@@ -1,0 +1,22 @@
+C:\Users\anton\source\repos\Blyatmir Putin Bot\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.deps.json
+C:\Users\anton\source\repos\Blyatmir Putin Bot\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.runtimeconfig.json
+C:\Users\anton\source\repos\Blyatmir Putin Bot\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.runtimeconfig.dev.json
+C:\Users\anton\source\repos\Blyatmir Putin Bot\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.dll
+C:\Users\anton\source\repos\Blyatmir Putin Bot\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.csprojAssemblyReference.cache
+C:\Users\anton\source\repos\Blyatmir Putin Bot\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.csproj.CoreCompileInputs.cache
+C:\Users\anton\source\repos\Blyatmir Putin Bot\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.AssemblyInfoInputs.cache
+C:\Users\anton\source\repos\Blyatmir Putin Bot\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.AssemblyInfo.cs
+C:\Users\anton\source\repos\Blyatmir Putin Bot\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.pdb
+C:\Users\anton\source\repos\Blyatmir Putin Bot\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.dll
+C:\Users\anton\source\repos\Blyatmir Putin Bot\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.pdb
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.deps.json
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.runtimeconfig.json
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.runtimeconfig.dev.json
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.dll
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\bin\Debug\netcoreapp2.1\Blyatmir Putin Bot.pdb
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.csprojAssemblyReference.cache
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.AssemblyInfoInputs.cache
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.AssemblyInfo.cs
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.dll
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Debug\netcoreapp2.1\Blyatmir Putin Bot.pdb
