@@ -5,7 +5,7 @@ A simple man by the name of Blyatmir once had a dream to unite the lands of russ
  
  Abilities <img align="left" width="40" height="40" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/man-mage_1f9d9-200d-2642-fe0f.png">
  ---------
- **What can our comarade Blyatmir do?**<img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/clipboard_1f4cb.png">
+ **What can our comrade Blyatmir do?**<img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/clipboard_1f4cb.png">
   - Purge messages so no-one ever knows of our other comrades secrets
   - Sympathise with our fallen bretheren through the use of `F`
   - Block the language of the furries
