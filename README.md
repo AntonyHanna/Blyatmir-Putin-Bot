@@ -25,39 +25,14 @@ A simple man by the name of Blyatmir once had a dream to unite the lands of russ
  
  How to run Blyatmir <img align="left" width="40" height="40" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/man-running_1f3c3-200d-2642-fe0f.png">
  -
- ### Option 1: The Command Line <img align="left" width="50" height="40" src="https://cdn.discordapp.com/attachments/559700127275679762/591587004035235895/terminal_application-512.png">
-  #### Step 1: Download the latest release
-  Go to the releases tab of this repository and downnload the latest full release available 
 
-  `insert image here`
+### Run the bot via docker <img align="left" width="50" height="30" src="https://cdn.discordapp.com/attachments/559700127275679762/591585009358471182/docker-whale-home-logo.png">
 
-  #### Step 2: Extract the .zip file
-  Extract the `.zip` file you downloaded
+Run the bot like any other docker. To make it even better you only need two environment variables
   
-  #### Step 4: Open Command Prompt (cmd)
-  Launch `Command Prompt` a.k.a `cmd`
-  
-  #### Step 5: Preparing Command Prompt
-  In `Command Prompt` write the following `dotnet `. 
-  
-  #### Step 6: Getting app file path
-  In the folder we extracted earlier find the file called `Blyatmir Putin Bot.dll` and drag it into `Command Prompt`. You should see something along the line of `dotnet [filepath]`.
-  
-  #### Step 7: 
-  Hit enter and the application should begin to start.
-
-### Option 2: Run the bot via docker <img align="left" width="50" height="30" src="https://cdn.discordapp.com/attachments/559700127275679762/591585009358471182/docker-whale-home-logo.png">
-  #### Step 1: Launch Command Prompt (cmd)
-  Launch `Command Prompt` a.k.a `cmd`
-  
-  #### Step 2: Pulling the docker image
-  In `Command Prompt` type the following command `docker pull antonyhanna/blyatmir-putin-bot` This will pull the image from the DockerHub website.
-  
-  #### Step 3: Creating a container
-  In `Command Prompt` type in the following command `docker create antonyhanna/blyatmir-putin-bot` This will create the container that the bot will run from.
-  
-  #### Step 4: Running the bot
-  In `Command Prompt` type in the following command `docker run antonyhanna/blyatmir-putin-bot` This will run the bot.
-  
-  
+  |  Environment Variables   |           Value                       |
+  |:------------------------:|:-------------------------------------:|
+  |**BOT_TOKEN**             | Your bots token here                  |
+  |**BOT_PREFIX**            | Your bots prefix here                 |
+   
   
