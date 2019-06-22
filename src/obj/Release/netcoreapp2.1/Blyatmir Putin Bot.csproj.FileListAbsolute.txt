@@ -8,3 +8,9 @@ D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Release\netcoreapp2.1\Blyatmir Pu
 D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Release\netcoreapp2.1\Blyatmir Putin Bot.AssemblyInfo.cs
 D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Release\netcoreapp2.1\Blyatmir Putin Bot.dll
 D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Release\netcoreapp2.1\Blyatmir Putin Bot.pdb
+D:\Documents\GitHub\Blyatmir-Putin-Bot\src\obj\Release\netcoreapp2.1\Blyatmir Putin Bot.csprojAssemblyReference.cache
+D:\Documents\GitHub\Blyatmir-Putin-Bot\build\netcoreapp2.1\Blyatmir Putin Bot.deps.json
+D:\Documents\GitHub\Blyatmir-Putin-Bot\build\netcoreapp2.1\Blyatmir Putin Bot.runtimeconfig.json
+D:\Documents\GitHub\Blyatmir-Putin-Bot\build\netcoreapp2.1\Blyatmir Putin Bot.runtimeconfig.dev.json
+D:\Documents\GitHub\Blyatmir-Putin-Bot\build\netcoreapp2.1\Blyatmir Putin Bot.dll
+D:\Documents\GitHub\Blyatmir-Putin-Bot\build\netcoreapp2.1\Blyatmir Putin Bot.pdb

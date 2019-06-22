@@ -9,8 +9,8 @@ namespace Blyatmir_Putin_Bot.modules
 {
     [Name("help")]
     [Summary("Get some info on these darn commmands")]
-    [Remarks("`[none] - Gets a list of all commands\n" +
-        "[command name] - Gets detailed info on a command module`")]
+    [Remarks("`help [none] - Gets a list of all commands\n" +
+        "help [string command name] - Gets detailed info on a command module`")]
     public class help : ModuleBase<SocketCommandContext>
     {
         [Command("help")]

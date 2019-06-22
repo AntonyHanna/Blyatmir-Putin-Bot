@@ -7,7 +7,7 @@ namespace Blyatmir_Putin_Bot.services
 {
     public class RestrictedWordService
     {
-        public static async Task CheckForBannedTerms(SocketMessage message)
+        public static async Task ScanMessage(SocketMessage message)
         {
             string[] bannedTerms = new string[] { "UwU", "OwO", "Yiff" };
             string[] insults = new string[] { $"Hey {message.Author.Username}, if I wanted to kill myself, I would climb up your ego and jump down to your IQ level.",
