@@ -2,6 +2,8 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -19,7 +21,6 @@ namespace Blyatmir_Putin_Bot
 
         public static DiscordSocketClient _client;
         public static CommandService Commands;
-        public const char prefix = '/';
 
         public async static Task StartBotAsync()
         {
@@ -31,13 +32,15 @@ namespace Blyatmir_Putin_Bot
             Commands = new CommandService();
 
             CommandHandler commandHandler = new CommandHandler(_client, Commands);
+            Env.LoadVariables();
 
-            //_client.MessageReceived += RestrictedWordsService.CheckForBannedTerms;
+            _client.MessageReceived += RestrictedWordService.ScanMessage;
             _client.MessageReceived += FInChatService.Respond;
+
             _client.Log += Log;
 
             await _client.SetGameAsync("Rebuilding the USSR");
-            await _client.LoginAsync(TokenType.Bot, "NTU2NjkwNjc5MzM0Njk5MDY4.D3yhrA.B1Ny_d9wDZ5drBqAuKr4lP9K7eQ");
+            await _client.LoginAsync(TokenType.Bot, Env.BotToken);
             await commandHandler.InstallCommandsAsync();
             await _client.StartAsync();
 

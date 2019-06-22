@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Blyatmir_Putin_Bot.modules
 {
     [Summary("Take a risk and call Blyatmir a bad communist comrade")]
-    [Remarks("`[none] - Tell the bot he is bad with his vodka`")]
+    [Remarks("`badbot [none] - Tell the bot he is bad with his vodka`")]
     public class badbot : ModuleBase<SocketCommandContext>
     {
         [Command("badbot")]
@@ -16,8 +16,8 @@ namespace Blyatmir_Putin_Bot.modules
         [Summary("Tell the bot he's a bad bot.")]
         public async Task BadBot()
         {
-            Env.points--;
-            Env.PointCalculations();
+            PointManager.points--;
+            PointManager.PointCalculations();
 
             var embed = new EmbedBuilder();
             var embedAuthor = new EmbedAuthorBuilder();
@@ -27,7 +27,7 @@ namespace Blyatmir_Putin_Bot.modules
             embedAuthor.Name = "Blyat Boy Putin";
             embedAuthor.IconUrl = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/thumbs-down-sign_1f44e.png";
 
-            embedFooter.Text = $"The freedom man kobes' a single stick away from Blyatmir, Blyatmir only has {Env.points} stick(s) remaining";
+            embedFooter.Text = $"The freedom man kobes' a single stick away from Blyatmir, Blyatmir only has {PointManager.points} stick(s) remaining";
 
             embed.Author = embedAuthor;
             embed.Footer = embedFooter;

@@ -4,20 +4,17 @@ using System.Text;
 
 namespace Blyatmir_Putin_Bot
 {
-    public static class Env
+    public class Env
     {
-        public static int points { get; set; }
-        public static int highestPoints { get; set; }
-        public static int lowestPoints { get; set; }
+        private static string _botToken;
+        private static string _botPrefix;
+        public static string BotToken => _botToken;
+        public static string BotPrefix => _botPrefix;
 
-
-        public static void PointCalculations()
+        public static void LoadVariables()
         {
-            if (points > highestPoints)
-                highestPoints = points;
-
-            if (points < lowestPoints)
-                lowestPoints = points;
+            _botToken = Environment.GetEnvironmentVariable("BOT_TOKEN");
+            _botPrefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
         }
     }
 }
