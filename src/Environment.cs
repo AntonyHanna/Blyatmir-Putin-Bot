@@ -17,10 +17,10 @@ namespace Blyatmir_Putin_Bot
             string botToken = Environment.GetEnvironmentVariable("BOT_TOKEN");
             string botPrefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
 
-            if(!string.IsNullOrWhiteSpace(botToken) && BotToken != "BOT_TOKEN_HERE")
+            if(!string.IsNullOrWhiteSpace(botToken) && BotToken == "BOT_TOKEN_HERE")
                 _botToken = Environment.GetEnvironmentVariable("BOT_TOKEN");
 
-            if(!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix != "BOT_PREFIX")
+            if(!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix == "BOT_PREFIX_HERE")
                 _botPrefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
         }
     }
