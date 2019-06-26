@@ -1,9 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Blyatmir_Putin_Bot.modules
 {
@@ -18,7 +16,7 @@ namespace Blyatmir_Putin_Bot.modules
         {
             var pinnedMessages = await sourceChannel.GetPinnedMessagesAsync();
 
-            foreach(var msg in pinnedMessages)
+            foreach (var msg in pinnedMessages.Reverse())
                 await Context.Channel.SendMessageAsync(msg.Content);
         }
     }
