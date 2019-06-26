@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Blyatmir_Putin_Bot.modules
 {
@@ -18,7 +19,7 @@ namespace Blyatmir_Putin_Bot.modules
         {
             var sourceMessages = await sourceChannel.GetMessagesAsync().FlattenAsync();
 
-            foreach (var msg in sourceMessages)
+            foreach (var msg in sourceMessages.Reverse())
                 await Context.Channel.SendMessageAsync(msg.Content);
         }
     }
