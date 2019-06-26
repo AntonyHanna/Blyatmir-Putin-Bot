@@ -9,11 +9,11 @@ namespace Blyatmir_Putin_Bot.modules
 {
     [Name("pintochannel")]
     [Summary("Gets channel pins and transfers to them to another channel as text")]
-    [Remarks("`.PTC [ITextChannel sourceChannel] - Gets channel pins and transfers to them to another channel as text`")]
+    [Remarks("`ptc [ITextChannel sourceChannel] - Gets channel pins and transfers to them to another channel as text`")]
     public class quotet : ModuleBase<SocketCommandContext>
     {
         [Command("pintochannel")]
-        [Alias("PTC")]
+        [Alias("ptc")]
         public async Task PinToTextChannel(ITextChannel sourceChannel)
         {
             var pinnedMessages = await sourceChannel.GetPinnedMessagesAsync();
