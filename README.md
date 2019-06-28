@@ -1,3 +1,7 @@
+[![Github Repo Size](https://img.shields.io/github/repo-size/AntonyHanna/Blyatmir-Putin-Bot.svg?style=popout)](https://github.com/AntonyHanna/Blyatmir-Putin-Bot)
+
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/antonyhanna/blyatmir-putin-bot.svg?style=popout)](https://cloud.docker.com/repository/docker/antonyhanna/blyatmir-putin-bot)
+
 
 Blyatmir Putin Bot <img align="right" width="100" height="100" src="https://cdn.discordapp.com/attachments/559700127275679762/591566828367642635/dd321c999e478a17136a288dd15144e2.png">
 ======================
