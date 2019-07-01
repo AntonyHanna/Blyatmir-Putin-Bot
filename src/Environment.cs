@@ -18,10 +18,6 @@ namespace Blyatmir_Putin_Bot
             string botPrefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
             string configLocation = Environment.GetEnvironmentVariable("CONFIG");
 
-            Console.WriteLine(botToken);
-            Console.WriteLine(botPrefix);
-            Console.WriteLine(configLocation);
-
             if (!string.IsNullOrWhiteSpace(botToken) && BotToken == "BOT_TOKEN")
                 _botToken = botToken;
 
@@ -29,7 +25,9 @@ namespace Blyatmir_Putin_Bot
                 _botPrefix = botPrefix;
 
             if (!string.IsNullOrWhiteSpace(configLocation) && ConfigLocation == "CONFIG")
-                _configLocation = configLocation;
+                _configLocation = "/config";
+
+            Console.WriteLine($"Config should be located in {ConfigLocation}");
         }
     }
 }
