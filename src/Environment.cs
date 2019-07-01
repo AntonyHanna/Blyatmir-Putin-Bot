@@ -4,10 +4,9 @@ namespace Blyatmir_Putin_Bot
 {
     public class Env
     {
-        private static string _botToken = "BOT_TOKEN_HERE";
-        private static string _botPrefix = "BOT_PREFIX_HERE";
-        private static string _configLocation = "CONFIG_FOLDER_LOCATION";
-
+        private static string _botToken = "BOT_TOKEN";
+        private static string _botPrefix = "BOT_PREFIX";
+        private static string _configLocation = "CONFIG";
 
         public static string BotToken => _botToken;
         public static string BotPrefix => _botPrefix;
@@ -19,13 +18,17 @@ namespace Blyatmir_Putin_Bot
             string botPrefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
             string configLocation = Environment.GetEnvironmentVariable("CONFIG");
 
-            if (!string.IsNullOrWhiteSpace(botToken) && BotToken == "BOT_TOKEN_HERE")
+            Console.WriteLine(botToken);
+            Console.WriteLine(botPrefix);
+            Console.WriteLine(configLocation);
+
+            if (!string.IsNullOrWhiteSpace(botToken) && BotToken == "BOT_TOKEN")
                 _botToken = botToken;
 
-            if (!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix == "BOT_PREFIX_HERE")
+            if (!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix == "BOT_PREFIX")
                 _botPrefix = botPrefix;
 
-            if (!string.IsNullOrWhiteSpace(configLocation) && ConfigLocation == "DATA_FOLDER_LOCATION")
+            if (!string.IsNullOrWhiteSpace(configLocation) && ConfigLocation == "CONFIG")
                 _configLocation = configLocation;
         }
     }
