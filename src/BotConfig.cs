@@ -1,11 +1,13 @@
-﻿using Blyatmir_Putin_Bot.services;
+﻿using Blyatmir_Putin_Bot.model;
+using Blyatmir_Putin_Bot.services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Blyatmir_Putin_Bot
 {
@@ -19,43 +21,67 @@ namespace Blyatmir_Putin_Bot
             await StartBotAsync();
         }
 
-        public static DiscordSocketClient _client;
+        public static DiscordSocketClient Client;
         public static CommandService Commands;
+
+        private static CommandHandler commandHandler;
 
         public async static Task StartBotAsync()
         {
-            _client = new DiscordSocketClient(new DiscordSocketConfig
+
+            Client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Debug
             });
 
             Commands = new CommandService();
 
-            CommandHandler commandHandler = new CommandHandler(_client, Commands);
+            commandHandler = new CommandHandler(Client, Commands);
             Env.LoadVariables();
 
-            _client.MessageReceived += RestrictedWordService.ScanMessage;
-            _client.MessageReceived += FInChatService.Respond;
+            Client.MessageReceived += RestrictedWordService.ScanMessage;
+            Client.MessageReceived += FInChatService.Respond;
+            Client.MessageReceived += QuoteManagamentService.QuoteIntentAsync;
 
-            _client.Log += Log;
+            Client.ReactionAdded += ReactionHandlerService.ReactionControllerAsync;
 
-            await _client.SetGameAsync("Rebuilding the USSR");
-            await _client.LoginAsync(TokenType.Bot, Env.BotToken);
+            //Update serverdata when the bot joins a new guild
+            Client.JoinedGuild += PersistantStorage.GenerateGuildData;
+
+            //Client.MessageDeleted += MessageDeletedService.MessageDeleted;
+
+            Client.Log += Log;
+
+            await Client.SetGameAsync("Rebuilding the USSR");
+            await Client.LoginAsync(TokenType.Bot, Env.BotToken);
             await commandHandler.InstallCommandsAsync();
-            await _client.StartAsync();
+
+
+            await Client.StartAsync();
+
+            PersistantStorage.DelayGuildDataGeneration();
 
             await Task.Delay(-1);
+
         }
 
+        /// <summary>
+        /// Stop the bot and exit the application asynchronously
+        /// </summary>
+        /// <returns></returns>
         public async static Task StopBotAsync()
         {
-            await _client.StopAsync();
+            await Client.StopAsync();
             Environment.Exit(1);
         }
 
+        /// <summary>
+        /// Dedicated logging method
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public static Task Log(LogMessage message)
         {
-            //Dedicated Logging Method
             Task.Run(() => Console.WriteLine(message.ToString()));
             return Task.CompletedTask;
         }

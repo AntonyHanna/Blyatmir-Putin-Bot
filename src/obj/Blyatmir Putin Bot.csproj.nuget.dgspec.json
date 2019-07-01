@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\Documents\\GitHub\\Blyatmir-Putin-Bot\\src\\Blyatmir Putin Bot.csproj": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "restore": {
         "projectUniqueName": "D:\\Documents\\GitHub\\Blyatmir-Putin-Bot\\src\\Blyatmir Putin Bot.csproj",
         "projectName": "Blyatmir Putin Bot",
@@ -44,14 +44,6 @@
             "Discord.Net": {
               "target": "Package",
               "version": "[2.1.1, )"
-            },
-            "Microsoft.Extensions.Configuration.EnvironmentVariables": {
-              "target": "Package",
-              "version": "[2.2.4, )"
-            },
-            "Microsoft.Extensions.Configuration.Json": {
-              "target": "Package",
-              "version": "[2.2.0, )"
             },
             "Microsoft.NETCore.App": {
               "target": "Package",
