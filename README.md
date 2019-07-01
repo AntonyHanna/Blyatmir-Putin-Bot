@@ -1,3 +1,4 @@
+[![Github Repo Size](https://img.shields.io/github/release-pre/antonyhanna/blyatmir-putin-bot.svg)](https://github.com/AntonyHanna/Blyatmir-Putin-Bot/releases/tag/v0.1.0)
 [![Github Repo Size](https://img.shields.io/github/repo-size/AntonyHanna/Blyatmir-Putin-Bot.svg?style=popout)](https://github.com/AntonyHanna/Blyatmir-Putin-Bot)
 [![Docker Build Status](https://img.shields.io/docker/cloud/build/antonyhanna/blyatmir-putin-bot.svg?style=popout)](https://cloud.docker.com/repository/docker/antonyhanna/blyatmir-putin-bot)
 
