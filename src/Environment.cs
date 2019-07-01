@@ -24,7 +24,7 @@ namespace Blyatmir_Putin_Bot
             if (!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix == "BOT_PREFIX")
                 _botPrefix = botPrefix;
 
-            if (!string.IsNullOrWhiteSpace(configLocation) && ConfigLocation == "CONFIG")
+            //if (!string.IsNullOrWhiteSpace(configLocation) && ConfigLocation == "CONFIG")
                 _configLocation = "/config";
 
             Console.WriteLine($"Config should be located in {ConfigLocation}");
