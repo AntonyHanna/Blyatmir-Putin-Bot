@@ -33,13 +33,10 @@ A simple man by the name of Blyatmir once had a dream to unite the lands of russ
 
 Run the bot like any other docker. To make it even better you only need two environment variables
   
-  |  Environment Variables   |           Value                       |
-  |:------------------------:|:-------------------------------------:|
-  |**BOT_TOKEN**             | Your bots token                       |
-  |**BOT_PREFIX**            | Your bots prefix                      |
-  
-  |  Environment Path        | Value                                 |
-  |:------------------------:|:-------------------------------------:|
-  | **/config**              | Config folder directory               |
+  |  Environment Variables   |           Value                       |   |     Environment Path     | Value        |
+  |:------------------------:|:-------------------------------------:|:-:|:------------------------:|:------------:|
+  |**BOT_TOKEN**             | Your bots token                       |   |        **config/**       | Config Folder|
+  |**BOT_PREFIX**            | Your bots prefix                      |   |
+
    
   
