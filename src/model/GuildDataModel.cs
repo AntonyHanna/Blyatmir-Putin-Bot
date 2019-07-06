@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System.Collections.Generic;
 
 namespace Blyatmir_Putin_Bot.model
 {
@@ -20,7 +19,6 @@ namespace Blyatmir_Putin_Bot.model
         public int LowestPoints { get; set; }
         public ulong QuoteChannelId { get; set; }
         public ulong AnnouncmentChannelId { get; set; }
-
 
         public GuildData()
         {
@@ -49,7 +47,7 @@ namespace Blyatmir_Putin_Bot.model
             this.QuoteChannelId = default;
             this.AnnouncmentChannelId = default;
         }
-        
+
         /// <summary>
         /// Sets a value for the QuoteChannel property
         /// </summary>

@@ -8,7 +8,7 @@ namespace Blyatmir_Putin_Bot
     public class CommandHandler
     {
         private DiscordSocketClient _client;
-        public CommandService Commands;
+        private CommandService Commands;
 
         public CommandHandler(DiscordSocketClient client, CommandService commands)
         {
@@ -18,36 +18,42 @@ namespace Blyatmir_Putin_Bot
 
         public async Task InstallCommandsAsync()
         {
+            //attach the command handler
             _client.MessageReceived += HandleCommandAsync;
 
+            //add modules
             await Commands.AddModulesAsync(
                 assembly: Assembly.GetEntryAssembly(),
                 services: null);
         }
 
-        public async Task HandleCommandAsync(SocketMessage messageParam)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task HandleCommandAsync(SocketMessage message)
         {
             // Don't process the command if it was a system message
-            var message = messageParam as SocketUserMessage;
+            var userMessage = message as SocketUserMessage;
 
-            if (message == null)
-            {
+            //dont run if message = null
+            if (userMessage == null)
                 return;
-            }
 
             // Create a number to track where the prefix ends and the command begins
             int argPos = 0;
 
             // Determine if the message is a command based on the prefix and make sure no bots trigger commands
-            if (!(message.HasStringPrefix(Env.BotPrefix, ref argPos) ||
-                message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
-                message.Author.IsBot)
+            if (!(userMessage.HasStringPrefix(AppEnvironment.BotPrefix, ref argPos) ||
+                userMessage.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
+                userMessage.Author.IsBot)
             {
                 return;
             }
 
             // Create a WebSocket-based command context based on the message
-            var context = new SocketCommandContext(_client, message);
+            var context = new SocketCommandContext(_client, userMessage);
 
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.

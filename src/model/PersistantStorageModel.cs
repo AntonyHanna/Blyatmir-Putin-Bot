@@ -15,7 +15,7 @@ namespace Blyatmir_Putin_Bot.model
 {
     public static class PersistantStorage
     {
-        private static readonly string _location = Path.Combine(Env.ConfigLocation, "ServerData.xml");
+        private static readonly string _location = Path.Combine(AppEnvironment.ConfigLocation, "ServerData.xml");
         public static List<GuildData> ServerDataList = new List<GuildData>(PersistantStorage.Read());
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Blyatmir_Putin_Bot.model
                     serializer.Serialize(writer, initializatinList);
                 }
 
-                Console.WriteLine("File should have been created");
+                Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Log \t     A new ServerData file has been created");
             }
         }
 
@@ -96,15 +96,12 @@ namespace Blyatmir_Putin_Bot.model
         private static void GenerateGuildData(object sender, ElapsedEventArgs e)
         {
             //Create the config directory if it doesn't exist
-            if (!Directory.Exists(Env.ConfigLocation))
-                Directory.CreateDirectory(Env.ConfigLocation);
+            if (!Directory.Exists(AppEnvironment.ConfigLocation))
+                Directory.CreateDirectory(AppEnvironment.ConfigLocation);
 
             //loop through all the guilds
             for (int j = 0; j < Client.Guilds.Count; j++)
             {
-                //notify admin that method has been called successfully
-                Console.WriteLine("Data called");
-
                 //indexing for readonly collections
                 var guild = Client.Guilds.ElementAt(j);
                 bool isPresent = false;
@@ -121,22 +118,25 @@ namespace Blyatmir_Putin_Bot.model
                 {
                     PersistantStorage.ServerDataList.Add(new GuildData(guild));
                     PersistantStorage.Write();
-                    Console.WriteLine($"Wrote: {guild.Name} data to XML file");
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for server: {guild.Name}");
                 }
             }
         }
+
+        /// <summary>
+        /// For use with the GuildAvailable event
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public static Task GenerateGuildData(SocketGuild arg)
         {
             //Create the config directory if it doesn't exist
-            if (!Directory.Exists(Env.ConfigLocation))
-                Directory.CreateDirectory(Env.ConfigLocation);
+            if (!Directory.Exists(AppEnvironment.ConfigLocation))
+                Directory.CreateDirectory(AppEnvironment.ConfigLocation);
 
             //loop through all the guilds
             for (int j = 0; j <= Client.Guilds.Count; j++)
             {
-                //notify admin that method has been called successfully
-                Console.WriteLine("Data called");
-
                 //indexing for readonly collections
                 var guild = Client.Guilds.ElementAt(j);
                 bool isPresent = false;
@@ -153,14 +153,18 @@ namespace Blyatmir_Putin_Bot.model
                 {
                     PersistantStorage.ServerDataList.Add(new GuildData(guild));
                     PersistantStorage.Write();
-                    Console.WriteLine($"Wrote: {guild.Name} data to XML file");
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for server: {guild.Name}");
                 }
             }
 
             return Task.CompletedTask;
         }
 
-
+        /// <summary>
+        /// Gets a specific guilds GuildData
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static GuildData GetServerData(SocketCommandContext context)
         {
             foreach (GuildData data in ServerDataList)
@@ -170,6 +174,11 @@ namespace Blyatmir_Putin_Bot.model
             return default;
         }
 
+        /// <summary>
+        /// Gets a specific guilds GuildData
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static GuildData GetServerData(IGuild guild)
         {
             foreach (GuildData data in ServerDataList)
@@ -179,6 +188,10 @@ namespace Blyatmir_Putin_Bot.model
             return default;
         }
 
+        /// <summary>
+        /// Calculate the different score statistics
+        /// </summary>
+        /// <param name="guildData"></param>
         public static void PointCalculations(GuildData guildData)
         {
             if (guildData.Points > guildData.HighestPoints)

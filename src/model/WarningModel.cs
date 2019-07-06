@@ -8,7 +8,6 @@ namespace Blyatmir_Putin_Bot.model
     public class Warning
     {
         public IUser User { get; set; }
-
         public int Warnings { get; set; }
     }
 }
