@@ -1,41 +1,42 @@
 ﻿using Blyatmir_Putin_Bot.model;
 using Discord;
 using Discord.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.modules
 {
     [Summary("Take a risk and call Blyatmir a bad communist comrade")]
     [Remarks("`badbot [none] - Tell the bot he is bad with his vodka`")]
-    public class badbot : ModuleBase<SocketCommandContext>
+    public class Badbot : ModuleBase<SocketCommandContext>
     {
+        /// <summary>
+        /// Tell the bot he's not good
+        /// </summary>
         [Command("badbot")]
         [Alias("bad")]
         [Summary("Tell the bot he's a bad bot.")]
         public async Task BadBot()
         {
+            //get server sepcific GuildData
             GuildData contextSpecificData = PersistantStorage.GetServerData(context: Context);
 
+            //increment their points
             contextSpecificData.Points--;
+
+            //calculate new point statistics
             PersistantStorage.PointCalculations(contextSpecificData);
 
-            var embed = new EmbedBuilder();
-            var embedAuthor = new EmbedAuthorBuilder();
-            var embedFooter = new EmbedFooterBuilder();
+            //embed template
+            var easyEmbed = new EasyEmbed()
+            {
+                AuthorName = "Blyat Boy Putin",
+                AuthorIcon = $"https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/thumbs-down-sign_1f44e.png",
+                EmbedColor = Color.Red,
+                FooterText = $"The freedom man kobes' a single stick away from Blyatmir, Blyatmir only has {contextSpecificData.Points} stick(s) remaining"
+            };
 
-            embed.Color = Color.Red;
-            embedAuthor.Name = "Blyat Boy Putin";
-            embedAuthor.IconUrl = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/thumbs-down-sign_1f44e.png";
-
-            embedFooter.Text = $"The freedom man kobes' a single stick away from Blyatmir, Blyatmir only has {contextSpecificData.Points} stick(s) remaining";
-
-            embed.Author = embedAuthor;
-            embed.Footer = embedFooter;
-
-            await Context.Channel.SendMessageAsync(embed: embed.Build());
+            //send the message
+            await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
         }
     }
 }

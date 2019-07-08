@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\Documents\\GitHub\\Blyatmir-Putin-Bot\\src\\Blyatmir Putin Bot.csproj": {
-      "version": "1.0.2",
+      "version": "0.1.0",
       "restore": {
         "projectUniqueName": "D:\\Documents\\GitHub\\Blyatmir-Putin-Bot\\src\\Blyatmir Putin Bot.csproj",
         "projectName": "Blyatmir Putin Bot",
@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[2.1.0, )",
               "autoReferenced": true
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.6.1, )"
             }
           },
           "imports": [

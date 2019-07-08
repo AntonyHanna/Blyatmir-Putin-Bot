@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using Blyatmir_Putin_Bot.model;
+using Discord;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,25 @@ namespace Blyatmir_Putin_Bot.modules
     [Summary("Tell em to fuck off")]
     [Remarks("`fuckoff [IGuildUser user] - Tell a prick to fuck off\n" +
         "fuckoff[string words] - Tell an inanimate object to fuck off`")]
-    public class fuckoff : ModuleBase<SocketCommandContext>
+    public class Fuckoff : ModuleBase<SocketCommandContext>
     {
+        /// <summary>
+        /// Tell a user to fuck off
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [Command("fuckoff")]
         [Summary("Tell a prick to fuckoff")]
         public async Task FuckOffAsync(IGuildUser user)
         {
+            //some literal string that should really be 
+            //moved into a file so that it's not as scuffed
             string[] fuckoffASCII = new string[] { "凸ಠ益ಠ)凸",
             "凸(｀0´)凸",
             "凸(>皿<)凸",
             "┌∩┐(ಠ_ಠ)┌∩┐",
             "凸(^▼ｪ▼ﾒ^)" };
+
             string[] fuckOffMessage = new string[] { $"You're not even worth the English {user.Username}, vittu!",
             $"{user.Username}, Have you seen my fucks? I can't seem to find them",
             $"Fucking fuck off,  {user.Username}.",
@@ -43,36 +52,38 @@ namespace Blyatmir_Putin_Bot.modules
             $"Merry Fucking Christmas, {user.Username}.",
             $"{user.Username}: A fucking problem solving super-hero."};
 
-            var textRandom = new Random();
             var rnd = new Random();
-            string asciiArt = fuckoffASCII[rnd.Next(0, fuckoffASCII.Length)];
 
-            var embed = new EmbedBuilder();
-            EmbedFooterBuilder embedf = new EmbedFooterBuilder();
-            var embedAuthor = new EmbedAuthorBuilder();
+            //embed template
+            var easyEmbed = new EasyEmbed()
+            {
+                //use rnd as random indexing between the literal strings
+                AuthorName = fuckoffASCII[rnd.Next(0, fuckoffASCII.Length)],
+                AuthorIcon = $"https://cdn.discordapp.com/emojis/541203072869990400.png?v=1",
+                EmbedColor = Color.LightOrange,
+                FooterText = fuckOffMessage[rnd.Next(0, fuckOffMessage.Length)] + " - @" + Context.Message.Author.Username
+            };
 
-            embed.Color = Color.LightOrange;
-            embedf.Text = fuckOffMessage[textRandom.Next(0, fuckOffMessage.Length)] + " - @" + Context.Message.Author.Username;
-
-            embedAuthor.Name = asciiArt;
-            embedAuthor.IconUrl = "https://cdn.discordapp.com/emojis/541203072869990400.png?v=1";
-
-            embed.Footer = embedf;
-            embed.Author = embedAuthor;
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build(), null);
+            //send the message
+            await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
         }
 
+        /// <summary>
+        /// Tell a string to fuck off
+        /// </summary>
+        /// <param name="terms"></param>
+        /// <returns></returns>
         [Command("fuckoff")]
         [Summary("Tell a prick to fuckoff")]
         public async Task FuckOffAsync([Remainder]string terms)
         {
-
+            //some more literal strings, should really move this soon
             string[] fuckoffASCII = new string[] { "凸ಠ益ಠ)凸",
             "凸(｀0´)凸",
             "凸(>皿<)凸",
             "┌∩┐(ಠ_ಠ)┌∩┐",
             "凸(^▼ｪ▼ﾒ^)" };
+
             string[] fuckOffMessage = new string[] { $"You're not even worth the English {terms}, vittu!",
             $"{terms}, Have you seen my fucks? I can't seem to find them",
             $"Fucking fuck off,  {terms}.",
@@ -94,24 +105,21 @@ namespace Blyatmir_Putin_Bot.modules
             $"Merry Fucking Christmas, {terms}.",
             $"{terms}: A fucking problem solving super-hero."};
 
-            var textRandom = new Random();
+
             var rnd = new Random();
-            string asciiArt = fuckoffASCII[rnd.Next(0, fuckoffASCII.Length)];
 
-            var embed = new EmbedBuilder();
-            EmbedFooterBuilder embedf = new EmbedFooterBuilder();
-            var embedAuthor = new EmbedAuthorBuilder();
+            //embed template
+            var easyEmbed = new EasyEmbed()
+            {
+                //use rnd as random indexing between the literal strings
+                AuthorName = fuckoffASCII[rnd.Next(0, fuckoffASCII.Length)],
+                AuthorIcon = $"https://cdn.discordapp.com/emojis/541203072869990400.png?v=1",
+                EmbedColor = Color.LightOrange,
+                FooterText = fuckOffMessage[rnd.Next(0, fuckOffMessage.Length)] + " - @" + Context.Message.Author.Username
+            };
 
-            embed.Color = Color.LightOrange;
-            embedf.Text = fuckOffMessage[textRandom.Next(0, fuckOffMessage.Length)] + " - @" + Context.Message.Author.Username;
-
-            embedAuthor.Name = asciiArt;
-            embedAuthor.IconUrl = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/reversed-hand-with-middle-finger-extended_1f595.png";
-
-            embed.Footer = embedf;
-            embed.Author = embedAuthor;
-
-            await Context.Channel.SendMessageAsync("", false, embed.Build(), null);
+            //send the message
+            await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
         }
 
     }

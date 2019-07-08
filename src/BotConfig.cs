@@ -4,65 +4,89 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace Blyatmir_Putin_Bot
 {
     class BotConfig
     {
+        public static DiscordSocketClient Client;
+        public static CommandService Commands;
+        private static CommandHandler commandHandler;
+
         private static void Main(string[] args)
             => new BotConfig().MainAsync().GetAwaiter().GetResult();
-
         public async Task MainAsync()
         {
             await StartBotAsync();
         }
 
-        public static DiscordSocketClient Client;
-        public static CommandService Commands;
-
-        private static CommandHandler commandHandler;
-
+        /// <summary>
+        /// Apply the bots configuration and start him asyncronously
+        /// </summary>
+        /// <returns></returns>
         public async static Task StartBotAsync()
         {
-
+            //set the bots log level
             Client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Debug
             });
 
+            //instantiate the command service
             Commands = new CommandService();
 
+            //instantiate the command handler with a client and commands
             commandHandler = new CommandHandler(Client, Commands);
-            Env.LoadVariables();
 
+            //Load in some environment variables
+            AppEnvironment.LoadVariables();
+
+            //attach the bots event handlers
+            AttachEventHandlers();
+
+            //tell people what edgy thing the bot is doing
+            await Client.SetGameAsync("Rebuilding the USSR");
+
+            //login to discords servers as a bot
+            await Client.LoginAsync(TokenType.Bot, AppEnvironment.BotToken);
+
+            //check for available commands
+            await commandHandler.InstallCommandsAsync();
+
+            //start the bot
+            await Client.StartAsync();
+
+            //delays the generations of GuildData so that the bot has time to load all the servers it connected to
+            //otherwise the method wont see the servers and will not run
+            PersistantStorage.DelayGuildDataGeneration();
+
+            //wait infinitely I think?
+            await Task.Delay(-1);
+        }
+
+        /// <summary>
+        /// Attaches the required event handlers to the bot
+        /// </summary>
+        private static void AttachEventHandlers()
+        {
+            //remove messages that are fucked
             Client.MessageReceived += RestrictedWordService.ScanMessage;
+
+            //responds with f's in chat
             Client.MessageReceived += FInChatService.Respond;
+
+            //check messages for potential quotes
             Client.MessageReceived += QuoteManagamentService.QuoteIntentAsync;
 
+            //Controld how reactions should affect messages
             Client.ReactionAdded += ReactionHandlerService.ReactionControllerAsync;
 
             //Update serverdata when the bot joins a new guild
             Client.JoinedGuild += PersistantStorage.GenerateGuildData;
 
-            //Client.MessageDeleted += MessageDeletedService.MessageDeleted;
-
+            //log messages in the console
             Client.Log += Log;
-
-            await Client.SetGameAsync("Rebuilding the USSR");
-            await Client.LoginAsync(TokenType.Bot, Env.BotToken);
-            await commandHandler.InstallCommandsAsync();
-
-
-            await Client.StartAsync();
-
-            PersistantStorage.DelayGuildDataGeneration();
-
-            await Task.Delay(-1);
-
         }
 
         /// <summary>
@@ -71,7 +95,10 @@ namespace Blyatmir_Putin_Bot
         /// <returns></returns>
         public async static Task StopBotAsync()
         {
+            //stop the bot correctly
             await Client.StopAsync();
+
+            //kill the program
             Environment.Exit(1);
         }
 
