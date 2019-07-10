@@ -12,7 +12,7 @@ namespace Blyatmir_Putin_Bot.services
             if (reaction.User.Value.IsBot)
                 return;
 
-            if (reaction.MessageId == QuoteManagamentService.QuoteConfirmationMessage.Id && QuoteManagamentService.Quoter.Guild.Name == "Bot Test")
+            if (reaction.MessageId == QuoteManagamentService.QuoteConfirmationMessage.Id)
             {
                 if (reaction.Emote.ToString() == "✅")
                     await QuoteManagamentService.QuoteConfirmedAsync();

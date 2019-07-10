@@ -12,6 +12,8 @@ namespace Blyatmir_Putin_Bot.model
         public string AuthorName { get; set; }
         public string AuthorIcon { get; set; }
         public Color EmbedColor { get; set; }
+        public string EmbedImage { get; set; }
+        public string EmbedThumbnail { get; set; }
         public string EmbedTitle { get; set; }
         public string EmbedDescription { get; set; }
         public EmbedFieldBuilder EmbedField { get; set; }
@@ -49,6 +51,12 @@ namespace Blyatmir_Putin_Bot.model
             if (_embed.Color != Color.Default)
                 _embed.Color = this.EmbedColor;
 
+            if (!string.IsNullOrWhiteSpace(EmbedImage))
+                _embed.ImageUrl = EmbedImage;
+
+            if (!string.IsNullOrWhiteSpace(EmbedThumbnail))
+                _embed.ThumbnailUrl = this.EmbedThumbnail;
+
             if (!string.IsNullOrWhiteSpace(EmbedTitle))
                 _embed.Title = this.EmbedTitle;
 
@@ -79,6 +87,8 @@ namespace Blyatmir_Putin_Bot.model
         //    AuthorName = "",
         //    AuthorIcon = $"",
         //    EmbedColor = Color.Default,
+        //    EmbedIcon  = $"",
+        //    EmbedThumbnail = $"",
         //    EmbedTitle = $"",
         //    EmbedDescription = $"",
         //    EmbedField = null,
