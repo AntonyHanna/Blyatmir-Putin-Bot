@@ -6,11 +6,10 @@ namespace Blyatmir_Putin_Bot
     {
         private static string _botToken = "BOT_TOKEN";
         private static string _botPrefix = "BOT_PREFIX";
-        private static string _configLocation = "config/";
 
         public static string BotToken => _botToken;
         public static string BotPrefix => _botPrefix;
-        public static string ConfigLocation => _configLocation;
+        public static string ConfigLocation{ get => "config/"; }
 
         /// <summary>
         /// Load environment variables
