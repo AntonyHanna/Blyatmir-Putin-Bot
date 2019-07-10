@@ -77,7 +77,7 @@ namespace Blyatmir_Putin_Bot
             Client.MessageReceived += FInChatService.Respond;
 
             //check messages for potential quotes
-            Client.MessageReceived += QuoteManagamentService.QuoteIntentAsync;
+            Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;
 
             //Controld how reactions should affect messages
             Client.ReactionAdded += ReactionHandlerService.ReactionControllerAsync;
