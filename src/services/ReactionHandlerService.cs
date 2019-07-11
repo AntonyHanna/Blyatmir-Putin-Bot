@@ -15,6 +15,11 @@ namespace Blyatmir_Putin_Bot.services
             await ReactionControlsAddedAsync(reaction);
         }
 
+        public static async Task ReactionsCleared(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel)
+        {
+            await ReactionControlsClearedAsync(message);
+        }
+
         /// <summary>
         /// Handle reaction controls for Quotes
         /// </summary>
@@ -29,11 +34,6 @@ namespace Blyatmir_Putin_Bot.services
                 if (reaction.Emote.ToString() == "❎")
                     await QuoteManagamentService.QuoteDeniedAsync();
             }
-        }
-
-        public static async Task ReactionsCleared(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel)
-        {
-            await ReactionControlsClearedAsync(message);
         }
 
         /// <summary>

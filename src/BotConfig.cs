@@ -46,7 +46,7 @@ namespace Blyatmir_Putin_Bot
             AttachEventHandlers();
 
             //tell people what edgy thing the bot is doing
-            await Client.SetGameAsync("Rebuilding the USSR");
+            await Client.SetGameAsync(AppEnvironment.BotActivity);
 
             //login to discords servers as a bot
             await Client.LoginAsync(TokenType.Bot, AppEnvironment.BotToken);
@@ -70,7 +70,7 @@ namespace Blyatmir_Putin_Bot
             Client.MessageReceived += RestrictedWordService.ScanMessage;
 
             //responds with f's in chat
-            Client.MessageReceived += FInChatService.Respond;
+            Client.MessageReceived += FInChatService.CheckForLoss;
 
             //check messages for potential quotes
             Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;

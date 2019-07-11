@@ -7,10 +7,13 @@ namespace Blyatmir_Putin_Bot
         private static string _botToken = "BOT_TOKEN";
         private static string _botPrefix = "BOT_PREFIX";
         private static string _configLocation = "config/";
+        private static string _botActivity = "BOT_ACTIVITY";
 
         public static string BotToken => _botToken;
         public static string BotPrefix => _botPrefix;
         public static string ConfigLocation => _configLocation;
+
+        public static string BotActivity => _botActivity;
 
         /// <summary>
         /// Load environment variables
@@ -20,6 +23,7 @@ namespace Blyatmir_Putin_Bot
             //pull the values from the environment
             string botToken = Environment.GetEnvironmentVariable("BOT_TOKEN");
             string botPrefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
+            string botActivity = Environment.GetEnvironmentVariable("BOT_ACTIVITY");
 
             //if the above values are not null and Bot_Token isn't default value
             //assign value
@@ -30,6 +34,10 @@ namespace Blyatmir_Putin_Bot
             //assign value
             if (!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix == "BOT_PREFIX")
                 _botPrefix = botPrefix;
+
+            if (!string.IsNullOrWhiteSpace(botActivity) && BotActivity == "BOT_ACTIVITY")
+                _botActivity = BotActivity;
+
         }
     }
 }
