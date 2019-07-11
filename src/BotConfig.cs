@@ -57,10 +57,6 @@ namespace Blyatmir_Putin_Bot
             //start the bot
             await Client.StartAsync();
 
-            //delays the generations of GuildData so that the bot has time to load all the servers it connected to
-            //otherwise the method wont see the servers and will not run
-            PersistantStorage.DelayGuildDataGeneration();
-
             //wait infinitely I think?
             await Task.Delay(-1);
         }
@@ -79,8 +75,14 @@ namespace Blyatmir_Putin_Bot
             //check messages for potential quotes
             Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;
 
-            //Controld how reactions should affect messages
-            Client.ReactionAdded += ReactionHandlerService.ReactionControllerAsync;
+            //Control how reactions should affect messages
+            Client.ReactionAdded += ReactionHandlerService.ReactionAddedAsync;
+
+            // Handle how services that require reactions should respond to the clearing of reactions
+            Client.ReactionsCleared += ReactionHandlerService.ReactionsCleared;
+
+            //Generate GuildData once Ready is fired
+            Client.Ready += PersistantStorage.GenerateGuildData;
 
             //Update serverdata when the bot joins a new guild
             Client.JoinedGuild += PersistantStorage.GenerateGuildData;
@@ -88,6 +90,7 @@ namespace Blyatmir_Putin_Bot
             //log messages in the console
             Client.Log += Log;
         }
+
 
         /// <summary>
         /// Stop the bot and exit the application asynchronously
