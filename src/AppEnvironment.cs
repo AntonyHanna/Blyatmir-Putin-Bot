@@ -36,7 +36,7 @@ namespace Blyatmir_Putin_Bot
                 _botPrefix = botPrefix;
 
             if (!string.IsNullOrWhiteSpace(botActivity) && BotActivity == "BOT_ACTIVITY")
-                _botActivity = BotActivity;
+                _botActivity = botActivity;
 
         }
     }
