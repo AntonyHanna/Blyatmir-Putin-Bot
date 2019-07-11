@@ -30,8 +30,7 @@ namespace Blyatmir_Putin_Bot
             if (!string.IsNullOrWhiteSpace(botToken) && BotToken == "BOT_TOKEN")
                 _botToken = botToken;
 
-            //if the above values are not null and Bot_Prefix isn't default value
-            //assign value
+            //the rest follow the same principle as above
             if (!string.IsNullOrWhiteSpace(botPrefix) && BotPrefix == "BOT_PREFIX")
                 _botPrefix = botPrefix;
 

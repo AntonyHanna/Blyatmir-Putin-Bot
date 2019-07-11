@@ -17,6 +17,10 @@ namespace Blyatmir_Putin_Bot.services
 
         public static async Task ReactionsCleared(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel)
         {
+            //dont look at bot reactions
+            if (message.Value.Author.IsBot)
+                return;
+
             await ReactionControlsClearedAsync(message);
         }
 
@@ -26,14 +30,15 @@ namespace Blyatmir_Putin_Bot.services
         /// <param name="reaction"></param>
         private static async Task ReactionControlsAddedAsync(SocketReaction reaction)
         {
-            if (reaction.MessageId == QuoteManagamentService.QuoteConfirmationMessage.Id)
-            {
-                if (reaction.Emote.ToString() == "✅")
-                    await QuoteManagamentService.QuoteConfirmedAsync();
+            if (QuoteManagamentService.QuoteConfirmationMessage != null)
+                if (reaction.MessageId == QuoteManagamentService.QuoteConfirmationMessage.Id)
+                {
+                    if (reaction.Emote.ToString() == "✅")
+                        await QuoteManagamentService.QuoteConfirmedAsync();
 
-                if (reaction.Emote.ToString() == "❎")
-                    await QuoteManagamentService.QuoteDeniedAsync();
-            }
+                    if (reaction.Emote.ToString() == "❎")
+                        await QuoteManagamentService.QuoteDeniedAsync();
+                }
         }
 
         /// <summary>
