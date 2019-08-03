@@ -10,7 +10,7 @@ namespace Blyatmir_Putin_Bot
         private static string _botActivity = "BOT_ACTIVITY";
         private static string _dockerIP = "DOCKER_IP";
         private static string _serverLogin = "SERVER_LOGIN";
-        private static string _serverPassword = "";
+        private static string _serverPassword = "SERVER_PASSWORD";
 
         public static string BotToken => _botToken;
         public static string BotPrefix => _botPrefix;
@@ -52,7 +52,7 @@ namespace Blyatmir_Putin_Bot
             if (!string.IsNullOrWhiteSpace(serverLogin) && DockerIP == "SERVER_LOGIN")
                 _serverLogin = serverLogin;
 
-            if (DockerIP == "")
+            if (DockerIP == "SERVER_PASSWORD")
                 _serverPassword = serverPassword;
         }
     }
