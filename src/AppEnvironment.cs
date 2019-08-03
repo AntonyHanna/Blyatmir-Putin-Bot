@@ -4,7 +4,7 @@ namespace Blyatmir_Putin_Bot
 {
     public class AppEnvironment
     {
-        private static string _botToken = "BOT_TOKEN.XSgp_A.loWkyod0iTinxAjHUHRMhZaHwzE";
+        private static string _botToken = "BOT_TOKEN";
         private static string _botPrefix = "BOT_PREFIX";
         private static string _configLocation = "config/";
         private static string _botActivity = "BOT_ACTIVITY";
