@@ -32,7 +32,18 @@ namespace Blyatmir_Putin_Bot
             string botActivity = Environment.GetEnvironmentVariable("BOT_ACTIVITY");
             string dockerIP = Environment.GetEnvironmentVariable("DOCKER_IP");
             string serverLogin = Environment.GetEnvironmentVariable("SERVER_LOGIN");
-            string serverPassword = Environment.GetEnvironmentVariable("SERVER_PASSWORD");
+            string serverPassword = string.Empty;
+
+            //try catch incase password is blank
+            try
+            {
+                serverPassword = Environment.GetEnvironmentVariable("SERVER_PASSWORD");
+            }
+
+            catch
+            {
+                serverPassword = string.Empty;
+            }
 
             //if the above values are not null and Bot_Token isn't default value
             //assign value
