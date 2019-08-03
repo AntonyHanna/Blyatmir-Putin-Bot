@@ -52,7 +52,7 @@ namespace Blyatmir_Putin_Bot
             if (!string.IsNullOrWhiteSpace(serverLogin) && DockerIP == "SERVER_LOGIN")
                 _serverLogin = serverLogin;
 
-            if (!string.IsNullOrWhiteSpace(serverPassword) && DockerIP == "")
+            if (DockerIP == "")
                 _serverPassword = serverPassword;
         }
     }
