@@ -42,7 +42,7 @@ namespace Blyatmir_Putin_Bot
 
             catch
             {
-                serverPassword = string.Empty;
+                serverPassword = "";
             }
 
             //if the above values are not null and Bot_Token isn't default value
