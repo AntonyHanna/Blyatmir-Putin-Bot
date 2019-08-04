@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.modules
+namespace Blyatmir_Putin_Bot.Modules
 {
     public class ManageGames : ModuleBase<SocketCommandContext>
     {
