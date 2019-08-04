@@ -29,7 +29,7 @@ namespace Blyatmir_Putin_Bot.modules
                 else
                     functionText = "stopped";
 
-                    await Context.Channel.SendMessageAsync($"The `{containerName}` game server has been `{functionText}`");
+                await Context.Channel.SendMessageAsync($"The `{containerName}` game server has been `{functionText}`");
             }
         }
 
