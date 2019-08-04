@@ -1,9 +1,6 @@
-﻿using Blyatmir_Putin_Bot.Services;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Renci.SshNet;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Modules
@@ -21,7 +18,7 @@ namespace Blyatmir_Putin_Bot.Modules
 
             string functionText;
 
-            if(result == 1)
+            if (result == 1)
             {
                 if (function == "start")
                     functionText = "started";
