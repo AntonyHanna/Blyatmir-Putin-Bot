@@ -1,10 +1,10 @@
-﻿using Blyatmir_Putin_Bot.model;
+﻿using Blyatmir_Putin_Bot.Model;
 using Discord;
 using Discord.Commands;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.modules
+namespace Blyatmir_Putin_Bot.Modules
 {
     [Name("highscore")]
     [Summary("Get the Blyatmirs stick history")]

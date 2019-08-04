@@ -3,7 +3,7 @@ using Discord.Commands;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace Blyatmir_Putin_Bot.modules
+namespace Blyatmir_Putin_Bot.Modules
 {
     /// <summary>
     /// Transfers a text channels pinned messages to another text channels chat

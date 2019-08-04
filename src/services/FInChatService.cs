@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.services
+namespace Blyatmir_Putin_Bot.Services
 {
     public class FInChatService
     {

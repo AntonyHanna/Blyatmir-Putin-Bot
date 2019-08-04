@@ -1,9 +1,9 @@
-﻿using Blyatmir_Putin_Bot.model;
+﻿using Blyatmir_Putin_Bot.Model;
 using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.modules
+namespace Blyatmir_Putin_Bot.Modules
 {
     [Summary("Take a risk and call Blyatmir a bad communist comrade")]
     [Remarks("`badbot [none] - Tell the bot he is bad with his vodka`")]

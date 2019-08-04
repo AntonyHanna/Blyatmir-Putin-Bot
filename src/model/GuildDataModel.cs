@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace Blyatmir_Putin_Bot.model
+namespace Blyatmir_Putin_Bot.Model
 {
     public class GuildData
     {

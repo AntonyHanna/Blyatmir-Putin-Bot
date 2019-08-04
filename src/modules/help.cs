@@ -1,4 +1,4 @@
-﻿using Blyatmir_Putin_Bot.model;
+﻿using Blyatmir_Putin_Bot.Model;
 using Discord;
 using Discord.Commands;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.modules
+namespace Blyatmir_Putin_Bot.Modules
 {
     /// <summary>
     /// Displays a list of command modules available

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blyatmir_Putin_Bot.model
+namespace Blyatmir_Putin_Bot.Model
 {
     public class Warning
     {

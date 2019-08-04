@@ -11,7 +11,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using static Blyatmir_Putin_Bot.BotConfig;
 
-namespace Blyatmir_Putin_Bot.model
+namespace Blyatmir_Putin_Bot.Model
 {
     public static class PersistantStorage
     {

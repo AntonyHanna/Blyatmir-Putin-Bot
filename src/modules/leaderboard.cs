@@ -1,11 +1,11 @@
-﻿using Blyatmir_Putin_Bot.model;
+﻿using Blyatmir_Putin_Bot.Model;
 using Discord;
 using Discord.Commands;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.modules
+namespace Blyatmir_Putin_Bot.Modules
 {
     [Name("Leaderboard")]
     [Summary("Display a list of servers ordered by their points")]
