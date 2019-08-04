@@ -15,7 +15,7 @@ namespace Blyatmir_Putin_Bot.Model
 {
     public static class PersistantStorage
     {
-        private static readonly string _location = Path.Combine(AppEnvironment.ConfigLocation, "ServerData.xml");
+        private static readonly string _location = Path.Combine(AppEnvironment.ConfigLocation, "GuildData.xml");
         public static List<GuildData> ServerDataList = new List<GuildData>(PersistantStorage.Read());
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Blyatmir_Putin_Bot.Model
                     serializer.Serialize(writer, initializatinList);
                 }
 
-                Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Log \t     A new ServerData file has been created");
+                Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Log \t     A new GuildData file has been created");
             }
         }
 
@@ -75,20 +75,6 @@ namespace Blyatmir_Putin_Bot.Model
         }
 
         /// <summary>
-        /// Delays the GenerateGuildData method using a timer
-        /// </summary>
-        public static void DelayGuildDataGeneration()
-        {
-            Timer timer = new Timer(3000)
-            {
-                AutoReset = false
-            };
-
-            timer.Elapsed += GenerateGuildData;
-            timer.Start();
-        }
-
-        /// <summary>
         /// Generates guild data for every server that the bot is present in
         /// </summary>
         /// <param name="sender"></param>
@@ -118,7 +104,7 @@ namespace Blyatmir_Putin_Bot.Model
                 {
                     PersistantStorage.ServerDataList.Add(new GuildData(guild));
                     PersistantStorage.Write();
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for server: {guild.Name}");
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
                 }
             }
         }
@@ -153,7 +139,39 @@ namespace Blyatmir_Putin_Bot.Model
                 {
                     PersistantStorage.ServerDataList.Add(new GuildData(guild));
                     PersistantStorage.Write();
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for server: {guild.Name}");
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public static Task GenerateGuildData()
+        {
+            //Create the config directory if it doesn't exist
+            if (!Directory.Exists(AppEnvironment.ConfigLocation))
+                Directory.CreateDirectory(AppEnvironment.ConfigLocation);
+
+            //loop through all the guilds
+            for (int j = 0; j < Client.Guilds.Count; j++)
+            {
+                //indexing for readonly collections
+                var guild = Client.Guilds.ElementAt(j);
+                bool isPresent = false;
+
+                //dont run if there is no guild data 
+                //otherwise compare the guild ids and only add the ones that are different
+                if (PersistantStorage.ServerDataList.Count > 0)
+                    foreach (var gld in PersistantStorage.ServerDataList)
+                        if (guild.Id == gld.GuildId)
+                            isPresent = true;
+
+                //for the ones not present add them to data
+                if (!isPresent)
+                {
+                    PersistantStorage.ServerDataList.Add(new GuildData(guild));
+                    PersistantStorage.Write();
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
                 }
             }
 
