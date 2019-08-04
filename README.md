@@ -36,7 +36,7 @@ Run the bot like any other docker. To make it even better you only need two envi
   
   |  Environment Variables   |           Value                       |   |     Environment Path     | Value        |
   |:------------------------:|:-------------------------------------:|:-:|:------------------------:|:------------:|
-  |**BOT_TOKEN**             | Your bots token                       |   |        **config/**       | Config Folder|
+  |**BOT_TOKEN**             | Your bots token                       |   |        **/config**       | Config Folder|
   |**BOT_PREFIX**            | Your bots prefix                      |   |
 
    
