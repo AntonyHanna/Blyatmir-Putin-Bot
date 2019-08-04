@@ -56,33 +56,30 @@ namespace Blyatmir_Putin_Bot.services
             {
                 if(IsPotentialQuote(message))
                 {
-                    //as long as a message is assigned run the process
-                    if (QuoteInQuestion != null)
+                    //check if the Guild has a QuoteChannel specified
+                    if (PersistantStorage.GetServerData(Quoter.Guild).QuoteChannelId != 0)
                     {
-                        //check if the Guild has a QuoteChannel specified
-                        if (PersistantStorage.GetServerData(Quoter.Guild).QuoteChannelId != 0)
+                        await SendQuoteConfirmationMessageAsync();
+                        StartTimeoutTrigger();
+                    }
+
+                    else
+                    {
+                        //send a message if the service has failed
+                        var easyEmbed = new EasyEmbed()
                         {
-                            await SendQuoteConfirmationMessageAsync();
-                            StartTimeoutTrigger();
-                        }
+                            AuthorName = "Failed to run the quote service",
+                            EmbedColor = Color.Red,
+                            EmbedImage = "https://cdn.discordapp.com/attachments/559700127275679762/595113538540797962/sadputin.png",
+                            EmbedDescription = $"You must first specify a quote channel for this server, " +
+                            $"before you can use this command, for more information see the docs (tbd)",
+                            FooterIcon = $"https://cdn.discordapp.com/attachments/559700127275679762/595110812314632205/585bad69cb11b227491c3284.png",
+                            FooterText = $"This was an automated message, don't even at me comrade"
+                        };
 
-                        else
-                        {
-                            var easyEmbed = new EasyEmbed()
-                            {
-                                AuthorName = "Failed to run the quote service",
-                                EmbedColor = Color.Red,
-                                EmbedImage = "https://cdn.discordapp.com/attachments/559700127275679762/595113538540797962/sadputin.png",
-                                EmbedDescription = $"You must first specify a quote channel for this server, " +
-                                $"before you can use this command, for more information see the docs (tbd)",
-                                FooterIcon = $"https://cdn.discordapp.com/attachments/559700127275679762/595110812314632205/585bad69cb11b227491c3284.png",
-                                FooterText = $"This was an automated message, don't even at me comrade"
-                            };
+                        await Quote.Channel.SendMessageAsync(embed: easyEmbed.Build());
 
-                            await Quote.Channel.SendMessageAsync(embed: easyEmbed.Build());
-
-                            ResetVariables();
-                        }
+                        ResetVariables();
                     }
                 }
             }
@@ -148,7 +145,7 @@ namespace Blyatmir_Putin_Bot.services
         /// Add reactions to the message
         /// </summary>
         /// <returns></returns>
-        private static async Task AddReactionsAsync()
+        public static async Task AddReactionsAsync()
         {
             await QuoteConfirmationMessage.AddReactionsAsync(new Emoji[]
             {
