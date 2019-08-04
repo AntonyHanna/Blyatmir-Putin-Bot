@@ -1,4 +1,4 @@
-﻿using Blyatmir_Putin_Bot.services;
+﻿using Blyatmir_Putin_Bot.Services;
 using Discord.Commands;
 using Renci.SshNet;
 using System;
