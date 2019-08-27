@@ -76,7 +76,7 @@ namespace Blyatmir_Putin_Bot.Modules
             //docker [process] [container name]
             string process = string.Empty, name = string.Empty;
 
-            foreach (string func in new string[] { "start", "stop" })
+            foreach (string func in new string[] { "start", "stop", "restart" })
                 if (func.Equals(function, StringComparison.OrdinalIgnoreCase))
                     process = function;
 
