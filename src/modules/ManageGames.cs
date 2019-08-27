@@ -16,15 +16,18 @@ namespace Blyatmir_Putin_Bot.Modules
             int result = RunCommand(function, containerName);
             DisconnectFromService();
 
-            string functionText;
+            string functionText = default;
 
             if (result == 1)
             {
                 if (function == "start")
                     functionText = "started";
 
-                else
+                else if (function == "stop")
                     functionText = "stopped";
+
+                else if (function == "restart")
+                    functionText = "restarted"; 
 
                 await Context.Channel.SendMessageAsync($"The `{containerName}` game server has been `{functionText}`");
             }
