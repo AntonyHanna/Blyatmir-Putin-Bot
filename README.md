@@ -6,7 +6,9 @@
 
 Blyatmir Putin Bot <img align="right" width="100" height="100" src="https://cdn.discordapp.com/attachments/559700127275679762/591566828367642635/dd321c999e478a17136a288dd15144e2.png">
 ======================
-A simple man by the name of Blyatmir once had a dream to unite the lands of russia via hard work and compasssion. One day he created the USSR and via the blyat powers invested in him he united all the lands and became Blyatmir Putin!. Years after the rise of Blyatmir Putin, the freedom man appeared with promises of lands filled with vodka and adidas tracksuits. In complete astonishment Blyatmir took up the offer and struck a deal with the freedom mans. Years later the freedom man betrayed Blyatmir and stole his sticks away from him. Now Blaytmir must retake what was stolen from him. This is the story of Blyatmir Putin.
+Once there was a boy named Blyatmir. He was a simple man with big dreams, dreams of uniting the savage lands of the Russia. Through hard work and compassion and the power of communism, the young tyke gained influence in his local village of Slavensk. He rose to power and led a revolution in Slavensk, introducing the wonders of communism and publishing his life's work, *The Blyat Manifesto*. As our young Blyatmir grew older, his power and influence grew and he united the lands of Russia under one banner, the UBR.
+
+After years of prosperity, rumours stirred of the freedom man of the west, with promises of prosperous lands of vodka and adidas. Blyatmir, now with his true title of Putin, declared war on the freedom man and labeled him as an enemy of the people. As the freedom man further challenges our Blyat, he must fight for his people, his vodka and for his Slavenskis. This is the story of Blyatmir Putin.
  
  Abilities <img align="left" width="40" height="40" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/man-mage_1f9d9-200d-2642-fe0f.png">
  ---------
