@@ -24,12 +24,12 @@ namespace Blyatmir_Putin_Bot.Modules
 			var fieldList = new List<EmbedFieldBuilder>();
 
 			//get all guilds that wish to be listed, by default is true
-			var listedGuilds = from GuildData guilds in GuildData.GuildDataList
+			var listedGuilds = from Guild guilds in Guild.GuildDataList
 							   where guilds.IsListed == true
 							   select guilds;
 
 			//order the listed guilds from largest to smallest in order to mimic a leaderboard
-			var orderAndListedGuilds = from GuildData guilds in listedGuilds
+			var orderAndListedGuilds = from Guild guilds in listedGuilds
 									   orderby guilds.Points descending
 									   select guilds;
 

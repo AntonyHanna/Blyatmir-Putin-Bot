@@ -19,13 +19,13 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task GoodBot()
 		{
 			//pull up specific server data
-			var contextSpecificData = GuildData.GetServerData(context: Context);
+			var contextSpecificData = Guild.GetServerData(context: Context);
 
 			//increment points
 			contextSpecificData.Points++;
 
 			//calculate the servers differnt score
-			GuildData.PointCalculations(contextSpecificData);
+			Guild.PointCalculations(contextSpecificData);
 
 			//some embed field
 			var field = new EmbedFieldBuilder
@@ -43,7 +43,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				EmbedColor = Color.Green,
 				EmbedField = field,
 				FooterText = $"You free a poor communist stick, putin sees this and attacks you, you drop the stick, " +
-				$"putin runs off with the stick. Putin now has: {contextSpecificData.Points} communist stick(s)."
+							$"putin runs off with the stick. Putin now has: {contextSpecificData.Points} communist stick(s)."
 			};
 
 			//send the message

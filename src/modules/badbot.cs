@@ -18,13 +18,13 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task BadBot()
 		{
 			//get server sepcific GuildData
-			GuildData contextSpecificData = GuildData.GetServerData(context: Context);
+			Guild contextSpecificData = Guild.GetServerData(context: Context);
 
 			//increment their points
 			contextSpecificData.Points--;
 
 			//calculate new point statistics
-			GuildData.PointCalculations(contextSpecificData);
+			Guild.PointCalculations(contextSpecificData);
 
 			//embed template
 			var easyEmbed = new EasyEmbed()

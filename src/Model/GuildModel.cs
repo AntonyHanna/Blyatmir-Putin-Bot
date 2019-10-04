@@ -10,11 +10,9 @@ using System.Timers;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class GuildData : PersistantStorage<GuildData>
+	public class Guild : PersistantStorage<Guild>
 	{
-		public static List<GuildData> GuildDataList = new List<GuildData>(PersistantStorage<GuildData>.Read());
-
-		public SocketGuild Guild { get; }
+		public static List<Guild> GuildDataList = new List<Guild>(PersistantStorage<Guild>.Read());
 
 		public ulong GuildId { get; set; }
 		public string GuildName { get; set; }
@@ -29,9 +27,8 @@ namespace Blyatmir_Putin_Bot.Model
 		public ulong QuoteChannelId { get; set; }
 		public ulong AnnouncmentChannelId { get; set; }
 
-		public GuildData()
+		public Guild()
 		{
-			this.Guild = default;
 			this.GuildName = default;
 			this.GuildId = default;
 			//this.Warnings = null;
@@ -42,9 +39,8 @@ namespace Blyatmir_Putin_Bot.Model
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
 		}
-		public GuildData(IGuild guild)
+		public Guild(IGuild guild)
 		{
-			this.Guild = guild as SocketGuild;
 			this.GuildName = guild.Name;
 			this.GuildId = guild.Id;
 
@@ -103,8 +99,8 @@ namespace Blyatmir_Putin_Bot.Model
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new GuildData(guild));
-					PersistantStorage<GuildData>.Write(GuildDataList);
+					GuildDataList.Add(new Guild(guild));
+					PersistantStorage<Guild>.Write(GuildDataList);
 					Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
 				}
 			}
@@ -138,8 +134,8 @@ namespace Blyatmir_Putin_Bot.Model
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new GuildData(guild));
-					PersistantStorage<GuildData>.Write(GuildDataList);
+					GuildDataList.Add(new Guild(guild));
+					PersistantStorage<Guild>.Write(GuildDataList);
 					Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
 				}
 			}
@@ -147,7 +143,7 @@ namespace Blyatmir_Putin_Bot.Model
 			return Task.CompletedTask;
 		}
 
-		public static Task GenerateGuildData()
+		public static Task GenerateMissingGuilds()
 		{
 			//Create the config directory if it doesn't exist
 			if (!Directory.Exists(AppEnvironment.ConfigLocation))
@@ -170,8 +166,8 @@ namespace Blyatmir_Putin_Bot.Model
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new GuildData(guild));
-					PersistantStorage<GuildData>.Write(GuildDataList);
+					GuildDataList.Add(new Guild(guild));
+					PersistantStorage<Guild>.Write(GuildDataList);
 					Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
 				}
 			}
@@ -184,9 +180,9 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public static GuildData GetServerData(SocketCommandContext context)
+		public static Guild GetServerData(SocketCommandContext context)
 		{
-			foreach (GuildData data in GuildDataList)
+			foreach (Guild data in GuildDataList)
 				if (data.GuildId == context.Guild.Id)
 					return data;
 
@@ -198,9 +194,9 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public static GuildData GetServerData(IGuild guild)
+		public static Guild GetServerData(IGuild guild)
 		{
-			foreach (GuildData data in GuildDataList)
+			foreach (Guild data in GuildDataList)
 				if (data.GuildId == guild.Id)
 					return data;
 
@@ -211,7 +207,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// Calculate the different score statistics
 		/// </summary>
 		/// <param name="guildData"></param>
-		public static void PointCalculations(GuildData guildData)
+		public static void PointCalculations(Guild guildData)
 		{
 			if (guildData.Points > guildData.HighestPoints)
 				guildData.HighestPoints = guildData.Points;
@@ -219,7 +215,7 @@ namespace Blyatmir_Putin_Bot.Model
 			if (guildData.Points < guildData.LowestPoints)
 				guildData.LowestPoints = guildData.Points;
 
-			PersistantStorage<GuildData>.Write(GuildDataList);
+			PersistantStorage<Guild>.Write(GuildDataList);
 		}
 	}
 }

@@ -42,6 +42,8 @@ namespace Blyatmir_Putin_Bot
 			//Load in some environment variables
 			AppEnvironment.LoadVariables();
 
+			SshManager.SshClient.Connect();
+
 			//attach the bots event handlers
 			AttachEventHandlers();
 
@@ -53,6 +55,8 @@ namespace Blyatmir_Putin_Bot
 
 			//check for available commands
 			await commandHandler.InstallCommandsAsync();
+
+
 
 			//start the bot
 			await Client.StartAsync();
@@ -82,14 +86,17 @@ namespace Blyatmir_Putin_Bot
 			Client.ReactionsCleared += ReactionHandlerService.ReactionsCleared;
 
 			//Generate GuildData once Ready is fired
-			Client.Ready += GuildData.GenerateGuildData;
+			Client.Ready += Guild.GenerateMissingGuilds;
+
+			Client.Ready += Container.GenerateMissingContiners;
 
 			//Update serverdata when the bot joins a new guild
-			Client.JoinedGuild += GuildData.GenerateGuildData;
+			Client.JoinedGuild += Guild.GenerateGuildData;
 
 			//log messages in the console
 			Client.Log += Log;
 		}
+
 
 
 		/// <summary>
@@ -100,7 +107,8 @@ namespace Blyatmir_Putin_Bot
 		{
 			//stop the bot correctly
 			await Client.StopAsync();
-
+			SshManager.SshClient.Disconnect();
+			SshManager.SshClient.Dispose();
 			//kill the program
 			Environment.Exit(1);
 		}
