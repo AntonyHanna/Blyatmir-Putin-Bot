@@ -13,7 +13,9 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		public static readonly Dictionary<Type, string> Path = new Dictionary<Type, string>()
 		{
-			{ typeof(GuildData), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}GuildData.xml"},
+			{ typeof(Guild), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}Guilds.xml"},
+			{ typeof(Container), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}Containers.xml"},
+			{ typeof(User), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}Users.xml"},
 		};
 
 
@@ -48,6 +50,10 @@ namespace Blyatmir_Putin_Bot.Model
 			}
 		}
 
+		/// <summary>
+		/// Write a list of type <typeparamref name="T"/> to an Xml file
+		/// </summary>
+		/// <param name="objects"></param>
 		public static void Write(List<T> objects)
 		{
 			using (StreamWriter sr = new StreamWriter(Path[typeof(T)]))

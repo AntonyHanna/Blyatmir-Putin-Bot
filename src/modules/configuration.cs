@@ -19,9 +19,9 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Summary("Set a specific quote channel for your server")]
 		public async Task AssignQuoteChannelAsync([Remainder] ITextChannel textChannel)
 		{
-			GuildData guildData = GuildData.GetServerData(context: Context);
+			Guild guildData = Guild.GetServerData(context: Context);
 			guildData.QuoteChannelId = textChannel.Id;
-			PersistantStorage<GuildData>.Write(GuildData.GuildDataList);
+			PersistantStorage<Guild>.Write(Guild.GuildDataList);
 
 			await Context.Channel.SendMessageAsync($"Quote channel has been assigned with id: `{textChannel.Id}` for the guild: `{guildData.GuildName}`");
 		}
@@ -31,9 +31,9 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Summary("Set a specific announcment channel for your server")]
 		public async Task AssignAnnouncmentChannelAsync([Remainder] ITextChannel textChannel)
 		{
-			GuildData guildData = GuildData.GetServerData(context: Context);
+			Guild guildData = Guild.GetServerData(context: Context);
 			guildData.AnnouncmentChannelId = textChannel.Id;
-			PersistantStorage<GuildData>.Write(GuildData.GuildDataList);
+			PersistantStorage<Guild>.Write(Guild.GuildDataList);
 
 			await Context.Channel.SendMessageAsync($"Announcment channel has been assigned with id: `{textChannel.Id}` for the guild: `{guildData.GuildName}`");
 		}
@@ -43,10 +43,10 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Summary("Opt in or out of being listed in server leadboards")]
 		public async Task DontListServer([Remainder] bool selection)
 		{
-			GuildData guildData = GuildData.GetServerData(context: Context);
+			Guild guildData = Guild.GetServerData(context: Context);
 
 			guildData.IsListed = selection;
-			PersistantStorage<GuildData>.Write(GuildData.GuildDataList);
+			PersistantStorage<Guild>.Write(Guild.GuildDataList);
 
 			if (selection)
 				await Context.Channel.SendMessageAsync($"`{guildData.GuildName}` has been opted out of being listed in scoreboards");
