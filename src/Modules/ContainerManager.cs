@@ -27,7 +27,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				else if (function == "restart")
 					functionText = "restarted";
 
-				await Context.Channel.SendMessageAsync($"The `{containerName}` game server has been `{functionText}`");
+				await Context.Channel.SendMessageAsync($"The `{containerName}` container has been `{functionText}`");
 			}
 		}
 

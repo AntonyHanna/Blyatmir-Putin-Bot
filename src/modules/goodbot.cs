@@ -18,7 +18,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task GoodBot()
 		{
 			//get server sepcific GuildData
-			Guild contextSpecificData = GuildData.GetServerData(context: Context);
+			Guild contextSpecificData = Guild.GetServerData(context: Context);
 
 			//increment points
 			contextSpecificData.Points++;
