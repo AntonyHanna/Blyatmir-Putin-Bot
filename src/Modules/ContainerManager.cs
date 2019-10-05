@@ -72,14 +72,14 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("gs ucp")]
 		public async Task UpdateContainerPermission(string containerName, [Remainder] Container.ContainerPermissions permissions)
 		{
-			if(User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.jack)
+			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.jack)
 			{
 				_container = Container.GetContainerByName(containerName);
 
 				_container.ContainerPermissionLevel = permissions;
 				Container.Write(Container.ContainerList);
 			}
-			
+
 
 			await Context.Channel.SendMessageAsync($"Container: `{_container.ContainerName}'s` permissions have been changed to {permissions}");
 		}

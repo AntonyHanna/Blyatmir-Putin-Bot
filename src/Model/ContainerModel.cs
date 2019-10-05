@@ -13,19 +13,19 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public enum ContainerRunStates
 		{
-			created,		// container has been created but not been run
-			restarting,		// container is in the middle of restarting
-			running,		// container is currently running
-			removing,		// container is in the process of being removed
-			paused,			// container is currently paused
-			exited,			// container is not currently running
-			dead			// container is non functional and needs to be removed
+			created,        // container has been created but not been run
+			restarting,     // container is in the middle of restarting
+			running,        // container is currently running
+			removing,       // container is in the process of being removed
+			paused,         // container is currently paused
+			exited,         // container is not currently running
+			dead            // container is non functional and needs to be removed
 		}
 		public enum ContainerPermissions
 		{
-			root = 0,	// full access to containers
-			user = 1,	// limited access to containers
-			jack = 2	// no access to containers
+			root = 0,   // full access to containers
+			user = 1,   // limited access to containers
+			jack = 2    // no access to containers
 		}
 
 		public string ContainerId { get; set; }
@@ -151,7 +151,7 @@ namespace Blyatmir_Putin_Bot.Model
 			string[] ports = SshManager.SshClient.RunCommand(string.Format("docker ps -a --filter \"id = {0}\" --format {{.Ports}}", containerId)).Result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
 
 			// sanatise the ports to only show the port people should use
-			for(int i = 0; i < ports.Length; i++)
+			for (int i = 0; i < ports.Length; i++)
 			{
 				// gets the portion of the string that matches the regex then removes the trailing -
 				ports[i] = Regex.Match(ports[0], "[0-9]{0,}-").Value.Replace("-", "").Trim();
@@ -179,7 +179,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			return SshManager.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Names}}}}").Result.Trim('\n');
 		}
-		
+
 		public static string GetContainerImage(string containerId)
 		{
 			string unsanitisedString = SshManager.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Image}}}}").Result.Trim('\n');
