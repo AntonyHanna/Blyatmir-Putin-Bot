@@ -33,7 +33,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				Value = $"{contextSpecificData.Points} Slavenski(s) lost to the freedom man",
 				IsInline = true
 			};
-			
+
 			//embed template
 			var easyEmbed = new EasyEmbed()
 			{

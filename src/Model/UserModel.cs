@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Discord.WebSocket;
-using Discord.Commands;
-using Discord;
-using static Blyatmir_Putin_Bot.Model.Container;
-using System.Threading.Tasks;
+﻿using Discord.WebSocket;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using static Blyatmir_Putin_Bot.Model.Container;
 
 namespace Blyatmir_Putin_Bot.Model
 {
@@ -61,7 +59,7 @@ namespace Blyatmir_Putin_Bot.Model
 				for (int i = 0; i < UserList.Count(); i++)
 					if (!UserExists(userId))
 						UserList.Add(new User(userId));
-				
+
 
 			return Task.CompletedTask;
 		}
