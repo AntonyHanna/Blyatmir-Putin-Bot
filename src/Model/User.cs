@@ -55,10 +55,9 @@ namespace Blyatmir_Putin_Bot.Model
 			if (!Directory.Exists(AppEnvironment.ConfigLocation))
 				Directory.CreateDirectory(AppEnvironment.ConfigLocation);
 
-			if (UserList.Count > 0)
-				for (int i = 0; i < UserList.Count(); i++)
-					if (!UserExists(userId))
-						UserList.Add(new User(userId));
+			for (int i = 0; i < UserList.Count(); i++)
+				if (!UserExists(userId))
+					new User(userId);
 
 
 			return Task.CompletedTask;

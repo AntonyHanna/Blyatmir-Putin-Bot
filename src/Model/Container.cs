@@ -203,5 +203,13 @@ namespace Blyatmir_Putin_Bot.Model
 
 			Write(ContainerList);
 		}
+
+		public static bool IsValidContainer(string containerName)
+		{
+			for (int i = 0; i < Container.ContainerList.Count; i++)
+				if (Container.ContainerList[i].ContainerName == containerName)
+					return true;
+			return false;
+		}
 	}
 }

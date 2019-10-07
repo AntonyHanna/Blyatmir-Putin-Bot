@@ -61,18 +61,12 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			return false;
 		}
-		private static bool IsValidContainer(string containerName)
-		{
-			for (int i = 0; i < Container.ContainerList.Count; i++)
-				if (Container.ContainerList[i].ContainerName == containerName)
-					return true;
-			return false;
-		}
+
 
 		[Command("gs ucp")]
 		public async Task UpdateContainerPermission(string containerName, [Remainder] Container.ContainerPermissions permissions)
 		{
-			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.jack)
+			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
 			{
 				_container = Container.GetContainerByName(containerName);
 
@@ -87,7 +81,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("gs uup")]
 		public async Task UpdateUserPermission(ulong userId, [Remainder] Container.ContainerPermissions permissions)
 		{
-			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.jack)
+			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
 			{
 				_user = User.GetUser(userId);
 
@@ -122,7 +116,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				// will check for users with a access level of user or root
 				if ((int)_user.ContainerAccessLevel < 2)
 				{
-					if (IsValidContainer(containerName))
+					if (Container.IsValidContainer(containerName))
 						_container = Container.GetContainerByName(containerName);
 					else
 					{
