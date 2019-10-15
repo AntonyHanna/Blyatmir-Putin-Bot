@@ -8,7 +8,7 @@ Blyatmir Putin Bot <img align="right" width="100" height="100" src="https://cdn.
 ======================
 Once there was a boy named Blyatmir. He was a simple man with big dreams, dreams of uniting the savage lands of the Russia. Through hard work and compassion and the power of communism, the young tyke gained influence in his local village of Slavensk. He rose to power and led a revolution in Slavensk, introducing the wonders of communism and publishing his life's work, *The Blyat Manifesto*. As our young Blyatmir grew older, his power and influence grew and he united the lands of Russia under one banner, the UBR.
 
-After years of prosperity, rumours stirred of the freedom man of the west, with promises of prosperous lands of vodka and adidas. Blyatmir, now with his true title of Putin, declared war on the freedom man and labeled him as an enemy of the people. As the freedom man further challenges our Blyat, he must fight for his people, his vodka and for his Slavenskis. This is the story of Blyatmir Putin.
+After years of prosperity, rumours stirred of the evil freedom man of the west, with promises of prosperous lands of vodka and adidas. Blyatmir, now with his true title of Putin, declared war on the freedom man and labeled him as an enemy of the people. As the freedom man further challenges our Blyat, he must fight for his people, his vodka and for his Slavenskis. This is the story of Blyatmir Putin.
  
  Abilities <img align="left" width="40" height="40" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/man-mage_1f9d9-200d-2642-fe0f.png">
  ---------
