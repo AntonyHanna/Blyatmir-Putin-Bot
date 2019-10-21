@@ -42,7 +42,7 @@ Required variables are marked with a `*`
 | -e       | DOCKER_IP       | string  | null    | The IP of a device running a docker instance | |
 | -e       | SERVER_LOGIN    | string  | null    | The username of an account with the ability to ssh in the docker instance | |
 | -e       | SERVER_PASSWORD | string  | null    | The password the account specified | |
-| -v       | /Data         | string  | null    | Path on host to where you want to store config and data files | * |
+| -v       | /path/on/host:/Data       | string  | null    | Path on host to where you want to store config and data files | * |
 
 ##### Minimal Configuration
 ```docker
