@@ -29,18 +29,36 @@ After years of prosperity, rumours stirred of the freedom man of the west, with 
   - Mention people about the stupid shit they said about Blyatmir
   
   ___
- 
- How to run Blyatmir <img align="left" width="40" height="40" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/man-running_1f3c3-200d-2642-fe0f.png">
- -
 
-### Run the bot via docker <img align="left" width="50" height="30" src="https://cdn.discordapp.com/attachments/559700127275679762/591585009358471182/docker-whale-home-logo.png">
+### Running the bot via docker <img align="left" width="50" height="30" src="https://cdn.discordapp.com/attachments/559700127275679762/591585009358471182/docker-whale-home-logo.png">
 
-Run the bot like any other docker. To make it even better you only need two environment variables
+Required variables are marked with a `*`
+
+| Var-Type |   Name          |  Type   |  Default Value  |  Description  |      |
+| :-:      |  ------         | :----:  | :-------------: | ------------- | :--: |
+| -e       | BOT_TOKEN       | string  | null    | Your discord applications bot token | * |
+| -e       | BOT_PREFIX      | char    | null    | Your desired prefix for bot commands| * |
+| -e       | BOT_ACTIVITY    | string  | null    | Your desired activity for the bot to display| |
+| -e       | DOCKER_IP       | string  | null    | The IP of a device running a docker instance | |
+| -e       | SERVER_LOGIN    | string  | null    | The username of an account with the ability to ssh in the docker instance | |
+| -e       | SERVER_PASSWORD | string  | null    | The password the account specified | |
+| -v       | /Data         | string  | null    | Path on host to where you want to store config and data files | * |
+
+##### Minimal Configuration
+```docker
+> docker run -v /path/on/host:/Data -e BOT_TOKEN=YOUR_BOT_TOKEN_HERE -e BOT_PREFIX=DESIRED_PREFIX_HERE \
+  antonyhanna/blyatmir-putin-bot
+```
+##### Full Configuration
+```docker
+> docker run -v /path/on/host:/Data -e BOT_TOKEN=YOUR_BOT_TOKEN_HERE -e BOT_PREFIX=DESIRED_PREFIX_HERE \
+  -e BOT_ACTIVITY=DESIRED_BOT_ACTIVITY_HERE -e DOCKER_IP=DOCKER_INSTANCE_IP -e SERVER_LOGIN=USERNAME \
+  -e SERVER_PASSWORD=PASSWORD antonyhanna/blyatmir-putin-bot
+```
   
-  |  Environment Variables   |           Value                       |   |     Environment Path     | Value        |
-  |:------------------------:|:-------------------------------------:|:-:|:------------------------:|:------------:|
-  |**BOT_TOKEN**             | Your bots token                       |   |        **/config**       | Config Folder|
-  |**BOT_PREFIX**            | Your bots prefix                      |   |
+  
+  
+  
 
    
   
