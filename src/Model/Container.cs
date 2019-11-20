@@ -61,6 +61,8 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Task GenerateMissingContiners()
 		{
+			if (!SshController.IsSshEnabled)
+				return Task.CompletedTask;
 			//Create the config directory if it doesn't exist
 			if (!Directory.Exists(AppEnvironment.ConfigLocation))
 				Directory.CreateDirectory(AppEnvironment.ConfigLocation);
