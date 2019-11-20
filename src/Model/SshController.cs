@@ -12,7 +12,7 @@ namespace Blyatmir_Putin_Bot.Model
 			{
 				if (instance == null)
 				{
-					instance = new SshClient(AppEnvironment.DockerIP, AppEnvironment.ServerLogin, "");
+					instance = new SshClient(AppEnvironment.DockerIP, AppEnvironment.ServerLogin, AppEnvironment.ServerPassword);
 					AttachErrorHandler();
 					instance.Connect();
 				}
