@@ -55,8 +55,6 @@ namespace Blyatmir_Putin_Bot.Modules
 			{
 				if (function == validCommand)
 					return true;
-				else
-					return false;
 			}
 
 			return false;
