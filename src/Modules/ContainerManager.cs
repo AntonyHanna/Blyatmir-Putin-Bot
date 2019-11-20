@@ -39,12 +39,11 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <returns></returns>
 		private static int CanExecuteStateChange(Container cont, string function)
 		{
-			if (Container.GetContainerCurrentRunState(cont.ContainerId) == "running" && function == "start")
+			string state = Container.GetContainerCurrentRunState(cont.ContainerId).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
+			if (state == "running" && function == "start")
 				return 1;
-			if (Container.GetContainerCurrentRunState(cont.ContainerId) == "exited" && function == "stop")
+			if (state == "exited" && function == "stop")
 				return 2;
-			if (Container.GetContainerCurrentRunState(cont.ContainerId) == "restarting")
-				return 3;
 			return 0;
 		}
 		private static bool IsValidCommand(string function)
@@ -102,7 +101,7 @@ namespace Blyatmir_Putin_Bot.Modules
 						return 0;
 					}
 
-					if (CanExecuteStateChange(_container, function) != 0)
+					if (CanExecuteStateChange(_container, function) == 0)
 						return 0;
 
 					if (IsValidCommand(function))
