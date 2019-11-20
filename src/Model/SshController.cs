@@ -5,24 +5,17 @@ namespace Blyatmir_Putin_Bot.Model
 {
 	public static class SshController
 	{
-		public static SshClient SshClient = new SshClient(AppEnvironment.DockerIP, AppEnvironment.ServerLogin, AppEnvironment.ServerPassword);
-
-		public static int ConnectToService()
+		private static SshClient instance;
+		public static SshClient SshClient
 		{
-			//connect to the server
-			//initialise some commands
-			try
+			get
 			{
-				SshClient.Connect();
-
-				Console.WriteLine("Successfully Connected to Docker CLI service");
-				return 1;
-			}
-
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-				return 0;
+				if(instance == null)
+				{
+					instance = new SshClient(AppEnvironment.DockerIP, AppEnvironment.ServerLogin, "");
+					instance.Connect();
+				}
+				return instance;
 			}
 		}
 

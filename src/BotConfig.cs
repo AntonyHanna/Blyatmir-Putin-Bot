@@ -42,8 +42,6 @@ namespace Blyatmir_Putin_Bot
 			//Load in some environment variables
 			AppEnvironment.LoadVariables();
 
-			SshController.SshClient.Connect();
-
 			//attach the bots event handlers
 			AttachEventHandlers();
 
