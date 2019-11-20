@@ -13,7 +13,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task StartConnection(string function, [Remainder] string containerName)
 		{
 			int result = RunCommand(function, containerName).Result;
-
 			string functionText = default;
 
 			if (result == 1)
@@ -46,7 +45,6 @@ namespace Blyatmir_Putin_Bot.Modules
 				return 2;
 			if (Container.GetContainerCurrentRunState(cont.ContainerId) == "restarting")
 				return 3;
-
 			return 0;
 		}
 		private static bool IsValidCommand(string function)
@@ -55,10 +53,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			{
 				if (function == validCommand)
 					return true;
-				else
-					return false;
 			}
-
 			return false;
 		}
 
@@ -73,8 +68,6 @@ namespace Blyatmir_Putin_Bot.Modules
 				_container.ContainerPermissionLevel = permissions;
 				Container.Write(Container.ContainerList);
 			}
-
-
 			await Context.Channel.SendMessageAsync($"Container: `{_container.ContainerName}'s` permissions have been changed to {permissions}");
 		}
 
@@ -88,27 +81,12 @@ namespace Blyatmir_Putin_Bot.Modules
 				_user.ContainerAccessLevel = permissions;
 				User.Write(User.UserList);
 			}
-
 			await Context.Channel.SendMessageAsync($"User with id: `{_user.UserId}'s' permissions have been changed to {permissions}");
 		}
 
 		private async Task<int> RunCommand(string function, string containerName)
 		{
-			// check if there is a container with a matching name
-			// check if the user has permissions
-			// check the status of the container
-			// if not same state than apply change
-			if (!User.UserExists(Context.Message.Author.Id))
-			{
-				new User(Context.Message.Author);
-
-				// will eventually send a nicer message...
-				await Context.Channel.SendMessageAsync("You don't have sufficient priveleges to access this command");
-
-				// return since the user won't have the required permissions to view containers
-				return 0;
-			}
-
+			await User.CreateUserIfMissing(Context);
 			_user = User.GetUser(Context.Message.Author.Id);
 
 			if (_user != null)
@@ -128,7 +106,7 @@ namespace Blyatmir_Putin_Bot.Modules
 						return 0;
 
 					if (IsValidCommand(function))
-						SshManager.SshClient.RunCommand($"docker {function} {containerName}");
+						SshController.SshClient.RunCommand($"docker {function} {containerName}");
 				}
 
 				else
@@ -143,7 +121,6 @@ namespace Blyatmir_Putin_Bot.Modules
 				await Context.Channel.SendMessageAsync($"Oops... Could not find a player with id {_user.UserId} on file");
 				return 0;
 			}
-
 			return 1;
 		}
 	}

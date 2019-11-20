@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord.Commands;
+using Discord.WebSocket;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -76,6 +77,15 @@ namespace Blyatmir_Putin_Bot.Model
 									   where user.UserId == userId
 									   select user;
 			return result.First();
+		}
+
+		internal static async Task CreateUserIfMissing(SocketCommandContext context)
+		{
+			if (!User.UserExists(context.Message.Author.Id))
+			{
+				new User(context.Message.Author);
+				await context.Channel.SendMessageAsync("You don't have sufficient priveleges to access this command");
+			}
 		}
 
 		public static void SetContainerAccessLevel(ulong userId, ContainerPermissions newContainerPermissions)

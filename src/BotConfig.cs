@@ -42,8 +42,6 @@ namespace Blyatmir_Putin_Bot
 			//Load in some environment variables
 			AppEnvironment.LoadVariables();
 
-			SshManager.SshClient.Connect();
-
 			//attach the bots event handlers
 			AttachEventHandlers();
 
@@ -107,8 +105,8 @@ namespace Blyatmir_Putin_Bot
 		{
 			//stop the bot correctly
 			await Client.StopAsync();
-			SshManager.SshClient.Disconnect();
-			SshManager.SshClient.Dispose();
+			SshController.SshClient.Disconnect();
+			SshController.SshClient.Dispose();
 			//kill the program
 			Environment.Exit(1);
 		}
