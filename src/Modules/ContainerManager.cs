@@ -12,21 +12,24 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("gs")]
 		public async Task StartConnection(string function, [Remainder] string containerName)
 		{
-			int result = RunCommand(function, containerName).Result;
-			string functionText = default;
-
-			if (result == 1)
+			if(SshController.IsSshEnabled)
 			{
-				if (function == "start")
-					functionText = "started";
+				int result = RunCommand(function, containerName).Result;
+				string functionText = default;
 
-				else if (function == "stop")
-					functionText = "stopped";
+				if (result == 1)
+				{
+					if (function == "start")
+						functionText = "started";
 
-				else if (function == "restart")
-					functionText = "restarted";
+					else if (function == "stop")
+						functionText = "stopped";
 
-				await Context.Channel.SendMessageAsync($"The `{containerName}` container has been `{functionText}`");
+					else if (function == "restart")
+						functionText = "restarted";
+
+					await Context.Channel.SendMessageAsync($"The `{containerName}` container has been `{functionText}`");
+				}
 			}
 		}
 
