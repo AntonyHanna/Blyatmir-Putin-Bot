@@ -3,7 +3,7 @@ using System;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public static class SshManager
+	public static class SshController
 	{
 		public static SshClient SshClient = new SshClient(AppEnvironment.DockerIP, AppEnvironment.ServerLogin, AppEnvironment.ServerPassword);
 
@@ -13,7 +13,7 @@ namespace Blyatmir_Putin_Bot.Model
 			//initialise some commands
 			try
 			{
-				SshManager.SshClient.Connect();
+				SshClient.Connect();
 
 				Console.WriteLine("Successfully Connected to Docker CLI service");
 				return 1;
@@ -28,8 +28,8 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public static void DisconnectFromService()
 		{
-			SshManager.SshClient.Disconnect();
-			SshManager.SshClient.Dispose();
+			SshClient.Disconnect();
+			SshClient.Dispose();
 		}
 	}
 }

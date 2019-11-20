@@ -128,7 +128,7 @@ namespace Blyatmir_Putin_Bot.Modules
 						return 0;
 
 					if (IsValidCommand(function))
-						SshManager.SshClient.RunCommand($"docker {function} {containerName}");
+						SshController.SshClient.RunCommand($"docker {function} {containerName}");
 				}
 
 				else

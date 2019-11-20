@@ -96,7 +96,7 @@ namespace Blyatmir_Putin_Bot.Model
 			// returns a single string with all container ids
 			// then splits the string into multiple strings
 			// does not return any strings that are empty
-			return SshManager.SshClient.RunCommand("docker ps -a --format {{.ID}}").Result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+			return SshController.SshClient.RunCommand("docker ps -a --format {{.ID}}").Result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		/// <summary>
@@ -140,7 +140,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static string GetContainerInfo(string containerId)
 		{
-			return SshManager.SshClient.RunCommand($"docker ps -a --filter \"id={containerId}\"").Result;
+			return SshController.SshClient.RunCommand($"docker ps -a --filter \"id={containerId}\"").Result;
 		}
 
 		public static string[] GetContainerPorts(string containerId)
@@ -148,7 +148,7 @@ namespace Blyatmir_Putin_Bot.Model
 			// returns a single string with all container ports
 			// then splits the string into multiple strings
 			// does not return any strings that are empty
-			string[] ports = SshManager.SshClient.RunCommand(string.Format("docker ps -a --filter \"id = {0}\" --format {{.Ports}}", containerId)).Result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+			string[] ports = SshController.SshClient.RunCommand(string.Format("docker ps -a --filter \"id = {0}\" --format {{.Ports}}", containerId)).Result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
 
 			// sanatise the ports to only show the port people should use
 			for (int i = 0; i < ports.Length; i++)
@@ -162,12 +162,12 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public static string GetContainerCreation(string containerId)
 		{
-			return SshManager.SshClient.RunCommand(string.Format("docker ps -a --filter \"id = {0}\" --format {{.RunningFor}}", containerId)).Result.Trim();
+			return SshController.SshClient.RunCommand(string.Format("docker ps -a --filter \"id = {0}\" --format {{.RunningFor}}", containerId)).Result.Trim();
 		}
 
 		public static string GetContainerCurrentRunState(string containerId)
 		{
-			return SshManager.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Status}}}}").Result.Trim();
+			return SshController.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Status}}}}").Result.Trim();
 		}
 
 		/// <summary>
@@ -177,18 +177,18 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static string GetContainerName(string containerId)
 		{
-			return SshManager.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Names}}}}").Result.Trim('\n');
+			return SshController.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Names}}}}").Result.Trim('\n');
 		}
 
 		public static string GetContainerImage(string containerId)
 		{
-			string unsanitisedString = SshManager.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Image}}}}").Result.Trim('\n');
+			string unsanitisedString = SshController.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Image}}}}").Result.Trim('\n');
 			return Regex.Replace(unsanitisedString, ":[A-z]{0,}", "");
 		}
 
 		public static string GetContainerTag(string containerId)
 		{
-			string unsanitisedString = SshManager.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Image}}}}").Result.Trim('\n');
+			string unsanitisedString = SshController.SshClient.RunCommand($"docker ps -a --filter \"id = {containerId}\" --format {{{{.Image}}}}").Result.Trim('\n');
 
 			// some containers don't have a branch specified and default to :latest
 			if (!unsanitisedString.Contains(":"))
