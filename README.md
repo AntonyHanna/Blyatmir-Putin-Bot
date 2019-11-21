@@ -42,16 +42,16 @@ Required variables are marked with a `*`
 | -e       | DOCKER_IP       | string  | null    | The IP of a device running a docker instance | |
 | -e       | SERVER_LOGIN    | string  | null    | The username of an account with the ability to ssh in the docker instance | |
 | -e       | SERVER_PASSWORD | string  | null    | The password the account specified | |
-| -v       | /path/on/host:/Data       | string  | null    | Path on host to where you want to store config and data files | * |
+| -v       | /path/on/host:/config     | string  | null    | Path on host to where you want to store config and data files | * |
 
 ##### Minimal Configuration
 ```docker
-> docker run -v /path/on/host:/Data -e BOT_TOKEN=YOUR_BOT_TOKEN_HERE -e BOT_PREFIX=DESIRED_PREFIX_HERE \
+> docker run -v /path/on/host:/config -e BOT_TOKEN=YOUR_BOT_TOKEN_HERE -e BOT_PREFIX=DESIRED_PREFIX_HERE \
   antonyhanna/blyatmir-putin-bot
 ```
 ##### Full Configuration
 ```docker
-> docker run -v /path/on/host:/Data -e BOT_TOKEN=YOUR_BOT_TOKEN_HERE -e BOT_PREFIX=DESIRED_PREFIX_HERE \
+> docker run -v /path/on/host:/config -e BOT_TOKEN=YOUR_BOT_TOKEN_HERE -e BOT_PREFIX=DESIRED_PREFIX_HERE \
   -e BOT_ACTIVITY=DESIRED_BOT_ACTIVITY_HERE -e DOCKER_IP=DOCKER_INSTANCE_IP -e SERVER_LOGIN=USERNAME \
   -e SERVER_PASSWORD=PASSWORD antonyhanna/blyatmir-putin-bot
 ```
