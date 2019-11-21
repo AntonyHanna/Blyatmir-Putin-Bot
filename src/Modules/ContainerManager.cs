@@ -63,27 +63,45 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("gs ucp")]
 		public async Task UpdateContainerPermission(string containerName, [Remainder] Container.ContainerPermissions permissions)
 		{
-			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
+			if (User.GetUser(Context.User.Id).ContainerAccessLevel != Container.ContainerPermissions.root)
 			{
-				_container = Container.GetContainerByName(containerName);
-
-				_container.ContainerPermissionLevel = permissions;
-				Container.Write(Container.ContainerList);
+				await Context.Channel.SendMessageAsync($"You dont have sufficient permission to change the access level of container : `{containerName}`");
+				return;
 			}
-			await Context.Channel.SendMessageAsync($"Container: `{_container.ContainerName}'s` permissions have been changed to {permissions}");
+
+			_container = Container.GetContainerByName(containerName);
+
+			if(_container == null)
+			{
+				await Context.Channel.SendMessageAsync($"There is no container with the name `{containerName}`");
+				return;
+			}
+
+			_container.ContainerPermissionLevel = permissions;
+			Container.Write(Container.ContainerList);
+			await Context.Channel.SendMessageAsync($"Container: `{_container.ContainerName}'s` permissions have been changed to `{permissions}`");
 		}
 
 		[Command("gs uup")]
 		public async Task UpdateUserPermission(ulong userId, [Remainder] Container.ContainerPermissions permissions)
 		{
-			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
+			if (User.GetUser(Context.User.Id).ContainerAccessLevel != Container.ContainerPermissions.root)
 			{
-				_user = User.GetUser(userId);
-
-				_user.ContainerAccessLevel = permissions;
-				User.Write(User.UserList);
+				await Context.Channel.SendMessageAsync($"You dont have sufficient permission to change the permissions level of this uer : `{permissions}`");
+				return;
 			}
-			await Context.Channel.SendMessageAsync($"User with id: `{_user.UserId}'s' permissions have been changed to {permissions}");
+
+			_user = User.GetUser(userId);
+
+			if(_user == null)
+			{
+				await Context.Channel.SendMessageAsync($"There is no user with the id `{userId}`");
+				return;
+			}
+
+			_user.ContainerAccessLevel = permissions;
+			User.Write(User.UserList);
+			await Context.Channel.SendMessageAsync($"User with id: `{_user.UserId}'s' permissions have been changed to `{permissions}`");
 		}
 
 		private async Task<int> RunCommand(string function, string containerName)
@@ -100,7 +118,7 @@ namespace Blyatmir_Putin_Bot.Modules
 						_container = Container.GetContainerByName(containerName);
 					else
 					{
-						await Context.Channel.SendMessageAsync($"Oops... Could not find a container with id {_container.ContainerId} on file");
+						await Context.Channel.SendMessageAsync($"Oops... Could not find a container with id `{_container.ContainerId}` on file");
 						return 0;
 					}
 
@@ -120,7 +138,7 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			else
 			{
-				await Context.Channel.SendMessageAsync($"Oops... Could not find a player with id {_user.UserId} on file");
+				await Context.Channel.SendMessageAsync($"Oops... Could not find a player with id: `{_user.UserId}` on file");
 				return 0;
 			}
 			return 1;
