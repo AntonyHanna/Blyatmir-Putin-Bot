@@ -5,21 +5,22 @@ namespace Blyatmir_Putin_Bot.Model
 {
 	public static class SshController
 	{
-		internal static bool IsSshEnabled { get; private set; }
+		internal static bool IsSshEnabled
+		{
+			get
+			{
+				if (AppEnvironment.DockerIP == "DOCKER_IP" || AppEnvironment.ServerLogin == "SERVER_LOGIN" || AppEnvironment.ServerPassword == "SERVER_PASSWORD")
+					return false;
+				return true;
+			}
+		}
 		private static SshClient instance;
 		public static SshClient SshClient
 		{
 			get
 			{
-				if (AppEnvironment.DockerIP == "DOCKER_IP" || AppEnvironment.ServerLogin == "SERVER_LOGIN" || AppEnvironment.ServerPassword == "SERVER_PASSWORD")
-				{
-					IsSshEnabled = false;
-					return null;
-				}
-
 				if (instance == null)
 				{
-					
 					instance = new SshClient(AppEnvironment.DockerIP, AppEnvironment.ServerLogin, AppEnvironment.ServerPassword);
 					AttachErrorHandler();
 					instance.Connect();

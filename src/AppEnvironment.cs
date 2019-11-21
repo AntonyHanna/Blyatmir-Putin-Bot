@@ -6,7 +6,7 @@ namespace Blyatmir_Putin_Bot
 	{
 		private static string _botToken = "BOT_TOKEN";
 		private static string _botPrefix = "BOT_PREFIX";
-		private static string _configLocation = "DATA/";
+		private static string _configLocation = "config/";
 		private static string _botActivity = "BOT_ACTIVITY";
 		private static string _dockerIP = "DOCKER_IP";
 		private static string _serverLogin = "SERVER_LOGIN";

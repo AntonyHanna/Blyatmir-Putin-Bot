@@ -88,7 +88,7 @@ namespace Blyatmir_Putin_Bot.Modules
 
 		private async Task<int> RunCommand(string function, string containerName)
 		{
-			await User.CreateUserIfMissing(Context);
+			User.CreateUserIfMissing(Context);
 			_user = User.GetUser(Context.Message.Author.Id);
 
 			if (_user != null)
