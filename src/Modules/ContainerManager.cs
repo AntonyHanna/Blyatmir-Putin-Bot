@@ -40,14 +40,14 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <param name="cont">The container that will be affected by a state changing command</param>
 		/// <param name="function">A state changing function</param>
 		/// <returns></returns>
-		private static int CanExecuteStateChange(Container cont, string function)
+		private static bool CanExecuteStateChange(Container cont, string function)
 		{
 			string state = Container.GetContainerCurrentRunState(cont.ContainerId).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
 			if (state == "running" && function == "start")
-				return 1;
+				return false;
 			if (state == "exited" && function == "stop")
-				return 2;
-			return 0;
+				return false;
+			return true;
 		}
 		private static bool IsValidCommand(string function)
 		{
@@ -88,7 +88,7 @@ namespace Blyatmir_Putin_Bot.Modules
 
 		private async Task<int> RunCommand(string function, string containerName)
 		{
-			await User.CreateUserIfMissing(Context);
+			User.CreateUserIfMissing(Context);
 			_user = User.GetUser(Context.Message.Author.Id);
 
 			if (_user != null)
@@ -104,8 +104,11 @@ namespace Blyatmir_Putin_Bot.Modules
 						return 0;
 					}
 
-					if (CanExecuteStateChange(_container, function) == 0)
+					if (!CanExecuteStateChange(_container, function))
+					{
+						await Context.Channel.SendMessageAsync($"Cannot run the provided function: `{function}` on the container: `{containerName}` as it is already in that state");
 						return 0;
+					}
 
 					if (IsValidCommand(function))
 						SshController.SshClient.RunCommand($"docker {function} {containerName}");
