@@ -31,7 +31,19 @@ namespace Blyatmir_Putin_Bot.Modules
 					else if (function == "restart")
 						functionText = "restarted";
 
-					await Context.Channel.SendMessageAsync($"The `{containerName}` container has been `{functionText}`");
+					EmbedBuilder embed = new EmbedBuilder
+					{
+						Title = "Container State Changed",
+						Color = Color.Green,
+						Footer = new EmbedFooterBuilder
+						{
+							IconUrl = Context.Message.Author.GetAvatarUrl(),
+							Text = $"The state of `{containerName}` has been changed"
+						},
+						Description = $"User: `{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` container",
+					};
+
+					await Context.Channel.SendMessageAsync(embed: embed.Build());
 				}
 			}
 		}
@@ -73,7 +85,20 @@ namespace Blyatmir_Putin_Bot.Modules
 				_container.ContainerPermissionLevel = permissions;
 				Container.Write(Container.ContainerList);
 			}
-			await Context.Channel.SendMessageAsync($"Container: `{_container.ContainerName}'s` permissions have been changed to {permissions}");
+
+			EmbedBuilder embed = new EmbedBuilder
+			{
+				Title = "Container Updated",
+				Color = Color.Green,
+				Footer = new EmbedFooterBuilder
+				{
+					IconUrl = Context.Message.Author.GetAvatarUrl(),
+					Text = $"A container permission was updated by user: {Context.Guild.GetUser(Context.Message.Author.Id)} at {DateTime.Now}"
+				},
+				Description = $"Container: `{_container.ContainerName}'s` permissions have been updated to `{permissions}`",
+			};
+
+			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 
 		[Command("gs uup")]
@@ -103,7 +128,7 @@ namespace Blyatmir_Putin_Bot.Modules
 					Footer = new EmbedFooterBuilder
 					{
 						IconUrl = Context.Message.Author.GetAvatarUrl(),
-						Text = $"Permission was updated by {Context.Message.Author} at {DateTime.Now}"
+						Text = $"A user permission was updated by {Context.Message.Author} at {DateTime.Now}"
 					},
 					Description = $"User with id: `{_user.UserId}'s` permissions have been changed to `{permissions}`",
 				};
@@ -139,7 +164,7 @@ namespace Blyatmir_Putin_Bot.Modules
 					Footer = new EmbedFooterBuilder
 					{
 						IconUrl = Context.Message.Author.GetAvatarUrl(),
-						Text = $"Permission was updated by {Context.Message.Author} at {DateTime.Now}"
+						Text = $" A user permission was updated by {Context.Message.Author} at {DateTime.Now}"
 					},
 					Description = $"User: `{Context.Guild.GetUser(this._user.UserId)}'s` permissions have been changed to `{permissions}`",
 				};
@@ -147,47 +172,63 @@ namespace Blyatmir_Putin_Bot.Modules
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 			}
 		}
-
+		// TODO
 		private async Task<int> RunCommand(string function, string containerName)
 		{
 			User.CreateUserIfMissing(Context);
 			_user = User.GetUser(Context.Message.Author.Id);
 
-			if (_user != null)
+			EmbedBuilder embed = new EmbedBuilder
 			{
-				// will check for users with a access level of user or root
-				if ((int)_user.ContainerAccessLevel < 2)
-				{
-					if (Container.IsValidContainer(containerName))
-						_container = Container.GetContainerByName(containerName);
-					else
-					{
-						await Context.Channel.SendMessageAsync($"Oops... Could not find a container with id {_container.ContainerId} on file");
-						return 0;
-					}
+				Title = "Error: ",
+				Color = Color.Red,
+			};
 
-					if (!CanExecuteStateChange(_container, function))
-					{
-						await Context.Channel.SendMessageAsync($"Cannot run the provided function: `{function}` on the container: `{containerName}` as it is already in that state");
-						return 0;
-					}
+			// don't run if user has no permissions
 
-					if (IsValidCommand(function))
-						SshController.SshClient.RunCommand($"docker {function} {containerName}");
-				}
-
-				else
-				{
-					await Context.Channel.SendMessageAsync("You don't have sufficient priveleges to access this command");
-					return 0;
-				}
+			if (Container.IsValidContainer(containerName))
+			{
+				_container = Container.GetContainerByName(containerName);
 			}
-
 			else
 			{
-				await Context.Channel.SendMessageAsync($"Oops... Could not find a player with id {_user.UserId} on file");
+				embed.Title += $"No container with the id specified";
+				embed.Description = $"Oops... Could not find a container with id: `{containerName}` on file";
+				await Context.Channel.SendMessageAsync(embed: embed.Build());
+
 				return 0;
 			}
+
+			if (!Container.UserHasSufficientPriveleges(this._container, this._user))
+			{
+				embed.Title += $"Insufficient permissions to run command";
+				embed.Description = "You don't have sufficient priveleges to access this command";
+				await Context.Channel.SendMessageAsync(embed: embed.Build());
+
+				return 0;
+			}
+
+			// TODO: this aint work
+			if (!CanExecuteStateChange(_container, function))
+			{
+				embed.Title += $"Container is in the same state as specified";
+				embed.Description = $"Cannot run the provided function: `{function}` on the container: `{containerName}` as it is already in that state";
+				await Context.Channel.SendMessageAsync(embed: embed.Build());
+
+				return 0;
+			}
+
+			if (IsValidCommand(function))
+				SshController.SshClient.RunCommand($"docker {function} {containerName}");
+			else
+			{
+				embed.Title += $"Invalid Function";
+				embed.Description = $"There is not function with the name of: `{function}`";
+				await Context.Channel.SendMessageAsync(embed: embed.Build());
+
+				return 0;
+			}
+			
 			return 1;
 		}
 	}

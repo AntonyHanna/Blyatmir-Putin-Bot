@@ -213,5 +213,12 @@ namespace Blyatmir_Putin_Bot.Model
 					return true;
 			return false;
 		}
+
+		public static bool UserHasSufficientPriveleges(Container container, User user)
+		{
+			if (container.ContainerPermissionLevel >= user.ContainerAccessLevel)
+				return true;
+			return false;
+		}
 	}
 }
