@@ -1,5 +1,8 @@
 ﻿using Blyatmir_Putin_Bot.Model;
+using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
+using System;
 using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Modules
@@ -12,7 +15,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("gs")]
 		public async Task StartConnection(string function, [Remainder] string containerName)
 		{
-			if(SshController.IsSshEnabled)
+			if (SshController.IsSshEnabled)
 			{
 				int result = RunCommand(function, containerName).Result;
 				string functionText = default;
@@ -80,10 +83,70 @@ namespace Blyatmir_Putin_Bot.Modules
 			{
 				_user = User.GetUser(userId);
 
-				_user.ContainerAccessLevel = permissions;
-				User.Write(User.UserList);
+				if (this._user != null)
+				{
+					_user.ContainerAccessLevel = permissions;
+					User.Write(User.UserList);
+				}
+
+				else
+				{
+					new User(Context.Guild.GetUser(userId));
+					this._user = User.GetUser(userId);
+					this._user.ContainerAccessLevel = permissions;
+					User.Write(User.UserList);
+				}
+				EmbedBuilder embed = new EmbedBuilder
+				{
+					Title = "A Users permissions has been updated",
+					Color = Color.Green,
+					Footer = new EmbedFooterBuilder
+					{
+						IconUrl = Context.Message.Author.GetAvatarUrl(),
+						Text = $"Permission was updated by {Context.Message.Author} at {DateTime.Now}"
+					},
+					Description = $"User with id: `{_user.UserId}'s` permissions have been changed to `{permissions}`",
+				};
+
+				await Context.Channel.SendMessageAsync(embed: embed.Build());
 			}
-			await Context.Channel.SendMessageAsync($"User with id: `{_user.UserId}'s' permissions have been changed to {permissions}");
+		}
+
+		[Command("gs uup")]
+		public async Task UpdateUserPermission(IGuildUser user, [Remainder] Container.ContainerPermissions permissions)
+		{
+			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
+			{
+				_user = User.GetUser(user.Id);
+
+				if (this._user != null)
+				{
+					_user.ContainerAccessLevel = permissions;
+					User.Write(User.UserList);
+				}
+
+				else
+				{
+					new User(Context.Guild.GetUser(user.Id));
+					this._user = User.GetUser(user.Id);
+					this._user.ContainerAccessLevel = permissions;
+					User.Write(User.UserList);
+				}
+
+				EmbedBuilder embed = new EmbedBuilder
+				{
+					Title = "A Users permissions has been updated",
+					Color = Color.Green,
+					Footer = new EmbedFooterBuilder
+					{
+						IconUrl = Context.Message.Author.GetAvatarUrl(),
+						Text = $"Permission was updated by {Context.Message.Author} at {DateTime.Now}"
+					},
+					Description = $"User: `{Context.Guild.GetUser(this._user.UserId)}'s` permissions have been changed to `{permissions}`",
+				};
+
+				await Context.Channel.SendMessageAsync(embed: embed.Build());
+			}
 		}
 
 		private async Task<int> RunCommand(string function, string containerName)

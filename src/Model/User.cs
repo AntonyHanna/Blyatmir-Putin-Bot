@@ -71,11 +71,12 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static User GetUser(ulong userId)
 		{
-			// linq query to search the xml for a matching user
-			// return null if no user is found
 			IEnumerable<User> result = from user in UserList
 									   where user.UserId == userId
 									   select user;
+			if (result.Count() == 0)
+				return null;
+
 			return result.First();
 		}
 
