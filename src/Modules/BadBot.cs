@@ -41,7 +41,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				AuthorIcon = $"https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/thumbs-down-sign_1f44e.png",
 				EmbedColor = Color.Red,
 				EmbedField = field,
-				FooterText = $"You lose a Slavenski, Blyatmir looks disgusted and takes your bottle of vodka" +
+				FooterText = $"You lose a Slavenski, Blyatmir looks disgusted and takes your bottle of vodka. " +
 				$"Slavensk now has a population of {contextSpecificData.Points}."
 			};
 
