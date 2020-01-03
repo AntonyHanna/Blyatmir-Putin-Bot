@@ -88,7 +88,6 @@ namespace Blyatmir_Putin_Bot.Modules
 					_user.ContainerAccessLevel = permissions;
 					User.Write(User.UserList);
 				}
-
 				else
 				{
 					new User(Context.Guild.GetUser(userId));
@@ -96,6 +95,7 @@ namespace Blyatmir_Putin_Bot.Modules
 					this._user.ContainerAccessLevel = permissions;
 					User.Write(User.UserList);
 				}
+
 				EmbedBuilder embed = new EmbedBuilder
 				{
 					Title = "A Users permissions has been updated",
@@ -124,7 +124,6 @@ namespace Blyatmir_Putin_Bot.Modules
 					_user.ContainerAccessLevel = permissions;
 					User.Write(User.UserList);
 				}
-
 				else
 				{
 					new User(Context.Guild.GetUser(user.Id));
