@@ -38,9 +38,9 @@ namespace Blyatmir_Putin_Bot.Modules
 						Footer = new EmbedFooterBuilder
 						{
 							IconUrl = Context.Message.Author.GetAvatarUrl(),
-							Text = $"The state of `{containerName}` has been changed"
+							Text = $"The run state of the container: {containerName} has been {functionText}"
 						},
-						Description = $"User: `{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` container",
+						Description = $"{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` container",
 					};
 
 					await Context.Channel.SendMessageAsync(embed: embed.Build());
@@ -60,7 +60,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			string state = Container.GetContainerCurrentRunState(cont.ContainerId).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
 			if (state == "running" && function == "start")
 				return false;
-			if (state == "exited" && function == "stop")
+			if (state == "stopped" && function == "stop")
 				return false;
 			return true;
 		}
@@ -172,7 +172,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 			}
 		}
-		// TODO
+
 		private async Task<int> RunCommand(string function, string containerName)
 		{
 			User.CreateUserIfMissing(Context);
@@ -223,7 +223,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			else
 			{
 				embed.Title += $"Invalid Function";
-				embed.Description = $"There is not function with the name of: `{function}`";
+				embed.Description = $"There is no function with the name: `{function}`";
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 
 				return 0;
