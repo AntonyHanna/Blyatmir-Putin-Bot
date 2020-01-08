@@ -8,10 +8,10 @@ using System.Reflection;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
-	public class ShowVersion : ModuleBase<SocketCommandContext>
+	public class ShowInfo : ModuleBase<SocketCommandContext>
 	{
 		[Command("info")]
-		public async Task DisplayVersion()
+		public async Task DisplayInfo()
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			EmbedBuilder embed = new EmbedBuilder
