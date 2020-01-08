@@ -1,4 +1,5 @@
 ﻿using Blyatmir_Putin_Bot.Model;
+using Blyatmir_Putin_Bot.Modules;
 using Blyatmir_Putin_Bot.Services;
 using Discord;
 using Discord.Commands;
@@ -14,10 +15,13 @@ namespace Blyatmir_Putin_Bot
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
 
+		public static DateTime StartTime { get; private set; }
+
 		private static void Main(string[] args)
 			=> new BotConfig().MainAsync().GetAwaiter().GetResult();
 		public async Task MainAsync()
 		{
+			StartTime = DateTime.Now;
 			await StartBotAsync();
 		}
 
