@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -15,6 +16,9 @@ namespace Blyatmir_Putin_Bot.Services
 		/// <returns></returns>
 		public static async Task CheckForLoss(SocketMessage message)
 		{
+			if (message.Author.IsBot)
+				return;
+
 			string[] terms = new string[] { "F", "in", "chat", "respect", "respects", "assignment", "due", "fucked", "can", "get", "bois" };
 			int fCounter = 0;
 			bool skipCheck = false;
@@ -26,21 +30,31 @@ namespace Blyatmir_Putin_Bot.Services
 			};
 
 			timer.Elapsed += ResetCooldown;
-			timer.Enabled = true;
 
-			foreach (string str in terms)
+			string[] words = message.Content.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+
+			for(int i = 0; i < terms.Length; i++)
 			{
-				if(message.Content.Contains("F", System.StringComparison.OrdinalIgnoreCase))
-					skipCheck = true;
+				for(int x = 0; x <words.Length; x++)
+				{
+					if(words[x].Equals("F"))
+					{
+						fCounter += 3;
+					}
 
-				else if (message.Content.Contains(str, System.StringComparison.OrdinalIgnoreCase))
-					fCounter++;
+					if(words[x].Equals(terms[i], System.StringComparison.OrdinalIgnoreCase))
+					{
+						fCounter++;
+					}
+				}
 			}
 
-			if ((fCounter >= 2 && !message.Author.IsBot && !onCooldown) || (skipCheck && !onCooldown))
+			if ((fCounter >= 3 && !onCooldown))
 			{
 				fCounter = 0;
 				onCooldown = true;
+				timer.Enabled = true;
+
 				await message.Channel.SendMessageAsync(text: "F");
 			}
 		}
