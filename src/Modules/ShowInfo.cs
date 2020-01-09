@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using System.Reflection;
+using System.Linq;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
@@ -33,7 +34,7 @@ namespace Blyatmir_Putin_Bot.Modules
 					new EmbedFieldBuilder
 					{
 						Name = "Bot Version",
-						Value = $"v{assembly.GetName().Version}"
+						Value = $"v{assembly.GetName().Version.ToString().Remove(assembly.GetName().Version.ToString().ToCharArray().Count() - 2)}"
 					},
 					new EmbedFieldBuilder
 					{
