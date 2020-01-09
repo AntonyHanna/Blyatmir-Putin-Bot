@@ -75,7 +75,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		}
 
 
-		[Command("gs ucp")]
+		[Command("ucp")]
 		public async Task UpdateContainerPermission(string containerName, [Remainder] Container.ContainerPermissions permissions)
 		{
 			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
@@ -101,7 +101,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 
-		[Command("gs uup")]
+		[Command("uup")]
 		public async Task UpdateUserPermission(ulong userId, [Remainder] Container.ContainerPermissions permissions)
 		{
 			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
@@ -137,7 +137,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			}
 		}
 
-		[Command("gs uup")]
+		[Command("uup")]
 		public async Task UpdateUserPermission(IGuildUser user, [Remainder] Container.ContainerPermissions permissions)
 		{
 			if (User.GetUser(Context.User.Id).ContainerAccessLevel == Container.ContainerPermissions.root)
