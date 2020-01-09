@@ -40,7 +40,7 @@ namespace Blyatmir_Putin_Bot.Modules
 							IconUrl = Context.Message.Author.GetAvatarUrl(),
 							Text = $"The run state of the container: {containerName} has been {functionText}"
 						},
-						Description = $"{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` container",
+						Description = $"`{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` container",
 					};
 
 					await Context.Channel.SendMessageAsync(embed: embed.Build());
