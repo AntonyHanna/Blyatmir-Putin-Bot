@@ -33,14 +33,14 @@ namespace Blyatmir_Putin_Bot.Modules
 
 					EmbedBuilder embed = new EmbedBuilder
 					{
-						Title = "Container State Changed",
+						Title = $"A container has been {functionText}",
 						Color = Color.Green,
 						Footer = new EmbedFooterBuilder
 						{
 							IconUrl = Context.Message.Author.GetAvatarUrl(),
-							Text = $"The run state of the container: {containerName} has been {functionText}"
+							Text = $"The status for container {containerName} has been updated"
 						},
-						Description = $"`{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` container",
+						Description = $"`{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` server",
 					};
 
 					await Context.Channel.SendMessageAsync(embed: embed.Build());
@@ -88,14 +88,14 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			EmbedBuilder embed = new EmbedBuilder
 			{
-				Title = "Container Updated",
+				Title = "A container has been updated",
 				Color = Color.Green,
 				Footer = new EmbedFooterBuilder
 				{
 					IconUrl = Context.Message.Author.GetAvatarUrl(),
-					Text = $"A container permission was updated by user: {Context.Guild.GetUser(Context.Message.Author.Id)} at {DateTime.Now}"
+					Text = $"A containers permission was updated by user: {Context.Guild.GetUser(Context.Message.Author.Id)} at {DateTime.Now}"
 				},
-				Description = $"Container: `{_container.ContainerName}'s` permissions have been updated to `{permissions}`",
+				Description = $"`{_container.ContainerName}'s` permissions have been updated to `{permissions}`",
 			};
 
 			await Context.Channel.SendMessageAsync(embed: embed.Build());
@@ -128,9 +128,9 @@ namespace Blyatmir_Putin_Bot.Modules
 					Footer = new EmbedFooterBuilder
 					{
 						IconUrl = Context.Message.Author.GetAvatarUrl(),
-						Text = $"A user permission was updated by {Context.Message.Author} at {DateTime.Now}"
+						Text = $"A users permission was updated by {Context.Message.Author} at {DateTime.Now}"
 					},
-					Description = $"User with id: `{_user.UserId}'s` permissions have been changed to `{permissions}`",
+					Description = $"`{Context.Guild.GetUser(this._user.UserId)}'s` permissions have been changed to `{permissions}`",
 				};
 
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
@@ -159,14 +159,14 @@ namespace Blyatmir_Putin_Bot.Modules
 
 				EmbedBuilder embed = new EmbedBuilder
 				{
-					Title = "A Users permissions has been updated",
+					Title = "A users permissions has been updated",
 					Color = Color.Green,
 					Footer = new EmbedFooterBuilder
 					{
 						IconUrl = Context.Message.Author.GetAvatarUrl(),
-						Text = $" A user permission was updated by {Context.Message.Author} at {DateTime.Now}"
+						Text = $" A users permission was updated by {Context.Message.Author} at {DateTime.Now}"
 					},
-					Description = $"User: `{Context.Guild.GetUser(this._user.UserId)}'s` permissions have been changed to `{permissions}`",
+					Description = $"`{Context.Guild.GetUser(this._user.UserId)}'s` permissions have been changed to `{permissions}`",
 				};
 
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
