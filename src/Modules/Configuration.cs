@@ -21,7 +21,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		{
 			Guild guildData = Guild.GetGuildData(context: Context);
 			guildData.SetQuoteChannel(textChannel);
-			PersistantStorage<Guild>.Write(Guild.GuildDataList);
+			Guild.Write(Guild.GuildDataList);
 
 			await Context.Channel.SendMessageAsync($"Quote channel has been assigned with id: `{textChannel.Id}` for the guild: `{guildData.GuildName}`");
 		}
@@ -33,7 +33,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		{
 			Guild guildData = Guild.GetGuildData(context: Context);
 			guildData.SetAnnouncmentChannel(textChannel);
-			PersistantStorage<Guild>.Write(Guild.GuildDataList);
+			Guild.Write(Guild.GuildDataList);
 
 			await Context.Channel.SendMessageAsync($"Announcment channel has been assigned with id: `{textChannel.Id}` for the guild: `{guildData.GuildName}`");
 		}
@@ -46,7 +46,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			Guild guildData = Guild.GetGuildData(context: Context);
 
 			guildData.IsListed = selection;
-			PersistantStorage<Guild>.Write(Guild.GuildDataList);
+			Guild.Write(Guild.GuildDataList);
 
 			if (selection)
 				await Context.Channel.SendMessageAsync($"`{guildData.GuildName}` has been opted out of being listed in scoreboards");
@@ -61,9 +61,24 @@ namespace Blyatmir_Putin_Bot.Modules
 		{
 			Guild guild = Guild.GetGuildData(Context);
 			guild.SetFTriggerCount(value);
-			PersistantStorage<Guild>.Write(Guild.GuildDataList);
+			Guild.Write(Guild.GuildDataList);
 
 			await Context.Channel.SendMessageAsync($"The F trigger value for `{Context.Guild.Name}` has been updated to `{value}`");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value">Value in seconds</param>
+		/// <returns></returns>
+		[Command("ftrigger cd")]
+		public async Task SetFTriggerCooldownValue([Remainder] double value)
+		{
+			Guild guild = Guild.GetGuildData(Context);
+			guild.SetFTriggerCooldown(value);
+			Guild.Write(Guild.GuildDataList);
+
+			await Context.Channel.SendMessageAsync($"The F trigger cooldown time for `{Context.Guild.Name}` has been updated to `{value}` seconds");
 		}
 	}
 }

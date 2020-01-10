@@ -26,12 +26,12 @@ namespace Blyatmir_Putin_Bot.Model
 		public ulong QuoteChannelId { get; set; }
 		public ulong AnnouncmentChannelId { get; set; }
 		public int FTriggerCount { get; set; }
+		public double FTriggerCoolDown { get; set; }
 
 		public Guild()
 		{
 			this.GuildName = default;
 			this.GuildId = default;
-			//this.Warnings = null;
 			this.IsListed = true;
 			this.Points = default;
 			this.HighestPoints = default;
@@ -39,13 +39,12 @@ namespace Blyatmir_Putin_Bot.Model
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
 			this.FTriggerCount = 3;
+			this.FTriggerCoolDown = 20.0;
 		}
 		public Guild(IGuild guild)
 		{
 			this.GuildName = guild.Name;
 			this.GuildId = guild.Id;
-
-			//this.Warnings = null;
 			this.IsListed = true;
 			this.Points = default;
 			this.HighestPoints = default;
@@ -53,6 +52,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
 			this.FTriggerCount = 3;
+			this.FTriggerCoolDown = 20.0;
 		}
 
 		/// <summary>
@@ -80,6 +80,15 @@ namespace Blyatmir_Putin_Bot.Model
 		public void SetFTriggerCount(int value)
 		{
 			this.FTriggerCount = value;
+		}
+
+		/// <summary>
+		/// Sets the F trigger cooldown timer
+		/// </summary>
+		/// <param name="value">Value in seconds</param>
+		public void SetFTriggerCooldown(double value)
+		{
+			this.FTriggerCoolDown = value;
 		}
 
 		/// <summary>

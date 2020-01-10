@@ -28,7 +28,7 @@ namespace Blyatmir_Putin_Bot.Services
 			Timer timer = new Timer
 			{
 				AutoReset = true,
-				Interval = 20000,
+				Interval = guild.FTriggerCoolDown * 1000,
 			};
 
 			timer.Elapsed += ResetCooldown;
