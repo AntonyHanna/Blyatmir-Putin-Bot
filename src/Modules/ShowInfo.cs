@@ -14,6 +14,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("info")]
 		public async Task DisplayInfo()
 		{
+			TimeSpan difference = DateTime.Now.Subtract(BotConfig.StartTime);
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			EmbedBuilder embed = new EmbedBuilder
 			{
@@ -38,8 +39,8 @@ namespace Blyatmir_Putin_Bot.Modules
 					},
 					new EmbedFieldBuilder
 					{
-						Name = "Uptime",
-						Value = $"{GetUptime()}"
+						Name = "Bot Uptime",
+						Value = $"{difference.Days} Days | {difference.Hours} Hours | {difference.Minutes} Minutes | {difference.Seconds} Seconds"
 					}
 				},
 
@@ -52,28 +53,6 @@ namespace Blyatmir_Putin_Bot.Modules
 			};
 
 			await Context.Channel.SendMessageAsync(embed: embed.Build());
-		}
-
-		private string GetUptime()
-		{
-			TimeSpan difference = DateTime.Now.Subtract(BotConfig.StartTime);
-			if (difference.TotalSeconds < 60)
-				return (int)difference.TotalSeconds + " Seconds";
-
-			else if (difference.TotalMinutes < 60)
-				return (int)difference.TotalMinutes + " Minutes";
-
-			else if (difference.TotalHours < 24)
-				return (int)difference.TotalHours + " Hours";
-
-			else if (difference.TotalDays < 1)
-				return (int)difference.TotalDays + " Days";
-
-			else if (difference.TotalDays > 365)
-				return (int)(difference.Days / 365) + " Years";
-
-			else
-				return "Unkown";
 		}
 	}
 }

@@ -74,6 +74,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			return false;
 		}
 
+		// TODO: Move the following three functions into their own class
 
 		[Command("ucp")]
 		public async Task UpdateContainerPermission(string containerName, [Remainder] Container.ContainerPermissions permissions)
