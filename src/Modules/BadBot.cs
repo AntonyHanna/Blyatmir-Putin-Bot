@@ -18,7 +18,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task BadBot()
 		{
 			//get server sepcific GuildData
-			Guild contextSpecificData = Guild.GetServerData(context: Context);
+			Guild contextSpecificData = Guild.GetGuildData(context: Context);
 
 			//decrement points
 			contextSpecificData.Points--;

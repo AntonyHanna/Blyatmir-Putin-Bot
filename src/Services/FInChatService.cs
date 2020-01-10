@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Blyatmir_Putin_Bot.Model;
+using Discord.WebSocket;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -19,14 +20,15 @@ namespace Blyatmir_Putin_Bot.Services
 			if (message.Author.IsBot)
 				return;
 
+			Guild guild = Guild.GetGuildData((message.Channel as SocketGuildChannel).Guild);
+
 			string[] terms = new string[] { "F", "in", "chat", "respect", "respects", "assignment", "due", "fucked", "can", "get", "bois" };
 			int fCounter = 0;
-			bool skipCheck = false;
 
 			Timer timer = new Timer
 			{
 				AutoReset = true,
-				Interval = 30000,
+				Interval = 20000,
 			};
 
 			timer.Elapsed += ResetCooldown;
@@ -39,7 +41,7 @@ namespace Blyatmir_Putin_Bot.Services
 				{
 					if(words[x].Equals("F"))
 					{
-						fCounter += 3;
+						fCounter += guild.FTriggerCount;
 					}
 
 					if(words[x].Equals(terms[i], System.StringComparison.OrdinalIgnoreCase))
@@ -49,7 +51,7 @@ namespace Blyatmir_Putin_Bot.Services
 				}
 			}
 
-			if ((fCounter >= 3 && !onCooldown))
+			if ((fCounter >= guild.FTriggerCount && !onCooldown))
 			{
 				fCounter = 0;
 				onCooldown = true;
