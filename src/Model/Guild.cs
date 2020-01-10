@@ -16,7 +16,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public ulong GuildId { get; set; }
 		public string GuildName { get; set; }
-		//public Warning Warnings { get; set; }
 		/// <summary>
 		/// Is the server listed in highscores list
 		/// </summary>
@@ -26,6 +25,7 @@ namespace Blyatmir_Putin_Bot.Model
 		public int LowestPoints { get; set; }
 		public ulong QuoteChannelId { get; set; }
 		public ulong AnnouncmentChannelId { get; set; }
+		public int FTriggerCount { get; set; }
 
 		public Guild()
 		{
@@ -38,6 +38,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.LowestPoints = default;
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
+			this.FTriggerCount = 3;
 		}
 		public Guild(IGuild guild)
 		{
@@ -51,6 +52,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.LowestPoints = default;
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
+			this.FTriggerCount = 3;
 		}
 
 		/// <summary>
@@ -69,6 +71,15 @@ namespace Blyatmir_Putin_Bot.Model
 		public void SetAnnouncmentChannel(ITextChannel channel)
 		{
 			this.AnnouncmentChannelId = (channel as SocketTextChannel).Id;
+		}
+
+		/// <summary>
+		/// Sets the trigger value for when F should be sent
+		/// </summary>
+		/// <param name="value"></param>
+		public void SetFTriggerCount(int value)
+		{
+			this.FTriggerCount = value;
 		}
 
 		/// <summary>
@@ -180,7 +191,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public static Guild GetServerData(SocketCommandContext context)
+		public static Guild GetGuildData(SocketCommandContext context)
 		{
 			foreach (Guild data in GuildDataList)
 				if (data.GuildId == context.Guild.Id)
@@ -194,7 +205,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public static Guild GetServerData(IGuild guild)
+		public static Guild GetGuildData(IGuild guild)
 		{
 			foreach (Guild data in GuildDataList)
 				if (data.GuildId == guild.Id)

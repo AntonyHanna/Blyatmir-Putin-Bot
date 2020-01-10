@@ -22,7 +22,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		{
 			string lessThanText = "";
 
-			Guild guildData = Guild.GetServerData(context: Context);
+			Guild guildData = Guild.GetGuildData(context: Context);
 
 			//sets the less than text to different values based on the point scenario
 			if (guildData.Points == guildData.HighestPoints)

@@ -56,7 +56,7 @@ namespace Blyatmir_Putin_Bot.Services
 				if (IsPotentialQuote(message))
 				{
 					//check if the Guild has a QuoteChannel specified
-					if (Guild.GetServerData(Quoter.Guild).QuoteChannelId != 0)
+					if (Guild.GetGuildData(Quoter.Guild).QuoteChannelId != 0)
 					{
 						await SendQuoteConfirmationMessageAsync();
 						StartTimeoutTrigger();
@@ -230,7 +230,7 @@ namespace Blyatmir_Putin_Bot.Services
 			//remove the confirmation message message
 			await QuoteConfirmationMessage.DeleteAsync();
 
-			Guild guildData = Guild.GetServerData(Quoter.Guild);
+			Guild guildData = Guild.GetGuildData(Quoter.Guild);
 			DateTime currentTime = DateTime.Now;
 
 			if (guildData.QuoteChannelId != 0)
