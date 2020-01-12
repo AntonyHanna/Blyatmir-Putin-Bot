@@ -39,7 +39,7 @@ namespace Blyatmir_Putin_Bot.Services
 			{
 				for(int x = 0; x <words.Length; x++)
 				{
-					if(words[x].Equals("F"))
+					if(words[x].Equals("F", System.StringComparison.OrdinalIgnoreCase))
 					{
 						fCounter += guild.FTriggerCount;
 					}
