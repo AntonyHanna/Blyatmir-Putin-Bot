@@ -9,7 +9,6 @@ using VideoLibrary;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
-	[Group("video")]
 	public class Video : ModuleBase<SocketCommandContext>
 	{
 		[Command("download")]
@@ -19,15 +18,18 @@ namespace Blyatmir_Putin_Bot.Modules
 			YouTube youtube = YouTube.Default;
 			var video = await youtube.GetVideoAsync(link);
 
-			string filePath = $"{AppEnvironment.ConfigLocation}\\videos\\{video.FullName}";
+			string filePath = $"{AppEnvironment.ConfigLocation}\\videos\\{video.FullName.Remove(video.FullName.ToCharArray().Length - 14)}.mp4";
 			await File.WriteAllBytesAsync( filePath, video.GetBytesAsync().Result);
 
 			EmbedBuilder embed = new EmbedBuilder
 			{
-				Title = "Video has been downloaded",
+				Title = "Download Link Ready",
 				Color = Color.Red,
-				Description = video.FullName,
-				Url = video.Uri
+				Description = $"Click [here]({video.Uri}) to be redirected to the download",
+				Footer = new EmbedFooterBuilder
+				{
+					Text = video.FullName.Remove(video.FullName.ToCharArray().Length - 14)
+				}
 			};
 
 			await Context.Channel.SendMessageAsync(embed: embed.Build());
