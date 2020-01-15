@@ -97,20 +97,23 @@ namespace Blyatmir_Putin_Bot
 
 			//log messages in the console
 			Client.Log += Log;
+
+			AppDomain.CurrentDomain.ProcessExit += OnExitAsync;
 		}
 
-
-
-		/// <summary>
-		/// Stop the bot and exit the application asynchronously
-		/// </summary>
-		/// <returns></returns>
-		public async static Task StopBotAsync()
+		private static async void OnExitAsync(object sender, EventArgs e)
 		{
 			//stop the bot correctly
 			await Client.StopAsync();
 			SshController.SshClient.Disconnect();
 			SshController.SshClient.Dispose();
+
+			//Disconnect From all Guild Voice Chats
+			foreach (AudioService audioService in AudioService.AudioServices)
+			{
+				await audioService.DisconnectFromVoiceAsync();
+			}
+
 			//kill the program
 			Environment.Exit(1);
 		}
