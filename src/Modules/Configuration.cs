@@ -80,5 +80,15 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			await Context.Channel.SendMessageAsync($"The F trigger cooldown time for `{Context.Guild.Name}` has been updated to `{value}` seconds");
 		}
+
+		[Command("intromusic")]
+		public async Task SetIntroMusic([Remainder] bool status)
+		{
+			Guild guildData = Guild.GetGuildData(Context);
+			guildData.EnableIntroMusic = status;
+			Guild.Write(Guild.GuildDataList);
+
+			await Context.Channel.SendMessageAsync($"Intro Music has been set to `{status}` for `{guildData.GuildName}`");
+		}
 	}
 }
