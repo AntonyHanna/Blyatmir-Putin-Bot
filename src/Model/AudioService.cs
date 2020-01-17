@@ -73,7 +73,8 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public bool NeedsToConnectToVoiceChannel()
 		{
-			IEnumerable<SocketVoiceChannel> channel = from vc in Context.Guild.VoiceChannels
+			SocketGuild guild = (this.VoiceState.VoiceChannel == null) ? this.Context.Guild : this.VoiceState.VoiceChannel.Guild;
+			IEnumerable<SocketVoiceChannel> channel = from vc in guild.VoiceChannels
 													  where vc.Users.Contains(BotConfig.Client.CurrentUser as IGuildUser)
 													  select vc;
 			if (channel.Count() == 0)
@@ -133,7 +134,9 @@ namespace Blyatmir_Putin_Bot.Model
 
 		private SocketVoiceChannel GetContextVoiceChannel()
 		{
-			IEnumerable<SocketVoiceChannel> channel = from vc in Context.Guild.VoiceChannels
+			SocketGuild guild = (this.VoiceState.VoiceChannel == null) ? this.Context.Guild : this.VoiceState.VoiceChannel.Guild;
+
+			IEnumerable<SocketVoiceChannel> channel = from vc in guild.VoiceChannels
 													  where vc.Users.Contains(Context.Message.Author)
 													  select vc;
 			if (channel.Count() == 0)
@@ -149,7 +152,8 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		private SocketVoiceChannel GetBotCurrentVoiceChannel()
 		{
-			IEnumerable<SocketVoiceChannel> channel = from vc in this.VoiceState.VoiceChannel.Guild.VoiceChannels
+			SocketGuild guild = (this.VoiceState.VoiceChannel == null) ? this.Context.Guild : this.VoiceState.VoiceChannel.Guild;
+			IEnumerable<SocketVoiceChannel> channel = from vc in guild.VoiceChannels
 													  where vc.GetUser(BotConfig.Client.CurrentUser.Id) != null
 													  select vc;
 			if (channel.Count() == 0)
