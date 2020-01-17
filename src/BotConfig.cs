@@ -95,6 +95,8 @@ namespace Blyatmir_Putin_Bot
 			//Update serverdata when the bot joins a new guild
 			Client.JoinedGuild += Guild.GenerateGuildData;
 
+			Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
+
 			//log messages in the console
 			Client.Log += Log;
 		}

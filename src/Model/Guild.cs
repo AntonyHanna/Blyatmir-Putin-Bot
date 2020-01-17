@@ -27,6 +27,7 @@ namespace Blyatmir_Putin_Bot.Model
 		public ulong AnnouncmentChannelId { get; set; }
 		public int FTriggerCount { get; set; }
 		public double FTriggerCoolDown { get; set; }
+		public bool EnableIntroMusic { get; set; }
 
 		public Guild()
 		{
@@ -40,6 +41,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.AnnouncmentChannelId = default;
 			this.FTriggerCount = 3;
 			this.FTriggerCoolDown = 20.0;
+			this.EnableIntroMusic = false;
 		}
 		public Guild(IGuild guild)
 		{
@@ -53,6 +55,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.AnnouncmentChannelId = default;
 			this.FTriggerCount = 3;
 			this.FTriggerCoolDown = 20.0;
+			this.EnableIntroMusic = false;
 		}
 
 		/// <summary>
