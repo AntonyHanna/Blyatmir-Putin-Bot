@@ -10,9 +10,13 @@ namespace Blyatmir_Putin_Bot.Services
 		// implement a queue of sorts for when multiple people join
 		public static Task PlayIntroMusic(SocketUser user, SocketVoiceState previousState, SocketVoiceState newState)
 		{
-			// Get the users data
-			// play the song if specified
 			Task.Run(async () => {
+				// Stops this from triggering when a user is muted or deafened
+				bool sameChannel = previousState.VoiceChannel == newState.VoiceChannel;
+
+				if (user.IsBot || sameChannel)
+					return;
+
 				User userData = User.GetUser(user.Id);
 				Guild guildData = Guild.GetGuildData(newState.VoiceChannel.Guild);
 
