@@ -13,20 +13,18 @@ namespace Blyatmir_Putin_Bot.Model
 		public static readonly List<User> UserList = new List<User>(Read());
 		public ulong UserId { get; set; }
 		public ContainerPermissions ContainerAccessLevel { get; set; }
-		public string IntroSong { get; set; }
+		public string IntroSong { get; set; } = "default.mp3";
 
 		public User()
 		{
 			this.UserId = default;
 			this.ContainerAccessLevel = ContainerPermissions.jack;
-			this.IntroSong = "default.mp3";
 		}
 
 		public User(ulong userId)
 		{
 			this.UserId = userId;
 			this.ContainerAccessLevel = ContainerPermissions.jack;
-			this.IntroSong = "default.mp3";
 
 			UserList.Add(this);
 			Write(UserList);
@@ -36,7 +34,6 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			this.UserId = user.Id;
 			this.ContainerAccessLevel = ContainerPermissions.jack;
-			this.IntroSong = "default.mp3";
 
 			UserList.Add(this);
 			Write(UserList);
