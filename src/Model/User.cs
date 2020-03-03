@@ -69,7 +69,7 @@ namespace Blyatmir_Putin_Bot.Model
 									   where user.UserId == userId
 									   select user;
 			if (result.Count() == 0)
-				return null;
+				return new User(userId);
 
 			return result.First();
 		}
