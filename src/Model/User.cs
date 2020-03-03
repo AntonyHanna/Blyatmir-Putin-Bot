@@ -12,19 +12,17 @@ namespace Blyatmir_Putin_Bot.Model
 	{
 		public static readonly List<User> UserList = new List<User>(Read());
 		public ulong UserId { get; set; }
-		public ContainerPermissions ContainerAccessLevel { get; set; }
+		public ContainerPermissions ContainerAccessLevel { get; set; } = ContainerPermissions.jack;
 		public string IntroSong { get; set; } = "default.mp3";
 
 		public User()
 		{
 			this.UserId = default;
-			this.ContainerAccessLevel = ContainerPermissions.jack;
 		}
 
 		public User(ulong userId)
 		{
 			this.UserId = userId;
-			this.ContainerAccessLevel = ContainerPermissions.jack;
 
 			UserList.Add(this);
 			Write(UserList);
@@ -33,7 +31,6 @@ namespace Blyatmir_Putin_Bot.Model
 		public User(SocketUser user)
 		{
 			this.UserId = user.Id;
-			this.ContainerAccessLevel = ContainerPermissions.jack;
 
 			UserList.Add(this);
 			Write(UserList);
@@ -64,7 +61,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <summary>
 		/// Get a user object
 		/// </summary>
-		/// <param name="userId">The ID of the user you're trying to view</param>
+		/// <param name="userId">The ID of the user you're trying to view, will create a new user if no user is found</param>
 		/// <returns></returns>
 		public static User GetUser(ulong userId)
 		{
