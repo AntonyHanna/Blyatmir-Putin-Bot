@@ -57,7 +57,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <returns></returns>
 		private static bool CanExecuteStateChange(Container cont, string function)
 		{
-			string state = Container.GetContainerCurrentRunState(cont.ContainerId).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
+			string state = Container.GetContainerCurrentRunState(cont.Id).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
 			if (state == "running" && function == "start")
 				return false;
 			if (state == "stopped" && function == "stop")
@@ -83,7 +83,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			{
 				_container = Container.GetContainerByName(containerName);
 
-				_container.ContainerPermissionLevel = permissions;
+				_container.PermisssionLevel = permissions;
 				Container.Write(Container.ContainerList);
 			}
 
@@ -96,7 +96,7 @@ namespace Blyatmir_Putin_Bot.Modules
 					IconUrl = Context.Message.Author.GetAvatarUrl(),
 					Text = $"A containers permission was updated by user: {Context.Guild.GetUser(Context.Message.Author.Id)} at {DateTime.Now}"
 				},
-				Description = $"`{_container.ContainerName}'s` permissions have been updated to `{permissions}`",
+				Description = $"`{_container.Name}'s` permissions have been updated to `{permissions}`",
 			};
 
 			await Context.Channel.SendMessageAsync(embed: embed.Build());

@@ -17,26 +17,26 @@ namespace Blyatmir_Putin_Bot.Model
 			user = 1,   // limited access to containers
 			jack = 2    // no access to containers
 		}
-		public string ContainerId { get; set; }
-		public string ContainerName { get; set; }
-		public string ContainerTag { get; set; }
-		public string ContainerImage { get; set; }
-		public ContainerPermissions ContainerPermissionLevel { get; set; } = ContainerPermissions.root;
+		public string Id { get; set; }
+		public string Name { get; set; }
+		public string Tag { get; set; }
+		public string Image { get; set; }
+		public ContainerPermissions PermisssionLevel { get; set; } = ContainerPermissions.root;
 
 		public Container()
 		{
-			this.ContainerId = default;
-			this.ContainerName = default;
-			this.ContainerImage = default;
-			this.ContainerTag = default;
+			this.Id = default;
+			this.Name = default;
+			this.Image = default;
+			this.Tag = default;
 		}
 
 		public Container(string containerId)
 		{
-			this.ContainerId = containerId;
-			this.ContainerName = GetContainerName(this.ContainerId);
-			this.ContainerImage = GetContainerImage(this.ContainerId);
-			this.ContainerTag = GetContainerTag(this.ContainerId);
+			this.Id = containerId;
+			this.Name = GetContainerName(this.Id);
+			this.Image = GetContainerImage(this.Id);
+			this.Tag = GetContainerTag(this.Id);
 
 			ContainerList.Add(this);
 			Write(ContainerList);
@@ -71,7 +71,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 				if (ContainerList.Count() > 0)
 					foreach (var cont in ContainerList)
-						if (containerIds[j] == cont.ContainerId)
+						if (containerIds[j] == cont.Id)
 							isPresent = true;
 
 				// for the ones not present add them to data
@@ -110,7 +110,7 @@ namespace Blyatmir_Putin_Bot.Model
 		public static Container GetContainerById(string containerId)
 		{
 			var result = from container in ContainerList
-						 where container.ContainerId == containerId
+						 where container.Id == containerId
 						 select container;
 
 			return result.First();
@@ -120,7 +120,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			// linq query to get container from Containers list
 			var result = from container in ContainerList
-						 where container.ContainerName == containerName
+						 where container.Name == containerName
 						 select container;
 
 			return result.First();
@@ -192,7 +192,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public static void SetContainerPermissionLevel(string containerId, ContainerPermissions newContainerPermissions)
 		{
-			GetContainerById(containerId).ContainerPermissionLevel = newContainerPermissions;
+			GetContainerById(containerId).PermisssionLevel = newContainerPermissions;
 
 			Write(ContainerList);
 		}
@@ -200,14 +200,14 @@ namespace Blyatmir_Putin_Bot.Model
 		public static bool IsValidContainer(string containerName)
 		{
 			for (int i = 0; i < Container.ContainerList.Count; i++)
-				if (Container.ContainerList[i].ContainerName == containerName)
+				if (Container.ContainerList[i].Name == containerName)
 					return true;
 			return false;
 		}
 
 		public static bool UserHasSufficientPriveleges(Container container, User user)
 		{
-			if (container.ContainerPermissionLevel >= user.ContainerAccessLevel)
+			if (container.PermisssionLevel >= user.ContainerAccessLevel)
 				return true;
 			return false;
 		}
