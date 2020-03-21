@@ -11,28 +11,17 @@ namespace Blyatmir_Putin_Bot.Model
 	{
 		public static readonly List<Container> ContainerList = new List<Container>(Read());
 
-		public enum ContainerRunStates
-		{
-			created,        // container has been created but not been run
-			restarting,     // container is in the middle of restarting
-			running,        // container is currently running
-			removing,       // container is in the process of being removed
-			paused,         // container is currently paused
-			exited,         // container is not currently running
-			dead            // container is non functional and needs to be removed
-		}
 		public enum ContainerPermissions
 		{
 			root = 0,   // full access to containers
 			user = 1,   // limited access to containers
 			jack = 2    // no access to containers
 		}
-
 		public string ContainerId { get; set; }
 		public string ContainerName { get; set; }
 		public string ContainerTag { get; set; }
 		public string ContainerImage { get; set; }
-		public ContainerPermissions ContainerPermissionLevel { get; set; }
+		public ContainerPermissions ContainerPermissionLevel { get; set; } = ContainerPermissions.root;
 
 		public Container()
 		{
@@ -40,7 +29,6 @@ namespace Blyatmir_Putin_Bot.Model
 			this.ContainerName = default;
 			this.ContainerImage = default;
 			this.ContainerTag = default;
-			this.ContainerPermissionLevel = ContainerPermissions.root;
 		}
 
 		public Container(string containerId)
@@ -49,7 +37,6 @@ namespace Blyatmir_Putin_Bot.Model
 			this.ContainerName = GetContainerName(this.ContainerId);
 			this.ContainerImage = GetContainerImage(this.ContainerId);
 			this.ContainerTag = GetContainerTag(this.ContainerId);
-			this.ContainerPermissionLevel = ContainerPermissions.root;
 
 			ContainerList.Add(this);
 			Write(ContainerList);
@@ -63,7 +50,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			if (!SshController.IsSshEnabled)
 				return Task.CompletedTask;
-			//Create the config directory if it doesn't exist
+
 			if (!Directory.Exists(AppEnvironment.ConfigLocation))
 				Directory.CreateDirectory(AppEnvironment.ConfigLocation);
 
@@ -72,17 +59,22 @@ namespace Blyatmir_Putin_Bot.Model
 			//loop through all the guilds
 			for (int j = 0; j < containerIds.Count(); j++)
 			{
-				//indexing for readonly collections
+				
+				// check for container update
+				// trigger an event if updated with the container info
+				// 
+
 				bool isPresent = false;
+
 				InitializeStorage();
-				//dont run if there is no guild data 
-				//otherwise compare the guild ids and only add the ones that are different
+
+
 				if (ContainerList.Count() > 0)
 					foreach (var cont in ContainerList)
 						if (containerIds[j] == cont.ContainerId)
 							isPresent = true;
 
-				//for the ones not present add them to data
+				// for the ones not present add them to data
 				if (!isPresent)
 				{
 					new Container(containerIds[j]);
@@ -117,7 +109,6 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Container GetContainerById(string containerId)
 		{
-			// linq query to get container from Containers list
 			var result = from container in ContainerList
 						 where container.ContainerId == containerId
 						 select container;
