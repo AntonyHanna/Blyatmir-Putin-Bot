@@ -6,9 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "Blyatmir Putin Bot/1.0.1": {
+      "Blyatmir Putin Bot/1.0.2": {
         "dependencies": {
           "Discord.Net": "2.1.1",
+          "Newtonsoft.Json": "12.0.3",
           "SSH.NET": "2016.1.0",
           "VideoLibrary": "3.0.0"
         },
@@ -657,7 +658,7 @@
     }
   },
   "libraries": {
-    "Blyatmir Putin Bot/1.0.1": {
+    "Blyatmir Putin Bot/1.0.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
