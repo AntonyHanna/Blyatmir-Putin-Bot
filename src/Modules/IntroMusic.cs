@@ -9,20 +9,49 @@ using Discord.Commands;
 namespace Blyatmir_Putin_Bot.Modules
 {
 	[Group("intromusic")]
+	[Alias("im")]
 	public class IntroMusic : ModuleBase<SocketCommandContext>
 	{
-		// Should contain commands for configuring things about the IntoMusicService such as:
-		// enabling and selecting song on user basis
-		// 
 		[Command("set")]
 		[Alias("-s")]
-		public async Task SetIntroMusic([Remainder] string songName)
+		public async Task SetIntroMusic()
 		{
+			Attachment attachment = Context.Message.Attachments.First();
+
+			if(attachment == null)
+			{
+				await Context.Channel.SendMessageAsync("No file was provided, no changes have been made");
+				return;
+			}
+
+			if (File.Exists($"{AppEnvironment.ConfigLocation}/resources/introMusic/{attachment.Filename}"))
+			{
+				await Context.Channel.SendMessageAsync("File already exists with this name");
+				return;
+			}
+
+			if (attachment.Size > 200000)
+			{
+				System.Console.WriteLine(attachment.Size);
+				await Context.Channel.SendMessageAsync($"File: `{attachment.Filename}` exceeded the 200kb file size limit");
+				return;
+			}
+
+			if (!attachment.Filename.Contains(".mp3"))
+			{
+				await Context.Channel.SendMessageAsync("File is of the wrong type, I only accept \".mp3\" files because tony is lazy");
+				return;
+			}
+
 			User userData = User.GetUser(Context.Message.Author.Id);
-			userData.IntroSong = songName;
+
+			DeleteIntroSong(userData.IntroSong);
+
+			userData.IntroSong = attachment.Filename;
 			User.Write(User.UserList);
 
-			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been set to `{songName}`");
+			DownloadFromLink(attachment.Url, attachment.Filename);
+			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been set to `{attachment.Filename}`");
 		}
 
 		[Command("remove")]
@@ -33,33 +62,21 @@ namespace Blyatmir_Putin_Bot.Modules
 			userData.IntroSong = null;
 			User.Write(User.UserList);
 
+			DeleteIntroSong(userData.IntroSong);
 			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
 		}
 
-
-		[Command("upload")]
-		[Alias("-u")]
-		public async Task UploadIntroMusic()
+		private void DownloadFromLink(string uri, string name)
 		{
-			Attachment attachment = Context.Message.Attachments.First();
-			if(File.Exists($"{AppEnvironment.ConfigLocation}/resources/introMusic/{attachment.Filename}"))
+			using (WebClient client = new WebClient())
 			{
-				// Send Embed and return
-				await Context.Channel.SendMessageAsync("File already exists with this name");
-				return;
+				client.DownloadFileAsync(new System.Uri(uri), $"{AppEnvironment.ConfigLocation}/resources/introMusic/{name}");
 			}
+		}
 
-			if(!attachment.Filename.Contains(".mp3"))
-			{
-				// Send embed and return
-				await Context.Channel.SendMessageAsync("File is of the wrong type, I only accept \".mp3\" files because tony is lazy");
-				return;
-			}
-			using(WebClient client = new WebClient())
-			{
-				client.DownloadFileAsync(new System.Uri(attachment.Url), $"{AppEnvironment.ConfigLocation}/resources/introMusic/{attachment.Filename}");
-				await Context.Channel.SendMessageAsync($"File: `{attachment.Filename}` has been uploaded");
-			}
+		private void DeleteIntroSong(string songName)
+		{
+			File.Delete($"{AppEnvironment.ConfigLocation}/resources/introMusic/{songName}");
 		}
 	}
 }
