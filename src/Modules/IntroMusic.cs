@@ -76,6 +76,9 @@ namespace Blyatmir_Putin_Bot.Modules
 
 		private void DeleteIntroSong(string songName)
 		{
+			if (songName == "default.mp3")
+				return;
+
 			File.Delete($"{AppEnvironment.ConfigLocation}/resources/introMusic/{songName}");
 		}
 	}
