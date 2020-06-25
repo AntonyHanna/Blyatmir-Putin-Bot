@@ -244,8 +244,6 @@ namespace Blyatmir_Putin_Bot.Services
 				};
 
 				await quoteChannel.SendMessageAsync(embed: easyEmbed.Build());
-
-				ResetVariables();
 			}
 
 			//remove the confirmation message message
@@ -253,6 +251,8 @@ namespace Blyatmir_Putin_Bot.Services
 
 			// remove the original quote
 			await Quote.DeleteAsync();
+
+			ResetVariables();
 		}
 
 		/// <summary>
