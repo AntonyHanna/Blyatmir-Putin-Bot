@@ -227,9 +227,6 @@ namespace Blyatmir_Putin_Bot.Services
 			//stop the timer
 			_timer.Stop();
 
-			//remove the confirmation message message
-			await QuoteConfirmationMessage.DeleteAsync();
-
 			Guild guildData = Guild.GetGuildData(Quoter.Guild);
 			DateTime currentTime = DateTime.Now;
 
@@ -247,9 +244,15 @@ namespace Blyatmir_Putin_Bot.Services
 				};
 
 				await quoteChannel.SendMessageAsync(embed: easyEmbed.Build());
-
-				ResetVariables();
 			}
+
+			//remove the confirmation message message
+			await QuoteConfirmationMessage.DeleteAsync();
+
+			// remove the original quote
+			await Quote.DeleteAsync();
+
+			ResetVariables();
 		}
 
 		/// <summary>
