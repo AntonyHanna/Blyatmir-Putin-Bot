@@ -62,11 +62,11 @@ namespace Blyatmir_Putin_Bot.Modules
 		private string appendIdToName(string originalName)
 		{
 			int i = 1;
-			string newName = originalName.Substring(originalName.Length - 4) + $"({i}).mp3";
+			string newName = originalName.Substring(0, originalName.Length - 4) + $"({i}).mp3";
 
 			while (FileExists(newName))
 			{
-				newName = originalName.Substring(originalName.Length - 7) + $"({i}).mp3";
+				newName = originalName.Substring(0, originalName.Length - 7) + $"({i}).mp3";
 				i++;
 			}
 
