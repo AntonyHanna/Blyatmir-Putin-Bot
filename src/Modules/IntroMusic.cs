@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Blyatmir_Putin_Bot.Model;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
@@ -105,6 +106,29 @@ namespace Blyatmir_Putin_Bot.Modules
 		private void DeleteIntroSong(string songName)
 		{
 			File.Delete($"{songDirectory}{songName}");
+		}
+
+		[Command("default")]
+		[Alias("-d")]
+		[RequireBotPermission(GuildPermission.Administrator)]
+		internal void SetUserIntroToDefault(SocketUser user) 
+			=> SetSongToDefault(user);
+
+		[Command("default")]
+		[Alias("-d")]
+		[RequireBotPermission(GuildPermission.Administrator)]
+		private void SetUserIntroToDefault() 
+			=> SetSongToDefault(Context.User);
+		
+		// this will probably end up being an issue since it'll allow users to default others intromusic
+		// the only solution is to how a baked in permissions system
+		private void SetSongToDefault(SocketUser user)
+		{
+			User userInfo = User.GetUser(user.Id);
+			userInfo.IntroSong = "default.mp3";
+			User.Write(User.UserList);
+
+			Context.Channel.SendMessageAsync($"Intro Music for User: `{user.Username}` has been set to the default");
 		}
 	}
 }
