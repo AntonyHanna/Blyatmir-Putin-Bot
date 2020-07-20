@@ -7,16 +7,16 @@ RUN mkdir /build-output /source-code
 # copy the source code to container
 COPY ./ /source-code/
 
+# gets the core runtime to allow for running the program
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
+
 # build the source code & install the required linux packages
 RUN dotnet publish "./source-code/Blyatmir Putin Bot.sln" -c Release -o /build-output/ ; \
-apt-get update && apt-get --no-install-recommends install -y \
+	apt-get update && apt-get --no-install-recommends install -y \
 	libopus-dev \
 	libsodium-dev \
 	ffmpeg ; \
 	rm -rf /var/lib/apt/lists/*
-
-# gets the core runtime to allow for running the program
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
 
 RUN mkdir /build-output/
 
