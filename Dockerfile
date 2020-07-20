@@ -1,8 +1,19 @@
 FROM mcr.microsoft.com/dotnet/core/runtime:2.1
-COPY ./build app/
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1
+
+# prep the directories we'll bn
+RUN mkdir /build-output
+RUN mkdir /source-code
+COPY ./src /source-code/
+
+# build the source code
+RUN dotnet publish "./source-code/Blyatmir Putin Bot.sln" -c Release -o /build-output/
+
+# install the required linux packages
 RUN apt-get update && apt-get install -y \
 	libopus-dev \
 	libsodium-dev \
 	ffmpeg
 	
-ENTRYPOINT ["dotnet", "app/Blyatmir Putin Bot.dll"]
+# start the program
+ENTRYPOINT ["dotnet", "/build-otput/Blyatmir Putin Bot.dll"]
