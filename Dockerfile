@@ -18,4 +18,4 @@ RUN apt-get update && apt-get install -y \
 	ffmpeg
 	
 # start the program
-ENTRYPOINT ["dotnet", "/build-otput/Blyatmir Putin Bot.dll"]
+ENTRYPOINT ["dotnet", "/build-output/Blyatmir Putin Bot.dll"]
