@@ -1,5 +1,5 @@
 # get the sdk to allow us to build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine as build-env
 
 # prep the directories we'll be using
 RUN mkdir /build-output /source-code
@@ -15,9 +15,8 @@ apt-get update && apt-get --no-install-recommends install -y \
 	ffmpeg ; \
 	rm -rf /var/lib/apt/lists/*
 
-
 # gets the core runtime to allow for running the program
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
 
 RUN mkdir /build-output/
 
