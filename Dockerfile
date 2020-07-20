@@ -1,5 +1,5 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:2.1
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1
+# get the sdk to allow us to build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1 as build-env
 
 # prep the directories we'll be using
 RUN mkdir /build-output /source-code
@@ -14,6 +14,14 @@ apt-get update && apt-get --no-install-recommends install -y \
 	libsodium-dev \
 	ffmpeg ; \
 	rm -rf /var/lib/apt/lists/*
+
+
+# gets the core runtime to allow for running the program
+FROM mcr.microsoft.com/dotnet/core/runtime:2.1
+
+RUN mkdir /build-output/
+
+COPY --from=build-env /build-output/ /build-output/
 	
 # start the program
 ENTRYPOINT ["dotnet", "/build-output/Blyatmir Putin Bot.dll"]
