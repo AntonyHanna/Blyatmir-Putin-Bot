@@ -41,7 +41,6 @@ namespace Blyatmir_Putin_Bot.Modules
 			}
 
 			User userData = User.GetUser(Context.Message.Author.Id);
-
 			string preparedFileName = appendFileNameIfExists(attachment.Filename);
 
 			DeleteIntroSong(userData.IntroSong);

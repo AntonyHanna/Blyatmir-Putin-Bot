@@ -1,4 +1,3 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/85614d329f784c5685256e0bd5589699)](https://www.codacy.com/manual/AntonyHanna/Blyatmir-Putin-Bot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AntonyHanna/Blyatmir-Putin-Bot&amp;utm_campaign=Badge_Grade)
 [![Github Repo Size](https://img.shields.io/github/release-pre/antonyhanna/blyatmir-putin-bot.svg)](https://github.com/AntonyHanna/Blyatmir-Putin-Bot/releases/tag/v0.1.0)
 [![Github Repo Size](https://img.shields.io/github/repo-size/AntonyHanna/Blyatmir-Putin-Bot.svg?style=popout)](https://github.com/AntonyHanna/Blyatmir-Putin-Bot)
 [![Docker Build Status](https://img.shields.io/docker/cloud/build/antonyhanna/blyatmir-putin-bot.svg?style=popout)](https://cloud.docker.com/repository/docker/antonyhanna/blyatmir-putin-bot)
