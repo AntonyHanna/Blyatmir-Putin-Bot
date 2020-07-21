@@ -15,7 +15,7 @@ FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
 
 # install the required linux packages
 RUN apk update && apk add \
-	libopus-dev \
+	opus-dev \
 	libsodium-dev \
 	ffmpeg ; \
 	rm -rf /var/lib/apt/lists/*
