@@ -14,7 +14,7 @@ RUN dotnet publish "./source-code/Blyatmir Putin Bot.sln" -c Release -o /build-o
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
 
 # install the required linux packages
-RUN apt-get update && apt-get --no-install-recommends install -y \
+RUN apk update && apk add \
 	libopus-dev \
 	libsodium-dev \
 	ffmpeg ; \
