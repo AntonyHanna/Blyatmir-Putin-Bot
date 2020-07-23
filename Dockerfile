@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine as build-env
 RUN mkdir /build-output /source-code
 
 # copy the source code to container
-COPY ./ /source-code/
+COPY ./blyatmir-putin/ /source-code/
 
 # build the source code
 RUN dotnet publish "./source-code/Blyatmir Putin Bot.sln" -c Release -o /build-output/

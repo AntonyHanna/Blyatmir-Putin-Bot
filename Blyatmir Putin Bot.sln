@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blyatmir Putin Bot", "Blyatmir Putin Bot.csproj", "{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blyatmir Putin Bot", "blyatmir-putin/Blyatmir Putin Bot.csproj", "{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
