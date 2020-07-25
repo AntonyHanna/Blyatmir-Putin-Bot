@@ -5,10 +5,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine as build-env
 RUN mkdir /build-output /source-code
 
 # copy the source code to container
-COPY ./blyatmir-putin/ /source-code/
+COPY ./ source-code/
 
 # build the source code
-RUN dotnet publish "./source-code/Blyatmir Putin Bot.sln" -c Release -o /build-output/
+RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" -c Release -o /build-output/
 
 # gets the core runtime to allow for running the program
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
