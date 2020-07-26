@@ -38,23 +38,6 @@ namespace Blyatmir_Putin_Bot.Modules
 			await Context.Channel.SendMessageAsync($"Announcment channel has been assigned with id: `{textChannel.Id}` for the guild: `{guildData.GuildName}`");
 		}
 
-		[Command("list")]
-		[Alias("ls")]
-		[Summary("Opt in or out of being listed in server leadboards")]
-		public async Task DontListServer([Remainder] bool selection)
-		{
-			Guild guildData = Guild.GetGuildData(context: Context);
-
-			guildData.IsListed = selection;
-			Guild.Write(Guild.GuildDataList);
-
-			if (selection)
-				await Context.Channel.SendMessageAsync($"`{guildData.GuildName}` has been opted out of being listed in scoreboards");
-
-			if (!selection)
-				await Context.Channel.SendMessageAsync($"`{guildData.GuildName}` has been opted into being listed in scoreboards");
-		}
-
 		[Command("ftrigger")]
 		[Alias("ftr")]
 		public async Task SetFTriggerValue([Remainder] int value)
