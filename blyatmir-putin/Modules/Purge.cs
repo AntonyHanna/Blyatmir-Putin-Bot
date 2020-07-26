@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
-	[Name("purge")]
-	[Summary("Set fire to the rain (chat)")]
-	[Remarks("`purge [int number] - Removes traces of your weird searches, you specify how many messages`")]
 	public class purge : ModuleBase<SocketCommandContext>
 	{
 		/// <summary>
@@ -17,7 +14,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <param name="num"></param>
 		/// <returns></returns>
 		[Command("purge")]
-		[Summary("Set fire to the chat")]
 		public async Task PurgeChatAsync(int num)
 		{
 			//if true set count to 100

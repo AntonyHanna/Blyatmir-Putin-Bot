@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
-	[Name("fuckoff")]
-	[Summary("Tell em to fuck off")]
-	[Remarks("`fuckoff [IGuildUser user] - Tell a prick to fuck off\n" +
-		"fuckoff[string words] - Tell an inanimate object to fuck off`")]
 	public class Fuckoff : ModuleBase<SocketCommandContext>
 	{
 		/// <summary>
@@ -18,7 +14,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <param name="user"></param>
 		/// <returns></returns>
 		[Command("fuckoff")]
-		[Summary("Tell a prick to fuckoff")]
 		public async Task FuckOffAsync(IGuildUser user)
 		{
 			//some literal string that should really be 

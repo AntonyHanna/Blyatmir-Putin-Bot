@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Modules
 {
-	[Name("roll")]
-	[Summary("Roll a dice, you should know how to use this")]
-	[Remarks("`roll [none] - Roll a regular die\n" +
-	"roll [int number1] - Roll a dice starting from 1 to number1\n" +
-	"roll [int number1, int number2] Roll a die starting from number1 to number2`")]
 	public class Dice : ModuleBase<SocketCommandContext>
 	{
 		/// <summary>
@@ -19,7 +14,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <returns></returns>
 		[Command("roll")]
 		[Alias("dice")]
-		[Summary("Roll a regular imaginary dice")]
 		public async Task DiceRollAsync()
 		{
 			//new field woo hoo
@@ -52,7 +46,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <returns></returns>
 		[Command("roll")]
 		[Alias("dice")]
-		[Summary("Roll an imaginary dice with a specified number of sides")]
 		public async Task DiceRollAsync(int num1)
 		{
 			//new field woo hoo
@@ -86,7 +79,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <returns></returns>
 		[Command("roll")]
 		[Alias("dice")]
-		[Summary("Roll an imaginary dice using two numbers specifying a min and max")]
 		public async Task DiceRollAsync(int num1, int num2)
 		{
 			//invalid number check

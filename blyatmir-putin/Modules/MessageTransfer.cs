@@ -9,9 +9,6 @@ namespace Blyatmir_Putin_Bot.Modules
 	/// <summary>
 	/// Transfers a channels recent messages from one channel to another
 	/// </summary>
-	[Name("messagetransfer")]
-	[Summary("Gets the channels message and transfers to them to another channel")]
-	[Remarks("`mt [ITextChannel sourceChannel] - Gets the channels message and transfers to them to another channel`")]
 	public class messagetransfer : ModuleBase<SocketCommandContext>
 	{
 		[Command("messagetransfer")]
