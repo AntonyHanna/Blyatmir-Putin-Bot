@@ -25,4 +25,4 @@ RUN mkdir /build-output/
 COPY --from=build-env /build-output/ /build-output/
 	
 # start the program
-ENTRYPOINT ["dotnet", "/build-output/Blyatmir Putin Bot.dll"]
+ENTRYPOINT ["dotnet", "/build-output/blyatmir-putin.dll"]
