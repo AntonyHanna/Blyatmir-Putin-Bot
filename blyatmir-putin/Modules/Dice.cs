@@ -9,18 +9,25 @@ namespace Blyatmir_Putin_Bot.Modules
 	public class Dice : ModuleBase<SocketCommandContext>
 	{
 		/// <summary>
+		/// Dice Roll between 1 and roll (inclusive)
+		/// </summary>
+		/// <param name="roll"></param>
+		/// <returns></returns>
+		private int RollDice(int roll = 5) => new Random().Next(roll) + 1;
+
+		/// <summary>
 		/// Roll a regular dice from 1-6
 		/// </summary>
 		/// <returns></returns>
-		[Command("roll")]
-		[Alias("dice")]
+		[Command("dice")]
+		[Alias("d")]
 		public async Task DiceRollAsync()
 		{
 			//new field woo hoo
 			EmbedFieldBuilder field = new EmbedFieldBuilder()
 			{
 				Name = "Roll",
-				Value = $"`{new Random().Next(1, 6)}`",
+				Value = $"`{this.RollDice()}`",
 				IsInline = false
 			};
 
@@ -42,17 +49,17 @@ namespace Blyatmir_Putin_Bot.Modules
 		/// <summary>
 		/// Roll a dice from 1 to the number specified
 		/// </summary>
-		/// <param name="num1"></param>
+		/// <param name="maxValue"></param>
 		/// <returns></returns>
-		[Command("roll")]
-		[Alias("dice")]
-		public async Task DiceRollAsync(int num1)
+		[Command("dice")]
+		[Alias("d")]
+		public async Task DiceRollAsync(int maxValue)
 		{
 			//new field woo hoo
 			EmbedFieldBuilder field = new EmbedFieldBuilder()
 			{
 				Name = "Roll",
-				Value = $"`{new Random().Next(1, num1)}`",
+				Value = $"`{this.RollDice(maxValue)}`",
 				IsInline = false
 			};
 
@@ -64,7 +71,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				EmbedColor = Color.Green,
 				EmbedTitle = $"Dice Roll Results",
 				EmbedField = field,
-				FooterText = $"Rolled on some mystical dice from bum fuck nowhere seems to have {num1} possible value(s)... BLYAT!"
+				FooterText = $"Rolled on some mystical dice from bum fuck nowhere seems to have {maxValue} possible value(s)... BLYAT!"
 			};
 
 			//send the message
