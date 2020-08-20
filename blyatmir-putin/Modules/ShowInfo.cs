@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.Generic; 
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -15,7 +14,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task DisplayInfo()
 		{
 			TimeSpan difference = DateTime.Now.Subtract(BotConfig.StartTime);
-			Assembly assembly = Assembly.GetExecutingAssembly();
 			EmbedBuilder embed = new EmbedBuilder
 			{
 				Title = "Current Status",
@@ -26,16 +24,6 @@ namespace Blyatmir_Putin_Bot.Modules
 					{
 						Name = "OS Version",
 						Value = $"{Environment.OSVersion}"
-					},
-					new EmbedFieldBuilder
-					{
-						Name = "Runtime Version",
-						Value = $"{assembly.ImageRuntimeVersion}"
-					},
-					new EmbedFieldBuilder
-					{
-						Name = "Bot Version",
-						Value = $"v{assembly.GetName().Version.ToString().Remove(assembly.GetName().Version.ToString().ToCharArray().Count() - 2)}"
 					},
 					new EmbedFieldBuilder
 					{
