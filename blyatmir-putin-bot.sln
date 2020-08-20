@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blyatmir Putin Bot", "Blyatmir Putin Bot.csproj", "{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "blyatmir-putin", "blyatmir-putin\blyatmir-putin.csproj", "{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "blyatmir-putin-tests", "blyatmir-putin-tests\blyatmir-putin-tests.csproj", "{CDAC4793-3366-4987-A498-326DC21987A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{030DD485-7C46-45A4-BF38-9D42F0DAA2CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDAC4793-3366-4987-A498-326DC21987A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDAC4793-3366-4987-A498-326DC21987A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDAC4793-3366-4987-A498-326DC21987A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDAC4793-3366-4987-A498-326DC21987A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,63 +15,28 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("gs")]
 		public async Task StartConnection(string function, [Remainder] string containerName)
 		{
-			if (SshController.IsSshEnabled)
-			{
-				int result = RunCommand(function, containerName).Result;
-				string functionText = default;
+			if (!SshController.IsSshEnabled) return;
+			
+			int result = RunCommand(function, containerName).Result;
+			string functionText;
 
-				if (result == 1)
+			if (result == -1) return;
+				
+			functionText = GetFunctionText(function);
+
+			EmbedBuilder embed = new EmbedBuilder
+			{
+				Title = $"A container has been {functionText}",
+				Color = Color.Green,
+				Footer = new EmbedFooterBuilder
 				{
-					if (function == "start")
-						functionText = "started";
+					IconUrl = Context.Message.Author.GetAvatarUrl(),
+					Text = $"The status for container {containerName} has been updated"
+				},
+				Description = $"`{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` server",
+			};
 
-					else if (function == "stop")
-						functionText = "stopped";
-
-					else if (function == "restart")
-						functionText = "restarted";
-
-					EmbedBuilder embed = new EmbedBuilder
-					{
-						Title = $"A container has been {functionText}",
-						Color = Color.Green,
-						Footer = new EmbedFooterBuilder
-						{
-							IconUrl = Context.Message.Author.GetAvatarUrl(),
-							Text = $"The status for container {containerName} has been updated"
-						},
-						Description = $"`{Context.Guild.GetUser(Context.Message.Author.Id)}` has {functionText} the `{containerName}` server",
-					};
-
-					await Context.Channel.SendMessageAsync(embed: embed.Build());
-				}
-			}
-		}
-
-
-		/// <summary>
-		/// Checks if the container in it's current status can execute the commmand
-		/// </summary>
-		/// <param name="cont">The container that will be affected by a state changing command</param>
-		/// <param name="function">A state changing function</param>
-		/// <returns></returns>
-		private static bool CanExecuteStateChange(Container cont, string function)
-		{
-			string state = Container.GetContainerCurrentRunState(cont.Id).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
-			if (state == "running" && function == "start")
-				return false;
-			if (state == "stopped" && function == "stop")
-				return false;
-			return true;
-		}
-		private static bool IsValidCommand(string function)
-		{
-			foreach (var validCommand in new string[] { "start", "stop", "restart" })
-			{
-				if (function == validCommand)
-					return true;
-			}
-			return false;
+			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 
 		// TODO: Move the following three functions into their own class
@@ -174,6 +139,41 @@ namespace Blyatmir_Putin_Bot.Modules
 			}
 		}
 
+		private static string GetFunctionText(string status)
+			=> status switch
+			{
+				"start" => "started",
+				"stop" => "stopped",
+				"restart" => "restarted",
+				_ => "uh-oh"
+			};
+		
+		/// <summary>
+		/// Checks if the container in it's current status can execute the commmand
+		/// </summary>
+		/// <param name="cont">The container that will be affected by a state changing command</param>
+		/// <param name="function">A state changing function</param>
+		/// <returns></returns>
+		private static bool CanExecuteStateChange(Container cont, string function)
+		{
+			string state = Container.GetContainerCurrentRunState(cont.Id).Contains("up", System.StringComparison.OrdinalIgnoreCase) ? "running" : "stopped";
+			if (state == "running" && function == "start")
+				return false;
+			if (state == "stopped" && function == "stop")
+				return false;
+			return true;
+		}
+
+		private static bool IsValidCommand(string function)
+		{
+			foreach (var validCommand in new string[] { "start", "stop", "restart" })
+			{
+				if (function == validCommand)
+					return true;
+			}
+			return false;
+		}
+
 		private async Task<int> RunCommand(string function, string containerName)
 		{
 			User.CreateUserIfMissing(Context);
@@ -197,7 +197,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				embed.Description = $"Oops... Could not find a container with id: `{containerName}` on file";
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 
-				return 0;
+				return -1;
 			}
 
 			if (!Container.UserHasSufficientPriveleges(this._container, this._user))
@@ -206,7 +206,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				embed.Description = "You don't have sufficient priveleges to access this command";
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 
-				return 0;
+				return -1;
 			}
 
 			// TODO: this aint work
@@ -216,7 +216,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				embed.Description = $"Cannot run the provided function: `{function}` on the container: `{containerName}` as it is already in that state";
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 
-				return 0;
+				return -1;
 			}
 
 			if (IsValidCommand(function))
@@ -227,7 +227,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				embed.Description = $"There is no function with the name: `{function}`";
 				await Context.Channel.SendMessageAsync(embed: embed.Build());
 
-				return 0;
+				return -1;
 			}
 			
 			return 1;

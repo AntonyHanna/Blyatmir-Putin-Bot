@@ -16,13 +16,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public ulong GuildId { get; set; }
 		public string GuildName { get; set; }
-		/// <summary>
-		/// Is the server listed in highscores list
-		/// </summary>
-		public bool IsListed { get; set; }
-		public int Points { get; set; }
-		public int HighestPoints { get; set; }
-		public int LowestPoints { get; set; }
 		public ulong QuoteChannelId { get; set; }
 		public ulong AnnouncmentChannelId { get; set; }
 		public int FTriggerCount { get; set; }
@@ -33,10 +26,6 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			this.GuildName = default;
 			this.GuildId = default;
-			this.IsListed = true;
-			this.Points = default;
-			this.HighestPoints = default;
-			this.LowestPoints = default;
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
 			this.FTriggerCount = 3;
@@ -47,10 +36,6 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			this.GuildName = guild.Name;
 			this.GuildId = guild.Id;
-			this.IsListed = true;
-			this.Points = default;
-			this.HighestPoints = default;
-			this.LowestPoints = default;
 			this.QuoteChannelId = default;
 			this.AnnouncmentChannelId = default;
 			this.FTriggerCount = 3;
@@ -224,21 +209,6 @@ namespace Blyatmir_Putin_Bot.Model
 					return data;
 
 			return default;
-		}
-
-		/// <summary>
-		/// Calculate the different score statistics
-		/// </summary>
-		/// <param name="guildData"></param>
-		public static void PointCalculations(Guild guildData)
-		{
-			if (guildData.Points > guildData.HighestPoints)
-				guildData.HighestPoints = guildData.Points;
-
-			if (guildData.Points < guildData.LowestPoints)
-				guildData.LowestPoints = guildData.Points;
-
-			PersistantStorage<Guild>.Write(GuildDataList);
 		}
 	}
 }

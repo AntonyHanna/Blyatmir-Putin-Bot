@@ -1,0 +1,154 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Blyatmir_Putin_Bot.Model;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+
+namespace Blyatmir_Putin_Bot.Modules
+{
+	[Group("intromusic")]
+	[Alias("im")]
+	public class IntroMusic : ModuleBase<SocketCommandContext>
+	{
+		private string songDirectory => $"{AppEnvironment.ConfigLocation}/resources/introMusic/";
+
+		[Command("set")]
+		[Alias("-s")]
+		public async Task SetIntroMusic()
+		{
+			Attachment attachment = Context.Message.Attachments.First();
+
+			if(attachment == null)
+			{
+				await DisplayMessage("No file was provided, no changes have been made");
+				return;
+			}
+
+			if (IsWithinFileSizeLimit(attachment.Size))
+			{
+				await DisplayMessage($"File: `{attachment.Filename}` exceeded the 200kb file size limit");
+				return;
+			}
+
+			if (!IsMp3(attachment.Filename))
+			{
+				await DisplayMessage("File is of the wrong type, I only accept \".mp3\" files because tony is lazy");
+				return;
+			}
+
+			User userData = User.GetUser(Context.Message.Author.Id);
+			string safeFileName = GenerateSafeFileName(attachment.Filename);
+
+			DeleteIntroSong(userData.IntroSong);
+
+			userData.IntroSong = safeFileName;
+			User.Write(User.UserList);
+
+			DownloadAttachment(attachment.Url, safeFileName);
+
+			await DisplayMessage($"Intro Music for `{Context.Message.Author.Username}` has been set to `{safeFileName}`");
+		}
+
+		[Command("remove")]
+		[Alias("-r")]
+		public async Task RemoveIntroMusic()
+		{
+			User userData = User.GetUser(Context.Message.Author.Id);
+			userData.IntroSong = null;
+			User.Write(User.UserList);
+
+			DeleteIntroSong(userData.IntroSong);
+			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
+		}
+
+		[Command("default")]
+		[Alias("-d")]
+		[RequireBotPermission(GuildPermission.Administrator)]
+		internal void SetUserIntroToDefault(SocketUser user)
+			=> SetSongToDefault(user);
+
+		[Command("default")]
+		[Alias("-d")]
+		[RequireBotPermission(GuildPermission.Administrator)]
+		private void SetUserIntroToDefault()
+			=> SetSongToDefault(Context.User);
+
+		private async Task DisplayMessage(string message)
+	=> await Context.Channel.SendMessageAsync(message);
+
+
+		private static bool IsWithinFileSizeLimit(int fileSize, int maxSize = 300000)
+		{
+			if (fileSize > maxSize) return false;
+			return true;
+		}
+
+		private static bool IsMp3(string fileName)
+		{
+			// get the last 4 chars of file name (should be extension)
+			string fileFormat = fileName.Substring(fileName.Length - 4, 4);
+
+			if (fileFormat == ".mp3") return true;
+			return false;
+		}
+
+		private bool FileExists(string fileName)
+		{
+			if (File.Exists($"{songDirectory}{fileName}")) return true;
+			return false;
+		}
+
+		private string AppendIdToName(string originalName)
+		{
+			int i = 1;
+			// 4 is used to remove .mp3 from fileName
+			string newName = originalName.Substring(0, originalName.Length - 4) + $"({i}).mp3";
+
+			while (FileExists(newName))
+			{
+				// 7 is used to remove the end of fileName (#).mp3
+				newName = originalName.Substring(0, originalName.Length - 7) + $"({i}).mp3";
+				i++;
+			}
+
+			return newName;
+		}
+
+		private string GenerateSafeFileName(string fileName)
+		{
+			string result = fileName;
+
+			if (FileExists(fileName)) result = AppendIdToName(fileName);
+
+			return result;
+		}
+
+		private void DownloadAttachment(string uri, string name)
+		{
+			using (WebClient client = new WebClient())
+			{
+				client.DownloadFileAsync(new System.Uri(uri), $"{songDirectory}{name}");
+			}
+		}
+
+		private void DeleteIntroSong(string songName)
+		{
+			File.Delete($"{songDirectory}{songName}");
+		}
+		
+		// this will probably end up being an issue since it'll allow users to default others intromusic
+		// the only solution is to how a baked in permissions system
+		private void SetSongToDefault(SocketUser user)
+		{
+			User userInfo = User.GetUser(user.Id);
+			userInfo.IntroSong = "default.mp3";
+			User.Write(User.UserList);
+
+			Context.Channel.SendMessageAsync($"Intro Music for User: `{user.Username}` has been set to the default");
+		}
+	}
+}
