@@ -28,7 +28,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				return;
 			}
 
-			if (IsWithinFileSizeLimit(attachment.Size))
+			if (!IsWithinFileSizeLimit(attachment.Size))
 			{
 				await DisplayMessage($"File: `{attachment.Filename}` exceeded the 200kb file size limit");
 				return;
