@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,63 +24,33 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			if(attachment == null)
 			{
-				await Context.Channel.SendMessageAsync("No file was provided, no changes have been made");
+				await DisplayMessage("No file was provided, no changes have been made");
 				return;
 			}
 
-			if (attachment.Size > 200000)
+			if (IsWithinFileSizeLimit(attachment.Size))
 			{
-				System.Console.WriteLine(attachment.Size);
-				await Context.Channel.SendMessageAsync($"File: `{attachment.Filename}` exceeded the 200kb file size limit");
+				await DisplayMessage($"File: `{attachment.Filename}` exceeded the 200kb file size limit");
 				return;
 			}
 
-			if (!attachment.Filename.Contains(".mp3"))
+			if (!IsMp3(attachment.Filename))
 			{
-				await Context.Channel.SendMessageAsync("File is of the wrong type, I only accept \".mp3\" files because tony is lazy");
+				await DisplayMessage("File is of the wrong type, I only accept \".mp3\" files because tony is lazy");
 				return;
 			}
 
 			User userData = User.GetUser(Context.Message.Author.Id);
-			string preparedFileName = appendFileNameIfExists(attachment.Filename);
+			string safeFileName = GenerateSafeFileName(attachment.Filename);
 
 			DeleteIntroSong(userData.IntroSong);
 
-			userData.IntroSong = preparedFileName;
+			userData.IntroSong = safeFileName;
 			User.Write(User.UserList);
 
-			DownloadFromLink(attachment.Url, preparedFileName);
+			DownloadAttachment(attachment.Url, safeFileName);
 
-			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been set to `{preparedFileName}`");
-		}
-
-		private bool FileExists(string fileName)
-		{
-			if (File.Exists($"{songDirectory}{fileName}")) return true;
-			return false;
-		}
-
-		private string appendIdToName(string originalName)
-		{
-			int i = 1;
-			string newName = originalName.Substring(0, originalName.Length - 4) + $"({i}).mp3";
-
-			while (FileExists(newName))
-			{
-				newName = originalName.Substring(0, originalName.Length - 7) + $"({i}).mp3";
-				i++;
-			}
-
-			return newName;
-		}
-
-		private string appendFileNameIfExists(string fileName)
-		{
-			string result = fileName;
-
-			if (FileExists(fileName)) result = appendIdToName(fileName);
-
-			return result;
+			await DisplayMessage($"Intro Music for `{Context.Message.Author.Username}` has been set to `{safeFileName}`");
 		}
 
 		[Command("remove")]
@@ -94,7 +65,69 @@ namespace Blyatmir_Putin_Bot.Modules
 			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
 		}
 
-		private void DownloadFromLink(string uri, string name)
+		[Command("default")]
+		[Alias("-d")]
+		[RequireBotPermission(GuildPermission.Administrator)]
+		internal void SetUserIntroToDefault(SocketUser user)
+			=> SetSongToDefault(user);
+
+		[Command("default")]
+		[Alias("-d")]
+		[RequireBotPermission(GuildPermission.Administrator)]
+		private void SetUserIntroToDefault()
+			=> SetSongToDefault(Context.User);
+
+		private async Task DisplayMessage(string message)
+	=> await Context.Channel.SendMessageAsync(message);
+
+
+		private static bool IsWithinFileSizeLimit(int fileSize, int maxSize = 200000)
+		{
+			if (fileSize > maxSize) return false;
+			return true;
+		}
+
+		private static bool IsMp3(string fileName)
+		{
+			// get the last 4 chars of file name (should be extension)
+			string fileFormat = fileName.Substring(fileName.Length - 4, 4);
+
+			if (fileFormat == ".mp3") return true;
+			return false;
+		}
+
+		private bool FileExists(string fileName)
+		{
+			if (File.Exists($"{songDirectory}{fileName}")) return true;
+			return false;
+		}
+
+		private string AppendIdToName(string originalName)
+		{
+			int i = 1;
+			// 4 is used to remove .mp3 from fileName
+			string newName = originalName.Substring(0, originalName.Length - 4) + $"({i}).mp3";
+
+			while (FileExists(newName))
+			{
+				// 7 is used to remove the end of fileName (#).mp3
+				newName = originalName.Substring(0, originalName.Length - 7) + $"({i}).mp3";
+				i++;
+			}
+
+			return newName;
+		}
+
+		private string GenerateSafeFileName(string fileName)
+		{
+			string result = fileName;
+
+			if (FileExists(fileName)) result = AppendIdToName(fileName);
+
+			return result;
+		}
+
+		private void DownloadAttachment(string uri, string name)
 		{
 			using (WebClient client = new WebClient())
 			{
@@ -106,18 +139,6 @@ namespace Blyatmir_Putin_Bot.Modules
 		{
 			File.Delete($"{songDirectory}{songName}");
 		}
-
-		[Command("default")]
-		[Alias("-d")]
-		[RequireBotPermission(GuildPermission.Administrator)]
-		internal void SetUserIntroToDefault(SocketUser user) 
-			=> SetSongToDefault(user);
-
-		[Command("default")]
-		[Alias("-d")]
-		[RequireBotPermission(GuildPermission.Administrator)]
-		private void SetUserIntroToDefault() 
-			=> SetSongToDefault(Context.User);
 		
 		// this will probably end up being an issue since it'll allow users to default others intromusic
 		// the only solution is to how a baked in permissions system
