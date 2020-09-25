@@ -14,7 +14,7 @@ namespace Blyatmir_Putin_Bot.Services
 				// Stops this from triggering when a user is muted or deafened
 				bool sameChannel = previousState.VoiceChannel == newState.VoiceChannel;
 
-				if (user.IsBot || sameChannel)
+				if (user.IsBot || sameChannel || newState.VoiceChannel == null)
 					return;
 
 				User userData = User.GetUser(user.Id);
