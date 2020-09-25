@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -92,7 +92,7 @@ namespace Blyatmir_Putin_Bot.Model
 			SocketVoiceChannel voiceChannel = (this.VoiceState.VoiceChannel == null) ?
 				GetContextVoiceChannel() : this.VoiceState.VoiceChannel;
 
-			if (this.VoiceChannel != voiceChannel)
+			if (this.VoiceChannel != voiceChannel && voiceChannel != null)
 			{
 				// For whatever reason this is called twice and causes the 
 				// task to cancel, so this check makes sure that by the 
