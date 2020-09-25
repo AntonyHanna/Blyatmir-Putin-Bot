@@ -65,6 +65,31 @@ namespace Blyatmir_Putin_Bot.Modules
 			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
 		}
 
+		[Command("join", RunMode = RunMode.Async)]
+		[Alias("-j")]
+		public async Task TriggerIntroMusic(SocketUser user = null)
+		{
+			if(user == null)
+			{
+				user = Context.Message.Author;
+			}
+
+			User userData = User.GetUser(user.Id);
+
+			AudioService audioService = AudioService.GetAudioService(Context.Guild);
+
+			if (audioService == null)
+				audioService = new AudioService(Context);
+
+
+			if(!await audioService.ConnectToVoiceAsync())
+			{
+				return;
+			}
+
+			await audioService.StreamToVoiceAsync(userData.IntroSong);
+		}
+
 		[Command("default")]
 		[Alias("-d")]
 		[RequireBotPermission(GuildPermission.Administrator)]
