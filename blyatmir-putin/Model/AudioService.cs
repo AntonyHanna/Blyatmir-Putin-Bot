@@ -87,7 +87,7 @@ namespace Blyatmir_Putin_Bot.Model
 		}
 
 
-		public async Task ConnectToVoiceAsync()
+		public async Task<bool> ConnectToVoiceAsync()
 		{
 			SocketVoiceChannel voiceChannel = (this.VoiceState.VoiceChannel == null) ?
 				GetContextVoiceChannel() : this.VoiceState.VoiceChannel;
@@ -101,7 +101,10 @@ namespace Blyatmir_Putin_Bot.Model
 					this.Client = await voiceChannel.ConnectAsync();
 				
 				this.VoiceChannel = voiceChannel;
+				return true;
 			}
+
+			return false;
 		}
 
 
