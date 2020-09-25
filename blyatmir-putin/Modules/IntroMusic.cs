@@ -106,7 +106,7 @@ namespace Blyatmir_Putin_Bot.Modules
 	=> await Context.Channel.SendMessageAsync(message);
 
 
-		private static bool IsWithinFileSizeLimit(int fileSize, int maxSize = 300000)
+		private static bool IsWithinFileSizeLimit(int fileSize, int maxSize = 307200)
 		{
 			if (fileSize > maxSize) return false;
 			return true;
