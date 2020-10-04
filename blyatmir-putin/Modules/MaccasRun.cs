@@ -15,6 +15,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("maccasrun")]
 		public async Task Run(DateTime time, [Remainder] string location)
 		{
+			ulong roleId;
 			List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
 
 			fields.Add(new EmbedFieldBuilder
@@ -40,8 +41,10 @@ namespace Blyatmir_Putin_Bot.Modules
 				ThumbnailUrl = "https://cdn.discordapp.com/attachments/559700127275679762/762252098263449600/McDonalds-Logo.png"
 			};
 
+			roleId = CreateRoleIfRequired(Context).Result.Id;
+
 			await Context.Channel.SendMessageAsync(embed: embed.Build());
-			await Context.Channel.SendMessageAsync("@maccas ^^");
+			await Context.Channel.SendMessageAsync($"{MentionUtils.MentionRole(roleId)} ^^");
 		}
 
 		[Command("wantmaccas")]
@@ -76,7 +79,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
-				tmp = await context.Guild.CreateRoleAsync("maccas", isMentionable: true);
+				tmp = await context.Guild.CreateRoleAsync("maccas", color: new Color(248, 231, 108), isMentionable: true);
 			}
 
 			return role;
