@@ -72,9 +72,6 @@ namespace Blyatmir_Putin_Bot
 		/// </summary>
 		private static void AttachEventHandlers()
 		{
-			//remove messages that are fucked
-			Client.MessageReceived += RestrictedWordService.ScanMessage;
-
 			//responds with f's in chat
 			Client.MessageReceived += FInChatService.CheckForLoss;
 
