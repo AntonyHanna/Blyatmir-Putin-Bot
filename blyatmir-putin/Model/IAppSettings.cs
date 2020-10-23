@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public interface IAppConfiguration
+	public interface IAppSettings
 	{
 		public string Token { get; set; }
 		public string Prefix { get; set; }

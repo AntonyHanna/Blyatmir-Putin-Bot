@@ -14,7 +14,7 @@ namespace Blyatmir_Putin_Bot
 		public static DiscordSocketClient Client;
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
-		public static IAppConfiguration AppConfig;
+		public static IAppSettings AppConfig;
 
 		public static DateTime StartTime { get; private set; }
 

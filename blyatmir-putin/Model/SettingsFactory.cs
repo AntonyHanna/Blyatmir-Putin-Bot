@@ -20,7 +20,7 @@ namespace Blyatmir_Putin_Bot.Model
 			}
 		}
 
-		public static IAppConfiguration Create()
+		public static IAppSettings Create()
 		{
 			if(SettingsFactory.IsDocker)
 			{

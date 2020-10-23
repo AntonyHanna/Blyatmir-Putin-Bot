@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class LocalSettings : PersistantStorage<LocalSettings>, IAppConfiguration
+	public class LocalSettings : PersistantStorage<LocalSettings>, IAppSettings
 	{
 		public string Token { get; set; }
 
