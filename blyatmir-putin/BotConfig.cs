@@ -14,6 +14,7 @@ namespace Blyatmir_Putin_Bot
 		public static DiscordSocketClient Client;
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
+		public static IAppConfiguration AppConfig;
 
 		public static DateTime StartTime { get; private set; }
 
@@ -44,16 +45,28 @@ namespace Blyatmir_Putin_Bot
 			commandHandler = new CommandHandler(Client, Commands);
 
 			//Load in some environment variables
-			AppEnvironment.LoadVariables();
+			//AppEnvironment.LoadVariables();
+			AppConfig = SettingsFactory.Create();
+
+			if(string.IsNullOrWhiteSpace(AppConfig.Token))
+			{
+				Console.WriteLine("Failed to start... Bot Token was missing.\n\n" +
+					"Troubleshooting:\n" +
+					"If running on Windows or Linux make sure to fill in the Settings.xml file (generated after first launch)\n" +
+					"If running on Docker make sure to pass in the BOT_TOKEN variable");
+				Environment.Exit(-1);
+			}
 
 			//attach the bots event handlers
 			AttachEventHandlers();
 
 			//tell people what edgy thing the bot is doing
-			await Client.SetGameAsync(AppEnvironment.BotActivity);
+			//await Client.SetGameAsync(AppEnvironment.BotActivity);
+			await Client.SetGameAsync(AppConfig.Activity);
 
 			//login to discords servers as a bot
-			await Client.LoginAsync(TokenType.Bot, AppEnvironment.BotToken);
+			//await Client.LoginAsync(TokenType.Bot, AppEnvironment.BotToken);
+			await Client.LoginAsync(TokenType.Bot, AppConfig.Token);
 
 			//check for available commands
 			await commandHandler.InstallCommandsAsync();
