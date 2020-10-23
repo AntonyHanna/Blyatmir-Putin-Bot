@@ -47,8 +47,8 @@ namespace Blyatmir_Putin_Bot.Model
 		public static Task GenerateUsers(ulong userId)
 		{
 			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(BotConfig.AppConfig.RootDirectory))
-				Directory.CreateDirectory(BotConfig.AppConfig.RootDirectory);
+			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
 
 			for (int i = 0; i < UserList.Count(); i++)
 				if (!UserExists(userId))

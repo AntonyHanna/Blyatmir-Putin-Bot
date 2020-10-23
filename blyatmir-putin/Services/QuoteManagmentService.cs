@@ -176,7 +176,7 @@ namespace Blyatmir_Putin_Bot.Services
 			var easyEmbed = new EasyEmbed
 			{
 				AuthorName = $"You all left me to die, so i've let your quote rot away!",
-				AuthorIcon = $"{BotConfig.Client.CurrentUser.GetAvatarUrl()}",
+				AuthorIcon = $"{Startup.Client.CurrentUser.GetAvatarUrl()}",
 				EmbedColor = Color.Red,
 				EmbedTitle = "\nQuote Timed Out :(",
 				EmbedDescription = $"A quote request has timed out for the following message\n\n \"*{ Quote.Content }*\" \n\n",
