@@ -9,7 +9,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			get
 			{
-				if (string.IsNullOrWhiteSpace(BotConfig.AppConfig.DockerIP) || string.IsNullOrWhiteSpace(BotConfig.AppConfig.ServerUser) || string.IsNullOrWhiteSpace(BotConfig.AppConfig.ServerPassword))
+				if (string.IsNullOrWhiteSpace(Startup.AppConfig.DockerIP) || string.IsNullOrWhiteSpace(Startup.AppConfig.ServerUser) || string.IsNullOrWhiteSpace(Startup.AppConfig.ServerPassword))
 					return false;
 				return true;
 			}
@@ -21,7 +21,7 @@ namespace Blyatmir_Putin_Bot.Model
 			{
 				if (instance == null)
 				{
-					instance = new SshClient(BotConfig.AppConfig.DockerIP, BotConfig.AppConfig.ServerUser, BotConfig.AppConfig.ServerPassword);
+					instance = new SshClient(Startup.AppConfig.DockerIP, Startup.AppConfig.ServerUser, Startup.AppConfig.ServerPassword);
 					AttachErrorHandler();
 					instance.Connect();
 				}

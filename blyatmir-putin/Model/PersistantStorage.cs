@@ -13,10 +13,10 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		public static readonly Dictionary<Type, string> Path = new Dictionary<Type, string>()
 		{
-			{ typeof(Guild), $"{System.IO.Path.Combine(BotConfig.AppConfig.RootDirectory)}Guilds.xml"},
-			{ typeof(Container), $"{System.IO.Path.Combine(BotConfig.AppConfig.RootDirectory)}Containers.xml"},
-			{ typeof(User), $"{System.IO.Path.Combine(BotConfig.AppConfig.RootDirectory)}Users.xml"},
-			{ typeof(LocalSettings), $"{System.IO.Path.Combine(BotConfig.AppConfig.RootDirectory)}Settings.xml"}
+			{ typeof(Guild), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Guilds.xml"},
+			{ typeof(Container), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Containers.xml"},
+			{ typeof(User), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Users.xml"},
+			{ typeof(LocalSettings), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Settings.xml"}
 		};
 
 

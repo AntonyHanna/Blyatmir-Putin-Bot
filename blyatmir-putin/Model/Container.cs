@@ -51,8 +51,8 @@ namespace Blyatmir_Putin_Bot.Model
 			if (!SshController.IsSshEnabled)
 				return Task.CompletedTask;
 
-			if (!Directory.Exists(BotConfig.AppConfig.RootDirectory))
-				Directory.CreateDirectory(BotConfig.AppConfig.RootDirectory);
+			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
 
 			string[] containerIds = GetAllContainerIds();
 

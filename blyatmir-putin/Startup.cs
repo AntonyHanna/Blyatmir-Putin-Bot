@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot
 {
-	class BotConfig
+	class Startup
 	{
 		public static DiscordSocketClient Client;
 		public static CommandService Commands;
@@ -19,7 +19,7 @@ namespace Blyatmir_Putin_Bot
 		public static DateTime StartTime { get; private set; }
 
 		private static void Main(string[] args)
-			=> new BotConfig().MainAsync().GetAwaiter().GetResult();
+			=> new Startup().MainAsync().GetAwaiter().GetResult();
 		public async Task MainAsync()
 		{
 			StartTime = DateTime.Now;

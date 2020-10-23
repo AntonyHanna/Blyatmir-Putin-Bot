@@ -14,7 +14,7 @@ namespace Blyatmir_Putin_Bot.Modules
 	[Alias("im")]
 	public class IntroMusic : ModuleBase<SocketCommandContext>
 	{
-		private string songDirectory => $"{BotConfig.AppConfig.RootDirectory}/resources/introMusic/";
+		private string songDirectory => $"{Startup.AppConfig.RootDirectory}/resources/introMusic/";
 
 		[Command("set")]
 		[Alias("-s")]
