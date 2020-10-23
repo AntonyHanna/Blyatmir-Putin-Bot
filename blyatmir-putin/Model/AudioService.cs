@@ -118,7 +118,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public async Task StreamToVoiceAsync(string fileName)
 		{
-			this.Ffmpeg = CreateStream($"{AppEnvironment.ConfigLocation}resources/introMusic/{fileName}");
+			this.Ffmpeg = CreateStream($"{BotConfig.AppConfig.RootDirectory}resources/introMusic/{fileName}");
 			this.FfmpegOutput = this.Ffmpeg.StandardOutput.BaseStream;
 			this.OutputStream = this.Client.CreatePCMStream(AudioApplication.Mixed);
 

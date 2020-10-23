@@ -45,7 +45,7 @@ namespace Blyatmir_Putin_Bot
 			int argPos = 0;
 
 			// Determine if the message is a command based on the prefix and make sure no bots trigger commands
-			if (!(userMessage.HasStringPrefix(AppEnvironment.BotPrefix, ref argPos) ||
+			if (!(userMessage.HasStringPrefix(BotConfig.AppConfig.Prefix, ref argPos) ||
 				userMessage.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
 				userMessage.Author.IsBot)
 			{
