@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -69,7 +69,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// The settings that should be used by all XmlWriters
 		/// </summary>
 		/// <returns></returns>
-		private static XmlWriterSettings XmlSettings()
+		internal static XmlWriterSettings XmlSettings()
 		{
 			XmlWriterSettings settings = new XmlWriterSettings();
 
