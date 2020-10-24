@@ -1,5 +1,4 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Blyatmir_Putin_Bot.Modules;
+using Blyatmir_Putin_Bot.Model;
 using Blyatmir_Putin_Bot.Services;
 using Discord;
 using Discord.Commands;
