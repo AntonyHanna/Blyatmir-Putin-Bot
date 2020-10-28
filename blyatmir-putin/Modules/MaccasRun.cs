@@ -43,6 +43,7 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			roleId = CreateRoleIfRequired(Context).Result.Id;
 
+			await Context.Message.DeleteAsync();
 			await Context.Channel.SendMessageAsync(embed: embed.Build());
 			await Context.Channel.SendMessageAsync($"{MentionUtils.MentionRole(roleId)} ^^");
 		}

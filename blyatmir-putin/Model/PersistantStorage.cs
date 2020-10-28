@@ -13,9 +13,10 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		public static readonly Dictionary<Type, string> Path = new Dictionary<Type, string>()
 		{
-			{ typeof(Guild), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}Guilds.xml"},
-			{ typeof(Container), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}Containers.xml"},
-			{ typeof(User), $"{System.IO.Path.Combine(AppEnvironment.ConfigLocation)}Users.xml"},
+			{ typeof(Guild), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Guilds.xml"},
+			{ typeof(Container), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Containers.xml"},
+			{ typeof(User), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Users.xml"},
+			{ typeof(LocalSettings), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Settings.xml"}
 		};
 
 
@@ -68,7 +69,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// The settings that should be used by all XmlWriters
 		/// </summary>
 		/// <returns></returns>
-		private static XmlWriterSettings XmlSettings()
+		internal static XmlWriterSettings XmlSettings()
 		{
 			XmlWriterSettings settings = new XmlWriterSettings();
 

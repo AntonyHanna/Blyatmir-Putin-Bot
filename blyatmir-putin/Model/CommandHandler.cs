@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot
+namespace Blyatmir_Putin_Bot.Model
 {
 	public class CommandHandler
 	{
@@ -45,7 +45,7 @@ namespace Blyatmir_Putin_Bot
 			int argPos = 0;
 
 			// Determine if the message is a command based on the prefix and make sure no bots trigger commands
-			if (!(userMessage.HasStringPrefix(AppEnvironment.BotPrefix, ref argPos) ||
+			if (!(userMessage.HasStringPrefix(Startup.AppConfig.Prefix, ref argPos) ||
 				userMessage.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
 				userMessage.Author.IsBot)
 			{

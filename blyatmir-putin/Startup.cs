@@ -1,5 +1,4 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Blyatmir_Putin_Bot.Modules;
+using Blyatmir_Putin_Bot.Model;
 using Blyatmir_Putin_Bot.Services;
 using Discord;
 using Discord.Commands;
@@ -9,16 +8,18 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot
 {
-	class BotConfig
+	class Startup
 	{
+		public static IAppSettings AppConfig;
 		public static DiscordSocketClient Client;
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
 
 		public static DateTime StartTime { get; private set; }
 
-		private static void Main(string[] args)
-			=> new BotConfig().MainAsync().GetAwaiter().GetResult();
+		private static void Main()
+			=> new Startup().MainAsync().GetAwaiter().GetResult();
+
 		public async Task MainAsync()
 		{
 			StartTime = DateTime.Now;
@@ -31,36 +32,31 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public async static Task StartBotAsync()
 		{
-			//set the bots log level
 			Client = new DiscordSocketClient(new DiscordSocketConfig
 			{
 				LogLevel = LogSeverity.Debug
 			});
 
-			//instantiate the command service
 			Commands = new CommandService();
-
-			//instantiate the command handler with a client and commands
 			commandHandler = new CommandHandler(Client, Commands);
 
-			//Load in some environment variables
-			AppEnvironment.LoadVariables();
+			AppConfig = SettingsFactory.Create();
 
-			//attach the bots event handlers
+			if(string.IsNullOrWhiteSpace(AppConfig.Token))
+			{
+				Console.WriteLine("Failed to start... Bot Token was missing.\n\n" +
+					"Troubleshooting:\n" +
+					"If running on Windows or Linux make sure to fill in the Settings.xml file (generated after first launch)\n" +
+					"If running on Docker make sure to pass in the BOT_TOKEN variable");
+				Environment.Exit(-1);
+			}
+
 			AttachEventHandlers();
 
-			//tell people what edgy thing the bot is doing
-			await Client.SetGameAsync(AppEnvironment.BotActivity);
-
-			//login to discords servers as a bot
-			await Client.LoginAsync(TokenType.Bot, AppEnvironment.BotToken);
-
-			//check for available commands
+			await Client.SetGameAsync(AppConfig.Activity);
+			await Client.LoginAsync(TokenType.Bot, AppConfig.Token);
 			await commandHandler.InstallCommandsAsync();
 
-
-
-			//start the bot
 			await Client.StartAsync();
 
 			//wait infinitely I think?
@@ -102,18 +98,16 @@ namespace Blyatmir_Putin_Bot
 
 		private static async void OnExitAsync(object sender, EventArgs e)
 		{
-			//stop the bot correctly
 			await Client.StopAsync();
 			SshController.SshClient.Disconnect();
 			SshController.SshClient.Dispose();
 
-			//Disconnect From all Guild Voice Chats
+			// Disconnect from all voice chats
 			foreach (AudioService audioService in AudioService.AudioServices)
 			{
 				await audioService.DisconnectFromVoiceAsync();
 			}
 
-			//kill the program
 			Environment.Exit(1);
 		}
 

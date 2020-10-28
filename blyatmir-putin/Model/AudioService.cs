@@ -75,7 +75,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			SocketGuild guild = (this.VoiceState.VoiceChannel == null) ? this.Context.Guild : this.VoiceState.VoiceChannel.Guild;
 			IEnumerable<SocketVoiceChannel> channel = from vc in guild.VoiceChannels
-													  where vc.Users.Contains(BotConfig.Client.CurrentUser as IGuildUser)
+													  where vc.Users.Contains(Startup.Client.CurrentUser as IGuildUser)
 													  select vc;
 			if (channel.Count() == 0)
 				return true;
@@ -118,7 +118,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public async Task StreamToVoiceAsync(string fileName)
 		{
-			this.Ffmpeg = CreateStream($"{AppEnvironment.ConfigLocation}resources/introMusic/{fileName}");
+			this.Ffmpeg = CreateStream($"{Startup.AppConfig.RootDirectory}resources/introMusic/{fileName}");
 			this.FfmpegOutput = this.Ffmpeg.StandardOutput.BaseStream;
 			this.OutputStream = this.Client.CreatePCMStream(AudioApplication.Mixed);
 
@@ -157,7 +157,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			SocketGuild guild = (this.VoiceState.VoiceChannel == null) ? this.Context.Guild : this.VoiceState.VoiceChannel.Guild;
 			IEnumerable<SocketVoiceChannel> channel = from vc in guild.VoiceChannels
-													  where vc.GetUser(BotConfig.Client.CurrentUser.Id) != null
+													  where vc.GetUser(Startup.Client.CurrentUser.Id) != null
 													  select vc;
 			if (channel.Count() == 0)
 				return null;

@@ -87,14 +87,14 @@ namespace Blyatmir_Putin_Bot.Model
 		private static void GenerateGuildData(object sender, ElapsedEventArgs e)
 		{
 			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(AppEnvironment.ConfigLocation))
-				Directory.CreateDirectory(AppEnvironment.ConfigLocation);
+			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
 
 			//loop through all the guilds
-			for (int j = 0; j < BotConfig.Client.Guilds.Count; j++)
+			for (int j = 0; j < Startup.Client.Guilds.Count; j++)
 			{
 				//indexing for readonly collections
-				var guild = BotConfig.Client.Guilds.ElementAt(j);
+				var guild = Startup.Client.Guilds.ElementAt(j);
 				bool isPresent = false;
 
 				//dont run if there is no guild data 
@@ -122,14 +122,14 @@ namespace Blyatmir_Putin_Bot.Model
 		public static Task GenerateGuildData(SocketGuild arg)
 		{
 			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(AppEnvironment.ConfigLocation))
-				Directory.CreateDirectory(AppEnvironment.ConfigLocation);
+			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
 
 			//loop through all the guilds
-			for (int j = 0; j <= BotConfig.Client.Guilds.Count; j++)
+			for (int j = 0; j <= Startup.Client.Guilds.Count; j++)
 			{
 				//indexing for readonly collections
-				var guild = BotConfig.Client.Guilds.ElementAt(j);
+				var guild = Startup.Client.Guilds.ElementAt(j);
 				bool isPresent = false;
 
 				//dont run if there is no guild data 
@@ -154,14 +154,14 @@ namespace Blyatmir_Putin_Bot.Model
 		public static Task GenerateMissingGuilds()
 		{
 			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(AppEnvironment.ConfigLocation))
-				Directory.CreateDirectory(AppEnvironment.ConfigLocation);
+			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
 
 			//loop through all the guilds
-			for (int j = 0; j < BotConfig.Client.Guilds.Count; j++)
+			for (int j = 0; j < Startup.Client.Guilds.Count; j++)
 			{
 				//indexing for readonly collections
-				var guild = BotConfig.Client.Guilds.ElementAt(j);
+				var guild = Startup.Client.Guilds.ElementAt(j);
 				bool isPresent = false;
 
 				//dont run if there is no guild data 

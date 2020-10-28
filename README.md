@@ -14,19 +14,38 @@ After years of prosperity, rumours stirred of the freedom man of the west, with 
  **What can our comrade Blyatmir do?**<img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/clipboard_1f4cb.png">
   - Purge messages so no-one ever knows of our other comrades secrets
   - Sympathise with our fallen bretheren through the use of `F`
-  - Block the language of the furries
-  - Rate how Blyatmir is doing on his quest for revenge
   - Tell people to blyat
-  - Rate your server as compared to others
-  - Eventually Blyatmir will sort out his vodka addiction and learn to do more things
+  - Play sick slav beats when you join a voice channel
+  - Quote messages for you
+  - Organise premature heart attack meetings at your local maccas
+  - Roll a patented russian dice
+  - Start and Stop game servers for you
   
  **What will Blyatmir be able to do once he is no longer drunk?** <img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/cocktail-glass_1f378.png">
   - Hold conversations with you like a proper comrade 
   - Play music for you
-  - Start and Stop game servers for you
-  - Quote messages for you
   - Mention people about the stupid shit they said about Blyatmir
+  - Vote off other people's dogshit intro music 
+  - Choose a random person's intro music as your own
   
+
+ Commands and Services <img align="left" width="40" height="40" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/microsoft/209/books_1f4da.png">
+ ---------
+ **How do we tell our comrade Blyatmir to act?**<img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/microsoft/209/green-book_1f4d7.png">
+  - `/maccasrun [time] [location]` organises a time for you to get chronic cholestrol levels
+  - `/dice [upper-bound]` rolls a dice
+  - `/fuckoff [userID/@username]` tells someone who deserves it to fuck off
+  - `/purge [number-to-purge]` hides your shady history
+  
+ **I want some music to squat to!**<img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/microsoft/209/blue-book_1f4d8.png">
+ These commands regard the intro music that will play when you join a voice channel
+  - `/im -s` in use with uploading a file sets your intro music
+  - `/im -j` will play your currently set intro music
+  - `/im -r` will remove your currently set intro music
+
+ **What can he do by himself?**<img align="left" width="25" height="25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/microsoft/209/closed-book_1f4d5.png">
+  - If you suffix any message with `- [userID/@username]`, he will request to quote you
+  - When you are paying your respects to a fallen comrade, Blyatmir will send an F in chat
   ___
 
 ### Running the bot via docker <img align="left" width="50" height="30" src="https://cdn.discordapp.com/attachments/559700127275679762/591585009358471182/docker-whale-home-logo.png">
