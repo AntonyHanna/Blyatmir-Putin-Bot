@@ -48,11 +48,20 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Task GenerateMissingContiners()
 		{
+			Logger.Debug("Attempting to generate missing containers");
+
 			if (!SshController.IsSshEnabled)
+			{
+				Logger.Warning("Aborting... SSH is NOT enabled");
 				return Task.CompletedTask;
+			}
+				
 
 			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+			{
+				Logger.Warning("Root directory not found. Creating root directory...");
 				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
+			}
 
 			string[] containerIds = GetAllContainerIds();
 
@@ -81,8 +90,8 @@ namespace Blyatmir_Putin_Bot.Model
 					Write(ContainerList);
 				}
 			}
-
-			return Task.CompletedTask;
+			Logger.Debug("Finished generating container data");
+			return Task.CompletedTask; 
 		}
 
 		public static string[] GetAllContainerIds()

@@ -109,7 +109,7 @@ namespace Blyatmir_Putin_Bot.Model
 				{
 					GuildDataList.Add(new Guild(guild));
 					PersistantStorage<Guild>.Write(GuildDataList);
-					Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
+					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
 		}
@@ -144,7 +144,7 @@ namespace Blyatmir_Putin_Bot.Model
 				{
 					GuildDataList.Add(new Guild(guild));
 					PersistantStorage<Guild>.Write(GuildDataList);
-					Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
+					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
 
@@ -176,7 +176,7 @@ namespace Blyatmir_Putin_Bot.Model
 				{
 					GuildDataList.Add(new Guild(guild));
 					PersistantStorage<Guild>.Write(GuildDataList);
-					Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")} Create      Default data has been written for Guild: {guild.Name}");
+					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
 
