@@ -20,22 +20,26 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Alias("-s")]
 		public async Task SetIntroMusic()
 		{
+			Logger.Debug($"Attempting to set the Intro Music for [{Context.Message.Author.Username}]");
 			Attachment attachment = Context.Message.Attachments.First();
 
 			if(attachment == null)
 			{
+				Logger.Warning("Aborting Intro Setting modificaiton: No file was provided");
 				await DisplayMessage("No file was provided, no changes have been made");
 				return;
 			}
 
 			if (!IsWithinFileSizeLimit(attachment.Size))
 			{
-				await DisplayMessage($"File: `{attachment.Filename}` exceeded the 200kb file size limit");
+				Logger.Warning("Aborting Intro Setting modificaiton: The file provided exceeded the file size limit");
+				await DisplayMessage($"File: `{attachment.Filename}` exceeded the 300kb file size limit");
 				return;
 			}
 
 			if (!IsMp3(attachment.Filename))
 			{
+				Logger.Warning("Aborting Intro Setting modificaiton: File provided has the wrong extension");
 				await DisplayMessage("File is of the wrong type, I only accept \".mp3\" files because tony is lazy");
 				return;
 			}
@@ -51,26 +55,32 @@ namespace Blyatmir_Putin_Bot.Modules
 			DownloadAttachment(attachment.Url, safeFileName);
 
 			await DisplayMessage($"Intro Music for `{Context.Message.Author.Username}` has been set to `{safeFileName}`");
+			Logger.Debug($"Intro Music has been successfully changed for [{Context.Message.Author.Username}]");
 		}
 
 		[Command("remove")]
 		[Alias("-r")]
 		public async Task RemoveIntroMusic()
 		{
+			Logger.Debug($"Attempting to remove Intro Music for [{Context.Message.Author.Username}]");
 			User userData = User.GetUser(Context.Message.Author.Id);
 			userData.IntroSong = null;
 			User.Write(User.UserList);
 
 			DeleteIntroSong(userData.IntroSong);
 			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
+			Logger.Debug($"Intro Music has been successfully removed for [{Context.Message.Author.Username}]");
 		}
 
 		[Command("join", RunMode = RunMode.Async)]
 		[Alias("-j")]
 		public async Task TriggerIntroMusic(SocketUser user = null)
 		{
+			Logger.Debug($"Triggering Intro Music in [{Context.Message.Channel.Name}] @ [{Context.Guild.Name}]");
+		
 			if(user == null)
 			{
+				Logger.Debug("User is null: Assuming user is the message author");
 				user = Context.Message.Author;
 			}
 
@@ -79,33 +89,36 @@ namespace Blyatmir_Putin_Bot.Modules
 			AudioService audioService = AudioService.GetAudioService(Context.Guild);
 
 			if (audioService == null)
+			{
+				Logger.Debug("Audio Service not found: Now creating a new Audio Service");
 				audioService = new AudioService(Context);
-
+			}
 
 			if(!await audioService.ConnectToVoiceAsync())
 			{
+				Logger.Warning("Aborting Intro Music: Failed to connect to voice channel");
 				return;
 			}
 
 			await audioService.StreamToVoiceAsync(userData.IntroSong);
+			Logger.Debug($"Intro Music has finished successfully");
 		}
 
 		[Command("default")]
 		[Alias("-d")]
 		[RequireBotPermission(GuildPermission.Administrator)]
 		internal void SetUserIntroToDefault(SocketUser user)
-			=> SetSongToDefault(user);
-
-		[Command("default")]
-		[Alias("-d")]
-		[RequireBotPermission(GuildPermission.Administrator)]
-		private void SetUserIntroToDefault()
-			=> SetSongToDefault(Context.User);
+		{
+			Logger.Debug($"Attempting to set Intro Music for [{user.Username}] to default value");
+			SetSongToDefault(user);
+			Logger.Debug($"Intro Music for [{user.Username}] has successfully been set to default");
+		}
 
 		private async Task DisplayMessage(string message)
-	=> await Context.Channel.SendMessageAsync(message);
-
-
+		{
+			await Context.Channel.SendMessageAsync(message);
+		}
+	
 		private static bool IsWithinFileSizeLimit(int fileSize, int maxSize = 307200)
 		{
 			if (fileSize > maxSize) return false;
@@ -154,15 +167,20 @@ namespace Blyatmir_Putin_Bot.Modules
 
 		private void DownloadAttachment(string uri, string name)
 		{
+			Logger.Debug("Downloading attachmenmt from message");
 			using (WebClient client = new WebClient())
 			{
 				client.DownloadFileAsync(new System.Uri(uri), $"{songDirectory}{name}");
 			}
+
+			Logger.Debug("Successfully downloaded attachment from message");
 		}
 
 		private void DeleteIntroSong(string songName)
 		{
+			Logger.Debug($"Attempting to delete the Intro Song file [{songName}]");
 			File.Delete($"{songDirectory}{songName}");
+			Logger.Debug($"Intro Music has been successfully deleted");
 		}
 		
 		// this will probably end up being an issue since it'll allow users to default others intromusic
