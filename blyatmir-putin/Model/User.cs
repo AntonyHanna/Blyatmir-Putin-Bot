@@ -48,7 +48,10 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			//Create the config directory if it doesn't exist
 			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
+			{
+				Logger.Debug("Root directory not found. Attempting to create the root directory...");
 				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
+			}
 
 			for (int i = 0; i < UserList.Count(); i++)
 				if (!UserExists(userId))
