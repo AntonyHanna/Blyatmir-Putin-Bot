@@ -37,7 +37,7 @@ namespace Blyatmir_Putin_Bot
 			Commands = new CommandService();
 			commandHandler = new CommandHandler(Client, Commands);
 
-			AppConfig = SettingsFactory.Create();
+			AppConfig = await SettingsFactory.CreateAsync();
 
 			if(string.IsNullOrWhiteSpace(AppConfig.Token))
 			{
