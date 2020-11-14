@@ -15,14 +15,11 @@ namespace Blyatmir_Putin_Bot
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
 
-		public static DateTime StartTime { get; private set; }
-
 		private static void Main()
 			=> new Startup().MainAsync().GetAwaiter().GetResult();
 
 		public async Task MainAsync()
 		{
-			StartTime = DateTime.Now;
 			await StartBotAsync();
 		}
 
