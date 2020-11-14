@@ -31,9 +31,13 @@ namespace Blyatmir_Putin_Bot.Model
 
 			if(!initialized)
 			{
-				/* ensure that the directory exists */
-				Directory.CreateDirectory(this.RootDirectory);
-
+				if(!Directory.Exists(this.RootDirectory))
+				{
+					Logger.Warning("No Settings file found. Attempting to create the file.");
+					Directory.CreateDirectory(this.RootDirectory);
+					Logger.Warning("Settings file has been created.");
+				}
+		
 				LocalSettings initialisationList = this;
 
 				using (StreamWriter sr = new StreamWriter(path))
