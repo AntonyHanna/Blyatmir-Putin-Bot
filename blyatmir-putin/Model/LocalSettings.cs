@@ -14,7 +14,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public string Prefix { get; set; }
 
-		public string RootDirectory { get; set; }
+		public string RootDirectory { get; set; } = "config/";
 
 		public string Activity { get; set; }
 
@@ -26,11 +26,14 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public LocalSettings()
 		{
-			string path = "config/Settings.xml";
+			string path = $"{this.RootDirectory}Settings.xml";
 			bool initialized = File.Exists(path);
 
 			if(!initialized)
 			{
+				/* ensure that the directory exists */
+				Directory.CreateDirectory(this.RootDirectory);
+
 				LocalSettings initialisationList = this;
 
 				using (StreamWriter sr = new StreamWriter(path))
@@ -40,7 +43,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 					this.Token = " ";
 					this.Prefix = " ";
-					this.RootDirectory = "config/";
 					this.Activity = " ";
 					this.DockerIP = " ";
 					this.ServerUser = " ";
@@ -54,7 +56,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public bool LoadSettings()
 		{
-			string path = "config/Settings.xml";
+			string path = $"{this.RootDirectory}Settings.xml";
 			LocalSettings settings;
 
 			using (XmlReader reader = XmlReader.Create(path))
@@ -67,7 +69,6 @@ namespace Blyatmir_Putin_Bot.Model
 			{
 				this.Token = settings.Token;
 				this.Prefix = settings.Prefix;
-				this.RootDirectory = "config/";
 				this.Activity = settings.Activity;
 				this.DockerIP = settings.DockerIP;
 				this.ServerUser = settings.ServerUser;

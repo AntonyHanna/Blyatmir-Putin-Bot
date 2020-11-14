@@ -10,7 +10,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public string Prefix { get; set; }
 
-		public string RootDirectory { get; set; }
+		public string RootDirectory { get; set; } = "config/";
 
 		public string Activity { get; set; }
 
@@ -24,7 +24,6 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			this.Token = Environment.GetEnvironmentVariable("BOT_TOKEN");
 			this.Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
-			this.RootDirectory = "config/";
 			this.Activity = Environment.GetEnvironmentVariable("BOT_ACTIVITY");
 			this.DockerIP = Environment.GetEnvironmentVariable("DOCKER_IP");
 			this.ServerUser = Environment.GetEnvironmentVariable("SERVER_LOGIN");
