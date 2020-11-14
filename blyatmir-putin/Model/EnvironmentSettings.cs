@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Blyatmir_Putin_Bot.Model
@@ -22,6 +23,9 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public EnvironmentSettings()
 		{
+			/* ensures that the root directory is created */
+			Directory.CreateDirectory(this.RootDirectory);
+
 			this.Token = Environment.GetEnvironmentVariable("BOT_TOKEN");
 			this.Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
 			this.Activity = Environment.GetEnvironmentVariable("BOT_ACTIVITY");
