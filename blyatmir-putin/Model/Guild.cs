@@ -10,7 +10,7 @@ using System.Timers;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class Guild : PersistantStorage<Guild>
+	public class Guild
 	{
 		public static List<Guild> GuildDataList = new List<Guild>(PersistantStorage<Guild>.Read());
 

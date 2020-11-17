@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class Container : PersistantStorage<Container>
+	public class Container
 	{
-		public static readonly List<Container> ContainerList = new List<Container>(Read());
+		public static readonly List<Container> ContainerList = new List<Container>(PersistantStorage<Container>.Read());
 
 		public enum ContainerPermissions
 		{
@@ -39,7 +39,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.Tag = GetContainerTag(this.Id);
 
 			ContainerList.Add(this);
-			Write(ContainerList);
+			PersistantStorage<Container>.Write(ContainerList);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 				bool isPresent = false;
 
-				InitializeStorage();
+				PersistantStorage<Container>.InitializeStorage();
 
 
 				if (ContainerList.Count() > 0)
@@ -87,7 +87,7 @@ namespace Blyatmir_Putin_Bot.Model
 				if (!isPresent)
 				{
 					new Container(containerIds[j]);
-					Write(ContainerList);
+					PersistantStorage<Container>.Write(ContainerList);
 				}
 			}
 			Logger.Debug("Finished generating container data");
@@ -203,7 +203,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			GetContainerById(containerId).PermisssionLevel = newContainerPermissions;
 
-			Write(ContainerList);
+			PersistantStorage<Container>.Write(ContainerList);
 		}
 
 		public static bool IsValidContainer(string containerName)
