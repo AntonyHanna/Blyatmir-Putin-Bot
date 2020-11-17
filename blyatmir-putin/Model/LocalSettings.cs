@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class LocalSettings : PersistantStorage<LocalSettings>, IAppSettings
+	public class LocalSettings : IAppSettings
 	{
 		public string Token { get; set; }
 
@@ -41,7 +41,7 @@ namespace Blyatmir_Putin_Bot.Model
 				LocalSettings initialisationList = this;
 
 				using (StreamWriter sr = new StreamWriter(path))
-				using (XmlWriter writer = XmlWriter.Create(sr, XmlSettings()))
+				using (XmlWriter writer = XmlWriter.Create(sr, PersistantStorage<LocalSettings>.XmlSettings()))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(LocalSettings));
 

@@ -8,9 +8,9 @@ using static Blyatmir_Putin_Bot.Model.Container;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class User : PersistantStorage<User>
+	public class User
 	{
-		public static readonly List<User> UserList = new List<User>(Read());
+		public static readonly List<User> UserList = new List<User>(PersistantStorage<User>.Read());
 		public ulong UserId { get; set; }
 		public ContainerPermissions ContainerAccessLevel { get; set; } = ContainerPermissions.jack;
 		public string IntroSong { get; set; } = "default.mp3";
@@ -25,7 +25,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.UserId = userId;
 
 			UserList.Add(this);
-			Write(UserList);
+			PersistantStorage<User>.Write(UserList);
 		}
 
 		public User(SocketUser user)
@@ -33,7 +33,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.UserId = user.Id;
 
 			UserList.Add(this);
-			Write(UserList);
+			PersistantStorage<User>.Write(UserList);
 		}
 
 		public static bool UserExists(ulong userId)
@@ -87,7 +87,7 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			GetUser(userId).ContainerAccessLevel = newContainerPermissions;
 
-			Write(UserList);
+			PersistantStorage<User>.Write(UserList);
 		}
 	}
 }

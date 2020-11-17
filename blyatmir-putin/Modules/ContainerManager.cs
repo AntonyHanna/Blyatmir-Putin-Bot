@@ -49,7 +49,7 @@ namespace Blyatmir_Putin_Bot.Modules
 				_container = Container.GetContainerByName(containerName);
 
 				_container.PermisssionLevel = permissions;
-				Container.Write(Container.ContainerList);
+				PersistantStorage<Container>.Write(Container.ContainerList);
 			}
 
 			EmbedBuilder embed = new EmbedBuilder
@@ -77,14 +77,14 @@ namespace Blyatmir_Putin_Bot.Modules
 				if (this._user != null)
 				{
 					_user.ContainerAccessLevel = permissions;
-					User.Write(User.UserList);
+					PersistantStorage<User>.Write(User.UserList);
 				}
 				else
 				{
 					new User(Context.Guild.GetUser(userId));
 					this._user = User.GetUser(userId);
 					this._user.ContainerAccessLevel = permissions;
-					User.Write(User.UserList);
+					PersistantStorage<User>.Write(User.UserList);
 				}
 
 				EmbedBuilder embed = new EmbedBuilder
@@ -113,14 +113,14 @@ namespace Blyatmir_Putin_Bot.Modules
 				if (this._user != null)
 				{
 					_user.ContainerAccessLevel = permissions;
-					User.Write(User.UserList);
+					PersistantStorage<User>.Write(User.UserList);
 				}
 				else
 				{
 					new User(Context.Guild.GetUser(user.Id));
 					this._user = User.GetUser(user.Id);
 					this._user.ContainerAccessLevel = permissions;
-					User.Write(User.UserList);
+					PersistantStorage<User>.Write(User.UserList);
 				}
 
 				EmbedBuilder embed = new EmbedBuilder
