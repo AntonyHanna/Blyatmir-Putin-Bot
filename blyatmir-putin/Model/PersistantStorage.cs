@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Blyatmir_Putin_Bot.Model
 {
-	public class PersistantStorage<T> where T : PersistantStorage<T>
+	public class PersistantStorage<T> where T : class
 	{
 		/// <summary>
 		/// Gets the file locations based on object type

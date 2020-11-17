@@ -50,7 +50,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			DeleteIntroSong(userData.IntroSong);
 
 			userData.IntroSong = safeFileName;
-			User.Write(User.UserList);
+			PersistantStorage<User>.Write(User.UserList);
 
 			DownloadAttachment(attachment.Url, safeFileName);
 
@@ -65,7 +65,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			Logger.Debug($"Attempting to remove Intro Music for [{Context.Message.Author.Username}]");
 			User userData = User.GetUser(Context.Message.Author.Id);
 			userData.IntroSong = null;
-			User.Write(User.UserList);
+			PersistantStorage<User>.Write(User.UserList);
 
 			DeleteIntroSong(userData.IntroSong);
 			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
@@ -189,7 +189,7 @@ namespace Blyatmir_Putin_Bot.Modules
 		{
 			User userInfo = User.GetUser(user.Id);
 			userInfo.IntroSong = "default.mp3";
-			User.Write(User.UserList);
+			PersistantStorage<User>.Write(User.UserList);
 
 			Context.Channel.SendMessageAsync($"Intro Music for User: `{user.Username}` has been set to the default");
 		}
