@@ -21,6 +21,7 @@ namespace Blyatmir_Putin_Bot.Model
 		public int FTriggerCount { get; set; }
 		public double FTriggerCoolDown { get; set; }
 		public bool EnableIntroMusic { get; set; }
+		public bool EnableGameNotifier { get; set; }
 
 		public Guild()
 		{
@@ -31,6 +32,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.FTriggerCount = 3;
 			this.FTriggerCoolDown = 20.0;
 			this.EnableIntroMusic = false;
+			this.EnableGameNotifier = false;
 		}
 		public Guild(IGuild guild)
 		{
@@ -41,6 +43,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.FTriggerCount = 3;
 			this.FTriggerCoolDown = 20.0;
 			this.EnableIntroMusic = false;
+			this.EnableGameNotifier = false;
 		}
 
 		/// <summary>
