@@ -56,6 +56,9 @@ namespace Blyatmir_Putin_Bot
 
 			await Client.StartAsync();
 
+			var g = GameNotifierService.Instance;
+			GameNotifierService.QueryService.StartService();
+
 			//wait infinitely I think?
 			await Task.Delay(-1);
 		}
