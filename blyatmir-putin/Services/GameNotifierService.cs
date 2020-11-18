@@ -8,23 +8,8 @@ using System.Linq;
 
 namespace Blyatmir_Putin_Bot.Services
 {
-	public class GameNotifierService
+	public static class GameNotifierService
 	{
-		private static GameNotifierService _instance;
-
-		public static GameNotifierService Instance
-		{
-			get
-			{
-				if (_instance == null)
-				{
-					_instance = new GameNotifierService();
-				}
-
-				return _instance;
-			}
-		}
-
 		private static StoreQueryService _queryService;
 
 		public static StoreQueryService QueryService
@@ -37,21 +22,17 @@ namespace Blyatmir_Putin_Bot.Services
 					{
 						TimeInterval = 10000 /* 4 hours in milliseconds */
 					};
+
+					_queryService.QueryCompleted += PostMessage;
+					_queryService.RegisterStore(new EpicGamesStore("Epic Store",
+						"https://cdn2.unrealengine.com/Diesel%2Flogo%2FLogo_EpicGames_Black-1360x1360-f15ee5845c95eacd424199bdf326047631b4bc69.png"));
 				}
 
 				return _queryService;
 			}
 		}
 
-		private GameNotifierService()
-		{
-			QueryService.QueryCompleted += PostMessage;
-
-			QueryService.RegisterStore(new EpicGamesStore("Epic Store",
-				"https://cdn2.unrealengine.com/Diesel%2Flogo%2FLogo_EpicGames_Black-1360x1360-f15ee5845c95eacd424199bdf326047631b4bc69.png"));
-		}
-
-		private void PostMessage(IEnumerable<ElCheapo.Generics.Game> games)
+		private static void PostMessage(IEnumerable<ElCheapo.Generics.Game> games)
 		{
 			PersistantStorage<LocalGame>.InitializeStorage();
 
@@ -91,7 +72,7 @@ namespace Blyatmir_Putin_Bot.Services
 			PersistantStorage<LocalGame>.Write((recordedGames as List<LocalGame>));
 		}
 
-		private Embed GameEmbed(LocalGame game)
+		private static Embed GameEmbed(LocalGame game)
 		{
 			EmbedBuilder builder = new EmbedBuilder
 			{
@@ -133,7 +114,7 @@ namespace Blyatmir_Putin_Bot.Services
 			return builder.Build();
 		}
 
-		private void AddNewGames(IEnumerable<ElCheapo.Generics.Game> newGames)
+		private static void AddNewGames(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
 			bool isGameNew = true;
 			IEnumerable<LocalGame> recordedGames = PersistantStorage<LocalGame>.Read();
@@ -151,7 +132,7 @@ namespace Blyatmir_Putin_Bot.Services
 			PersistantStorage<LocalGame>.Write((recordedGames as List<LocalGame>));
 		}
 
-		private void RemoveOldGames(IEnumerable<ElCheapo.Generics.Game> newGames)
+		private static void RemoveOldGames(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
 			bool isGameStillFree = false;
 			IEnumerable<LocalGame> recordedGames = PersistantStorage<LocalGame>.Read();
