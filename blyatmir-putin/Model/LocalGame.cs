@@ -5,6 +5,8 @@ namespace Blyatmir_Putin_Bot.Model
 {
 	public class LocalGame : Game
 	{
+		public int ID { get; set; }
+
 		public bool Posted { get; set; }
 
 		public LocalGame() : base() { }
