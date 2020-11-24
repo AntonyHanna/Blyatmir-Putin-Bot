@@ -3,6 +3,7 @@ using Blyatmir_Putin_Bot.Services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Blyatmir_Putin_Bot
 	{
 		public static IAppSettings AppConfig;
 		public static DiscordSocketClient Client;
+		public static DataContext context;
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
 
@@ -29,6 +31,10 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public async static Task StartBotAsync()
 		{
+			context = new DataContext();
+
+			context.Database.Migrate();	/* ensure the db exists */
+
 			Client = new DiscordSocketClient(new DiscordSocketConfig
 			{
 				LogLevel = LogSeverity.Debug
