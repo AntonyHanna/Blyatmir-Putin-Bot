@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using Blyatmir_Putin_Bot.Services;
-using ElCheapo.Generics;
 
 namespace Blyatmir_Putin_Bot.Model
 {
@@ -15,11 +13,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		public static readonly Dictionary<Type, string> Path = new Dictionary<Type, string>()
 		{
-			{ typeof(Guild), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Guilds.xml"},
-			{ typeof(Container), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Containers.xml"},
-			{ typeof(User), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Users.xml"},
-			{ typeof(LocalSettings), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Settings.xml"},
-			{ typeof(LocalGame), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Games.xml"}
+			{ typeof(LocalSettings), $"{System.IO.Path.Combine(Startup.AppConfig.RootDirectory)}Settings.xml"}
 		};
 
 
