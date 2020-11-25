@@ -8,8 +8,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public DbSet<User> Users { get; set; }
 
-		public DbSet<Container> Containers { get; set; }
-
 		public DbSet<LocalGame> Games { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
