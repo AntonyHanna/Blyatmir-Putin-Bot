@@ -1,4 +1,4 @@
-﻿using Blyatmir_Putin_Bot.Model;
+using Blyatmir_Putin_Bot.Model;
 using Discord;
 using Discord.WebSocket;
 using ElCheapo.Managers;
@@ -20,12 +20,14 @@ namespace Blyatmir_Putin_Bot.Services
 				{
 					_queryService = new StoreQueryService
 					{
-						TimeInterval = 10000 /* 4 hours in milliseconds */
+						TimeInterval = 14400000  /* 4 hours in milliseconds */
 					};
 
 					_queryService.QueryCompleted += PostMessage;
 					_queryService.RegisterStore(new EpicGamesStore("Epic Store",
 						"https://cdn2.unrealengine.com/Diesel%2Flogo%2FLogo_EpicGames_Black-1360x1360-f15ee5845c95eacd424199bdf326047631b4bc69.png"));
+
+					_queryService.QueryProviders();
 				}
 
 				return _queryService;
