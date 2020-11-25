@@ -5,6 +5,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot
@@ -31,10 +32,6 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public async static Task StartBotAsync()
 		{
-			context = new DataContext();
-
-			context.Database.Migrate();	/* ensure the db exists */
-
 			Client = new DiscordSocketClient(new DiscordSocketConfig
 			{
 				LogLevel = LogSeverity.Debug
@@ -45,7 +42,12 @@ namespace Blyatmir_Putin_Bot
 
 			AppConfig = await SettingsFactory.CreateAsync();
 
-			if(string.IsNullOrWhiteSpace(AppConfig.Token))
+			Directory.CreateDirectory(AppConfig.RootDirectory);
+
+			context = new DataContext();
+			context.Database.Migrate(); /* ensure the db exists */
+
+			if (string.IsNullOrWhiteSpace(AppConfig.Token))
 			{
 				Console.WriteLine("Failed to start... Bot Token was missing.\n\n" +
 					"Troubleshooting:\n" +
