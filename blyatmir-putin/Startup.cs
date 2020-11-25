@@ -124,7 +124,7 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public static Task Log(LogMessage message)
 		{
-			Task.Run(() => Console.WriteLine(message.ToString()));
+			Task.Run(() => Logger.Debug(message.Message));
 			return Task.CompletedTask;
 		}
 	}
