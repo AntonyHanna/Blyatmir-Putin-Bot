@@ -1,4 +1,4 @@
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.IO;
@@ -89,13 +89,6 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			if (!UserExists(context.Message.Author.Id))
 				new User(context.Message.Author);
-		}
-
-		public static void SetContainerAccessLevel(ulong userId, ContainerPermissions newContainerPermissions)
-		{
-			GetUser(userId).ContainerAccessLevel = newContainerPermissions;
-
-			PersistantStorage<User>.Write(UserList);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
@@ -80,41 +80,6 @@ namespace Blyatmir_Putin_Bot.Model
 		public void SetFTriggerCooldown(double value)
 		{
 			this.FTriggerCoolDown = value;
-		}
-
-		/// <summary>
-		/// Generates guild data for every server that the bot is present in
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private static void GenerateGuildData(object sender, ElapsedEventArgs e)
-		{
-			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
-				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
-
-			//loop through all the guilds
-			for (int j = 0; j < Startup.Client.Guilds.Count; j++)
-			{
-				//indexing for readonly collections
-				var guild = Startup.Client.Guilds.ElementAt(j);
-				bool isPresent = false;
-
-				//dont run if there is no guild data 
-				//otherwise compare the guild ids and only add the ones that are different
-				if (GuildDataList.Count() > 0)
-					foreach (var gld in GuildDataList)
-						if (guild.Id == gld.GuildId)
-							isPresent = true;
-
-				//for the ones not present add them to data
-				if (!isPresent)
-				{
-					GuildDataList.Add(new Guild(guild));
-					PersistantStorage<Guild>.Write(GuildDataList);
-					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
-				}
-			}
 		}
 
 		/// <summary>
