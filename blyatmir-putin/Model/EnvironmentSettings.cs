@@ -23,13 +23,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public EnvironmentSettings()
 		{
-			if(!Directory.Exists(this.RootDirectory))
-			{
-				Logger.Warning("No Settings file found. Attempting to create the file.");
-				Directory.CreateDirectory(this.RootDirectory);
-				Logger.Warning("Settings file has been created.");
-			}
-
 			this.Token = Environment.GetEnvironmentVariable("BOT_TOKEN");
 			this.Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
 			this.Activity = Environment.GetEnvironmentVariable("BOT_ACTIVITY");

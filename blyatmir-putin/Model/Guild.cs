@@ -89,10 +89,6 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static async Task GenerateGuildData(SocketGuild arg)
 		{
-			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
-				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
-
 			//loop through all the guilds
 			for (int j = 0; j <= Startup.Client.Guilds.Count; j++)
 			{
@@ -125,10 +121,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public static async Task GenerateMissingGuilds()
 		{
-			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
-				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
-
 			//loop through all the guilds
 			for (int j = 0; j < Startup.Client.Guilds.Count; j++)
 			{
