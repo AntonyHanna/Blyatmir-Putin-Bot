@@ -107,8 +107,6 @@ namespace Blyatmir_Putin_Bot
 		private static async void OnExitAsync(object sender, EventArgs e)
 		{
 			await Client.StopAsync();
-			SshController.SshClient.Disconnect();
-			SshController.SshClient.Dispose();
 
 			// Disconnect from all voice chats
 			foreach (AudioService audioService in AudioService.AudioServices)
