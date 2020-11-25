@@ -1,10 +1,13 @@
 ﻿using Blyatmir_Putin_Bot.Model;
 using Discord;
+using System;
 using Discord.WebSocket;
 using ElCheapo.Managers;
 using ElCheapo.Stores;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot.Services
 {
@@ -20,56 +23,63 @@ namespace Blyatmir_Putin_Bot.Services
 				{
 					_queryService = new StoreQueryService
 					{
-						TimeInterval = 10000 /* 4 hours in milliseconds */
+						TimeInterval = 14400000  /* 4 hours in milliseconds */
 					};
 
 					_queryService.QueryCompleted += PostMessage;
 					_queryService.RegisterStore(new EpicGamesStore("Epic Store",
 						"https://cdn2.unrealengine.com/Diesel%2Flogo%2FLogo_EpicGames_Black-1360x1360-f15ee5845c95eacd424199bdf326047631b4bc69.png"));
+
+					_queryService.QueryProviders();
 				}
 
 				return _queryService;
 			}
 		}
 
+		private static DataContext DbContext => Startup.context;
+
 		private static void PostMessage(IEnumerable<ElCheapo.Generics.Game> games)
 		{
-			PersistantStorage<LocalGame>.InitializeStorage();
-
-			AddNewGames(games);
-			RemoveOldGames(games);
-
-			IEnumerable<SocketGuild> guilds = Startup.Client.Guilds;
-			IEnumerable<LocalGame> recordedGames = PersistantStorage<LocalGame>.Read();
-
-			for (int guildIdx = 0; guildIdx < guilds.Count(); guildIdx++)
+			Task.Run(async () => 
 			{
-				Guild lGuild = Guild.GetGuildData(guilds.ElementAt(guildIdx));
+				await ImportNewGames(games);
+				await RemoveOldGames(games);
 
-				if(lGuild.AnnouncmentChannelId == 0)
-				{
-					Logger.Warning($"No announcment channel was set for guild [{guilds.ElementAt(guildIdx).Name}]");
-					continue;
-				}
+				IEnumerable<SocketGuild> guilds = Startup.Client.Guilds;
+				DbSet<LocalGame> recordedGames = DbContext.Games;
 
-				if(!lGuild.EnableGameNotifier)
+				for (int guildIdx = 0; guildIdx < guilds.Count(); guildIdx++)
 				{
-					continue;
-				}
+					Logger.Critical($"Checking for guild: {guilds.ElementAt(guildIdx).Name}");
+					Guild lGuild = Guild.GetGuildData(guilds.ElementAt(guildIdx));
 
-				for (int gameIdx = 0; gameIdx < recordedGames.Count(); gameIdx++)
-				{
-					if (recordedGames.ElementAt(gameIdx).Posted)
+					if (lGuild.AnnouncmentChannelId == 0)
+					{
+						Logger.Warning($"No announcment channel was set for guild [{guilds.ElementAt(guildIdx).Name}]");
+						continue;
+					}
+
+					if (!lGuild.EnableGameNotifier)
 					{
 						continue;
 					}
 
-					guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(recordedGames.ElementAt(gameIdx)));
-					recordedGames.ElementAt(gameIdx).Posted = true;
-				}
-			}
+					for (int gameIdx = 0; gameIdx < recordedGames.Count(); gameIdx++)
+					{
+						if (recordedGames.AsEnumerable().ElementAt(gameIdx).Posted)
+						{
+							continue;
+						}
 
-			PersistantStorage<LocalGame>.Write((recordedGames as List<LocalGame>));
+						await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(recordedGames.AsEnumerable().ElementAt(gameIdx)));
+						recordedGames.AsEnumerable().ElementAt(gameIdx).Posted = true;
+					}
+				}
+
+				await DbContext.SaveChangesAsync();
+			});
+
 		}
 
 		private static Embed GameEmbed(LocalGame game)
@@ -114,40 +124,49 @@ namespace Blyatmir_Putin_Bot.Services
 			return builder.Build();
 		}
 
-		private static void AddNewGames(IEnumerable<ElCheapo.Generics.Game> newGames)
+		private static async Task ImportNewGames(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
 			bool isGameNew = true;
-			IEnumerable<LocalGame> recordedGames = PersistantStorage<LocalGame>.Read();
 
 			foreach (ElCheapo.Generics.Game game in newGames)
 			{
-				isGameNew = !(recordedGames as List<LocalGame>).Exists(s => s.Name == game.Name);
+				isGameNew = DbContext.Games.AsQueryable().Select(g => g.Name == game.Name).Count() == 0 ? true : false;
 
 				if (isGameNew)
 				{
-					(recordedGames as List<LocalGame>).Add(new LocalGame(game));
+					Logger.Debug($"Adding a new game to DB: [{game.Name}]");
+					DbContext.Games.Add(new LocalGame(game));
 				}
 			}
 
-			PersistantStorage<LocalGame>.Write((recordedGames as List<LocalGame>));
+			await DbContext.SaveChangesAsync();
 		}
 
-		private static void RemoveOldGames(IEnumerable<ElCheapo.Generics.Game> newGames)
+		private static async Task RemoveOldGames(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
-			bool isGameStillFree = false;
-			IEnumerable<LocalGame> recordedGames = PersistantStorage<LocalGame>.Read();
+			DbSet<LocalGame> storedGames = DbContext.Games;
 
-			foreach (ElCheapo.Generics.Game game in newGames)
+			foreach (LocalGame oldGame in storedGames)
 			{
-				isGameStillFree = (recordedGames as List<LocalGame>).Exists(s => s.Name == game.Name);
+				bool gameExists = false;
 
-				if (!isGameStillFree)
+				foreach (ElCheapo.Generics.Game newGame in newGames)
 				{
-					(recordedGames as List<LocalGame>).Remove(new LocalGame(game));
+					if (newGame.Name == oldGame.Name)
+					{
+						gameExists = true;
+					}
+				}
+
+				if (!gameExists)
+				{
+					LocalGame tmp = storedGames.AsQueryable().First(g => g.Name == oldGame.Name);
+					Logger.Debug($"Removing an old game from the DB: [{tmp.Name}]");
+					storedGames.Remove(tmp);
 				}
 			}
 
-			PersistantStorage<LocalGame>.Write((recordedGames as List<LocalGame>));
+			await DbContext.SaveChangesAsync();
 		}
 	}
 }

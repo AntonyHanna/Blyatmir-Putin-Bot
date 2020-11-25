@@ -3,7 +3,9 @@ using Blyatmir_Putin_Bot.Services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot
@@ -12,6 +14,7 @@ namespace Blyatmir_Putin_Bot
 	{
 		public static IAppSettings AppConfig;
 		public static DiscordSocketClient Client;
+		public static DataContext context;
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
 
@@ -39,7 +42,12 @@ namespace Blyatmir_Putin_Bot
 
 			AppConfig = await SettingsFactory.CreateAsync();
 
-			if(string.IsNullOrWhiteSpace(AppConfig.Token))
+			Directory.CreateDirectory(AppConfig.RootDirectory);
+
+			context = new DataContext();
+			context.Database.Migrate(); /* ensure the db exists */
+
+			if (string.IsNullOrWhiteSpace(AppConfig.Token))
 			{
 				Console.WriteLine("Failed to start... Bot Token was missing.\n\n" +
 					"Troubleshooting:\n" +
@@ -48,7 +56,7 @@ namespace Blyatmir_Putin_Bot
 				Environment.Exit(-1);
 			}
 
-			AttachEventHandlers();
+			await AttachEventHandlers();
 
 			await Client.SetGameAsync(AppConfig.Activity);
 			await Client.LoginAsync(TokenType.Bot, AppConfig.Token);
@@ -65,34 +73,35 @@ namespace Blyatmir_Putin_Bot
 		/// <summary>
 		/// Attaches the required event handlers to the bot
 		/// </summary>
-		private static void AttachEventHandlers()
+		private static async Task AttachEventHandlers()
 		{
-			//responds with f's in chat
-			Client.MessageReceived += FInChatService.CheckForLoss;
+			await Task.Run(() =>
+			{
+				//responds with f's in chat
+				Client.MessageReceived += FInChatService.CheckForLoss;
 
-			//check messages for potential quotes
-			Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;
+				//check messages for potential quotes
+				Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;
 
-			//Control how reactions should affect messages
-			Client.ReactionAdded += ReactionHandlerService.ReactionAddedAsync;
+				//Control how reactions should affect messages
+				Client.ReactionAdded += ReactionHandlerService.ReactionAddedAsync;
 
-			// Handle how services that require reactions should respond to the clearing of reactions
-			Client.ReactionsCleared += ReactionHandlerService.ReactionsCleared;
+				// Handle how services that require reactions should respond to the clearing of reactions
+				Client.ReactionsCleared += ReactionHandlerService.ReactionsCleared;
 
-			//Generate GuildData once Ready is fired
-			Client.Ready += Guild.GenerateMissingGuilds;
+				//Generate GuildData once Ready is fired
+				Client.Ready += Guild.GenerateMissingGuilds;
 
-			Client.Ready += Container.GenerateMissingContiners;
+				//Update serverdata when the bot joins a new guild
+				Client.JoinedGuild += Guild.GenerateGuildData;
 
-			//Update serverdata when the bot joins a new guild
-			Client.JoinedGuild += Guild.GenerateGuildData;
+				Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
 
-			Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
+				//log messages in the console
+				Client.Log += Log;
 
-			//log messages in the console
-			Client.Log += Log;
-
-			AppDomain.CurrentDomain.ProcessExit += OnExitAsync;
+				AppDomain.CurrentDomain.ProcessExit += OnExitAsync;
+			});
 		}
 
 		private static async void OnExitAsync(object sender, EventArgs e)

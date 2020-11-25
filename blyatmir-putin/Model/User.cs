@@ -2,18 +2,18 @@
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using static Blyatmir_Putin_Bot.Model.Container;
+using System.Linq;
 
 namespace Blyatmir_Putin_Bot.Model
 {
 	public class User
 	{
-		public static readonly List<User> UserList = new List<User>(PersistantStorage<User>.Read());
 		public ulong UserId { get; set; }
-		public ContainerPermissions ContainerAccessLevel { get; set; } = ContainerPermissions.jack;
+
 		public string IntroSong { get; set; } = "default.mp3";
+
+		private static DataContext DbContext => Startup.context;
 
 		public User()
 		{
@@ -24,23 +24,28 @@ namespace Blyatmir_Putin_Bot.Model
 		{
 			this.UserId = userId;
 
-			UserList.Add(this);
-			PersistantStorage<User>.Write(UserList);
+			DbContext.Users.Add(this);
+			DbContext.SaveChanges();
 		}
 
 		public User(SocketUser user)
 		{
 			this.UserId = user.Id;
 
-			UserList.Add(this);
-			PersistantStorage<User>.Write(UserList);
+			DbContext.Users.Add(this);
+			DbContext.SaveChanges();
 		}
 
 		public static bool UserExists(ulong userId)
 		{
-			foreach (User user in UserList)
+			foreach (User user in DbContext.Users)
+			{
 				if (user.UserId == userId)
+				{
 					return true;
+				}
+			}
+				
 			return false;
 		}
 
@@ -53,11 +58,15 @@ namespace Blyatmir_Putin_Bot.Model
 				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
 			}
 
-			for (int i = 0; i < UserList.Count(); i++)
+			for (int i = 0; i < DbContext.Users.Count(); i++)
+			{
 				if (!UserExists(userId))
+				{
 					new User(userId);
-
-
+				}
+					
+			}
+				
 			return Task.CompletedTask;
 		}
 
@@ -68,26 +77,18 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static User GetUser(ulong userId)
 		{
-			IEnumerable<User> result = from user in UserList
-									   where user.UserId == userId
-									   select user;
-			if (result.Count() == 0)
+			User result = DbContext.Users.First(user => user.UserId == userId);
+
+			if (result == null)
 				return new User(userId);
 
-			return result.First();
+			return result;
 		}
 
 		internal static void CreateUserIfMissing(SocketCommandContext context)
 		{
 			if (!UserExists(context.Message.Author.Id))
 				new User(context.Message.Author);
-		}
-
-		public static void SetContainerAccessLevel(ulong userId, ContainerPermissions newContainerPermissions)
-		{
-			GetUser(userId).ContainerAccessLevel = newContainerPermissions;
-
-			PersistantStorage<User>.Write(UserList);
 		}
 	}
 }

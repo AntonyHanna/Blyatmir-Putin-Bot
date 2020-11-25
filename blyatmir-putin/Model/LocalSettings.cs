@@ -41,7 +41,7 @@ namespace Blyatmir_Putin_Bot.Model
 				LocalSettings initialisationList = this;
 
 				using (StreamWriter sr = new StreamWriter(path))
-				using (XmlWriter writer = XmlWriter.Create(sr, PersistantStorage<LocalSettings>.XmlSettings()))
+				using (XmlWriter writer = XmlWriter.Create(sr, XmlSettings()))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(LocalSettings));
 
@@ -82,6 +82,21 @@ namespace Blyatmir_Putin_Bot.Model
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// The settings that should be used by all XmlWriters
+		/// </summary>
+		/// <returns></returns>
+		public static XmlWriterSettings XmlSettings()
+		{
+			XmlWriterSettings settings = new XmlWriterSettings();
+
+			settings.Indent = true;
+			settings.IndentChars = "    ";
+			settings.CloseOutput = true;
+
+			return settings;
 		}
 	}
 }
