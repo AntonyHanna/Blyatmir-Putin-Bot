@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blyatmir_Putin_Bot.Model
 {
@@ -13,6 +13,6 @@ namespace Blyatmir_Putin_Bot.Model
 		public DbSet<LocalGame> Games { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
-			=> options.UseSqlite("Data Source=Guido.db");
+			=> options.UseSqlite("Data Source=./config/Guido.db");
 	}
 }
