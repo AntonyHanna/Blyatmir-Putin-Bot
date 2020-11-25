@@ -55,7 +55,6 @@ namespace Blyatmir_Putin_Bot.Services
 			{
 				if (IsPotentialQuote(message))
 				{
-					//check if the Guild has a QuoteChannel specified
 					if (Guild.GetGuildData(Quoter.Guild).QuoteChannelId != 0)
 					{
 						await SendQuoteConfirmationMessageAsync();
@@ -64,19 +63,24 @@ namespace Blyatmir_Putin_Bot.Services
 
 					else
 					{
-						//send a message if the service has failed
-						var easyEmbed = new EasyEmbed()
+						var embed = new EmbedBuilder
 						{
-							AuthorName = "Failed to run the quote service",
-							EmbedColor = Color.Red,
-							EmbedImage = "https://cdn.discordapp.com/attachments/559700127275679762/595113538540797962/sadputin.png",
-							EmbedDescription = $"You must first specify a quote channel for this server, " +
+							Color = Color.Red,
+							ImageUrl = "https://cdn.discordapp.com/attachments/559700127275679762/595113538540797962/sadputin.png",
+							Description = $"You must first specify a quote channel for this server, " +
 							$"before you can use this command, for more information see the docs (tbd)",
-							FooterIcon = $"https://cdn.discordapp.com/attachments/559700127275679762/595110812314632205/585bad69cb11b227491c3284.png",
-							FooterText = $"This was an automated message, don't even at me comrade"
+							Author = new EmbedAuthorBuilder
+							{ 
+								Name = "Failed to run the quote service",
+							},
+							Footer = new EmbedFooterBuilder
+							{
+								IconUrl = $"https://cdn.discordapp.com/attachments/559700127275679762/595110812314632205/585bad69cb11b227491c3284.png",
+								Text = $"This was an automated message, don't even at me comrade"
+							}
 						};
 
-						await Quote.Channel.SendMessageAsync(embed: easyEmbed.Build());
+						await Quote.Channel.SendMessageAsync(embed: embed.Build());
 
 						ResetVariables();
 					}
@@ -120,21 +124,27 @@ namespace Blyatmir_Putin_Bot.Services
 			QuoteInQuestion = null; //stops the bot from responding to previously sent messages and its own
 
 			//embed template
-			var easyEmbed = new EasyEmbed
+			var embed = new EmbedBuilder
 			{
-				AuthorName = "Want me to quote this bish...",
-				EmbedColor = Color.Green,
-				EmbedThumbnail = $"https://cdn.discordapp.com/attachments/559700127275679762/594028718683455498/Fucked-sm.png",
-				EmbedDescription = $"I may be mostly blind, I may or may not have done one too many shooeys but this looks like a quote and just like karen did with the kids I can take them away.\n\n " +
+				Color = Color.Green,
+				Author = new EmbedAuthorBuilder
+				{
+					Name = "Want me to quote this bish..."
+				},
+				ThumbnailUrl = $"https://cdn.discordapp.com/attachments/559700127275679762/594028718683455498/Fucked-sm.png",
+				Description = $"I may be mostly blind, I may or may not have done one too many shooeys but this looks like a quote and just like karen did with the kids I can take them away.\n\n " +
 				$"**Quote In Question**\n\n" +
 				$"\"*{ Quote.Content }*\" \n\n" +
 				$"`Click on one of the below reactions to continue...`",
-				FooterIcon = $"https://cdn.discordapp.com/attachments/559700127275679762/595110812314632205/585bad69cb11b227491c3284.png",
-				FooterText = $"This was an automated message and will expire in an hour if there is no response"
+				Footer = new EmbedFooterBuilder
+				{ 
+					IconUrl = $"https://cdn.discordapp.com/attachments/559700127275679762/595110812314632205/585bad69cb11b227491c3284.png",
+					Text = $"This was an automated message and will expire in an hour if there is no response"
+				}
 			};
 
 			//send the message and keep a reference to it
-			QuoteConfirmationMessage = await Quote.Channel.SendMessageAsync(embed: easyEmbed.Build());
+			QuoteConfirmationMessage = await Quote.Channel.SendMessageAsync(embed: embed.Build());
 
 			//add the reactions to the message
 			await AddReactionsAsync();
@@ -173,18 +183,24 @@ namespace Blyatmir_Putin_Bot.Services
 		/// <returns></returns>
 		private static async Task<RestUserMessage> SendTimeoutMessageAsync()
 		{
-			var easyEmbed = new EasyEmbed
+			var embed = new EmbedBuilder
 			{
-				AuthorName = $"You all left me to die, so i've let your quote rot away!",
-				AuthorIcon = $"{Startup.Client.CurrentUser.GetAvatarUrl()}",
-				EmbedColor = Color.Red,
-				EmbedTitle = "\nQuote Timed Out :(",
-				EmbedDescription = $"A quote request has timed out for the following message\n\n \"*{ Quote.Content }*\" \n\n",
-				FooterIcon = $"https://cdn.discordapp.com/attachments/559700127275679762/595117013203025950/902023-1.png",
-				FooterText = $"This was an automated message, don't even at me comrade"
+				Color = Color.Red,
+				Title = "\nQuote Timed Out :(",
+				Description = $"A quote request has timed out for the following message\n\n \"*{ Quote.Content }*\" \n\n",
+				Author = new EmbedAuthorBuilder
+				{
+					Name = $"You all left me to die, so i've let your quote rot away!",
+					IconUrl = $"{Startup.Client.CurrentUser.GetAvatarUrl()}",
+				},
+				Footer = new EmbedFooterBuilder
+				{ 
+					Text = $"This was an automated message, don't even at me comrade",
+					IconUrl = $"https://cdn.discordapp.com/attachments/559700127275679762/595117013203025950/902023-1.png",
+				}
 			};
 
-			return await Quote.Channel.SendMessageAsync(embed: easyEmbed.Build());
+			return await Quote.Channel.SendMessageAsync(embed: embed.Build());
 		}
 
 		/// <summary>
@@ -234,16 +250,19 @@ namespace Blyatmir_Putin_Bot.Services
 			{
 				var quoteChannel = await Quoter.Guild.GetTextChannelAsync(guildData.QuoteChannelId);
 
-				var easyEmbed = new EasyEmbed
+				var embed = new EmbedBuilder
 				{
-					EmbedColor = Color.Green,
-					EmbedThumbnail = $"{MentionedUsers.ElementAt(0).GetAvatarUrl()}",
-					EmbedDescription = $"{Quote.Content}",
-					FooterIcon = Quoter.GetAvatarUrl(ImageFormat.Auto),
-					FooterText = $"Quoted by: {Quoter} | {currentTime.ToString("dddd, dd MMMM yyyy h:mm:ss tt")}"
+					Color = Color.Green,
+					ThumbnailUrl = $"{MentionedUsers.ElementAt(0).GetAvatarUrl()}",
+					Description = $"{Quote.Content}",
+					Footer = new EmbedFooterBuilder
+					{
+						Text = $"Quoted by: {Quoter} | {currentTime.ToString("dddd, dd MMMM yyyy h:mm:ss tt")}",
+						IconUrl = Quoter.GetAvatarUrl(ImageFormat.Auto),
+					}
 				};
 
-				await quoteChannel.SendMessageAsync(embed: easyEmbed.Build());
+				await quoteChannel.SendMessageAsync(embed: embed.Build());
 			}
 
 			//remove the confirmation message message

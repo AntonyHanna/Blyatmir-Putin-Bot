@@ -55,18 +55,22 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			var rnd = new Random();
 
-			//embed template
-			var easyEmbed = new EasyEmbed()
+			EmbedBuilder embed = new EmbedBuilder
 			{
-				//use rnd as random indexing between the literal strings
-				AuthorName = fuckoffASCII[rnd.Next(0, fuckoffASCII.Length)],
-				AuthorIcon = $"https://cdn.discordapp.com/emojis/541203072869990400.png?v=1",
-				EmbedColor = Color.LightOrange,
-				FooterText = fuckOffMessage[rnd.Next(0, fuckOffMessage.Length)] + " - @" + Context.Message.Author.Username
+				Color = Color.LightOrange,
+				Author = new EmbedAuthorBuilder
+				{
+					Name = fuckoffASCII[rnd.Next(0, fuckoffASCII.Length)],
+					IconUrl = $"https://cdn.discordapp.com/emojis/541203072869990400.png?v=1",
+
+				},
+				Footer = new EmbedFooterBuilder
+				{
+					Text = fuckOffMessage[rnd.Next(0, fuckOffMessage.Length)] + " - @" + Context.Message.Author.Username
+				}
 			};
 
-			//send the message
-			await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
+			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 	}
 }
