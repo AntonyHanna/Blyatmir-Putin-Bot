@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
@@ -12,7 +12,7 @@ namespace Blyatmir_Putin_Bot.Model
 {
 	public class Guild
 	{
-		public static List<Guild> GuildDataList = new List<Guild>(PersistantStorage<Guild>.Read());
+		private static DataContext DbContext => Startup.context;
 
 		public ulong GuildId { get; set; }
 		public string GuildName { get; set; }
@@ -122,7 +122,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// </summary>
 		/// <param name="arg"></param>
 		/// <returns></returns>
-		public static Task GenerateGuildData(SocketGuild arg)
+		public static async Task GenerateGuildData(SocketGuild arg)
 		{
 			//Create the config directory if it doesn't exist
 			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
@@ -137,24 +137,28 @@ namespace Blyatmir_Putin_Bot.Model
 
 				//dont run if there is no guild data 
 				//otherwise compare the guild ids and only add the ones that are different
-				if (GuildDataList.Count() > 0)
-					foreach (var gld in GuildDataList)
+				if (DbContext.Guilds.Count() > 0)
+				{
+					foreach (var gld in DbContext.Guilds)
+					{
 						if (guild.Id == gld.GuildId)
+						{
 							isPresent = true;
+						}
+					}	
+				}
 
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new Guild(guild));
-					PersistantStorage<Guild>.Write(GuildDataList);
+					DbContext.Guilds.Add(new Guild(guild));
+					await DbContext.SaveChangesAsync();
 					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
-
-			return Task.CompletedTask;
 		}
 
-		public static Task GenerateMissingGuilds()
+		public static async Task GenerateMissingGuilds()
 		{
 			//Create the config directory if it doesn't exist
 			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
@@ -169,21 +173,25 @@ namespace Blyatmir_Putin_Bot.Model
 
 				//dont run if there is no guild data 
 				//otherwise compare the guild ids and only add the ones that are different
-				if (GuildDataList.Count() > 0)
-					foreach (var gld in GuildDataList)
+				if (DbContext.Guilds.Count() > 0)
+				{
+					foreach (var gld in DbContext.Guilds)
+					{
 						if (guild.Id == gld.GuildId)
+						{
 							isPresent = true;
+						}
+					}
+				}
 
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new Guild(guild));
-					PersistantStorage<Guild>.Write(GuildDataList);
+					DbContext.Guilds.Add(new Guild(guild));
+					await DbContext.SaveChangesAsync();
 					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
-
-			return Task.CompletedTask;
 		}
 
 		/// <summary>
@@ -193,7 +201,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Guild GetGuildData(SocketCommandContext context)
 		{
-			foreach (Guild data in GuildDataList)
+			foreach (Guild data in DbContext.Guilds)
 				if (data.GuildId == context.Guild.Id)
 					return data;
 
@@ -207,7 +215,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Guild GetGuildData(IGuild guild)
 		{
-			foreach (Guild data in GuildDataList)
+			foreach (Guild data in DbContext.Guilds)
 				if (data.GuildId == guild.Id)
 					return data;
 
