@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot
 {
+	[DirectoryRequired("config")]
 	class Startup
 	{
 		public static IAppSettings AppConfig;
@@ -32,6 +33,8 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public async static Task StartBotAsync()
 		{
+			AttributeLoader.LoadCustomAttributes();
+
 			Client = new DiscordSocketClient(new DiscordSocketConfig
 			{
 				LogLevel = LogSeverity.Debug

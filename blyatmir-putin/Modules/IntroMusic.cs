@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ namespace Blyatmir_Putin_Bot.Modules
 {
 	[Group("intromusic")]
 	[Alias("im")]
+	[DirectoryRequired("config/user-intros")]
 	public class IntroMusic : ModuleBase<SocketCommandContext>
 	{
 		private string songDirectory => $"{Startup.AppConfig.RootDirectory}/resources/introMusic/";
