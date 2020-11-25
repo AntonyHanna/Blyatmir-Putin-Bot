@@ -45,8 +45,6 @@ namespace Blyatmir_Putin_Bot
 
 			AppConfig = await SettingsFactory.CreateAsync();
 
-			Directory.CreateDirectory(AppConfig.RootDirectory);
-
 			context = new DataContext();
 			context.Database.Migrate(); /* ensure the db exists */
 
