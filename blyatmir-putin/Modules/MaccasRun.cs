@@ -16,28 +16,26 @@ namespace Blyatmir_Putin_Bot.Modules
 		public async Task Run(DateTime time, [Remainder] string location)
 		{
 			ulong roleId;
-			List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>();
-
-			fields.Add(new EmbedFieldBuilder
-			{
-				Name = "Location",
-				Value = location,
-				IsInline = true
-			});
-
-			fields.Add(new EmbedFieldBuilder
-			{
-				Name = "Time",
-				Value = time.ToShortTimeString(),
-				IsInline = true
-			});
-
 			EmbedBuilder embed = new EmbedBuilder
 			{
+				Color = Color.Red,
 				Title = "Calling all fat cunts",
 				Description = "Meet at maccas to eat maccas.",
-				Fields = fields,
-				Color = Color.Red,
+				Fields = new List<EmbedFieldBuilder>
+				{
+					new EmbedFieldBuilder
+					{
+						Name = "Location",
+						Value = location,
+						IsInline = true
+					},
+					new EmbedFieldBuilder
+					{
+						Name = "Time",
+						Value = time.ToShortTimeString(),
+						IsInline = true
+					}
+				},
 				ThumbnailUrl = "https://cdn.discordapp.com/attachments/559700127275679762/762252098263449600/McDonalds-Logo.png"
 			};
 
