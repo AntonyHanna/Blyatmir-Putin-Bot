@@ -48,8 +48,6 @@ namespace Blyatmir_Putin_Bot.Modules
 			User userData = User.GetUser(Context.Message.Author.Id);
 			string safeFileName = GenerateSafeFileName(attachment.Filename);
 
-			DeleteIntroSong(userData.IntroSong);
-
 			userData.IntroSong = safeFileName;
 			await DbContext.SaveChangesAsync();
 
