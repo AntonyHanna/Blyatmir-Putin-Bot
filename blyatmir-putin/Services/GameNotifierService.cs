@@ -51,7 +51,6 @@ namespace Blyatmir_Putin_Bot.Services
 
 				for (int guildIdx = 0; guildIdx < guilds.Count(); guildIdx++)
 				{
-					Logger.Critical($"Checking for guild: {guilds.ElementAt(guildIdx).Name}");
 					Guild lGuild = Guild.GetGuildData(guilds.ElementAt(guildIdx));
 
 					if (lGuild.AnnouncmentChannelId == 0)
