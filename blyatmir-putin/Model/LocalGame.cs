@@ -11,12 +11,14 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public LocalGame() : base() { }
 
-		public LocalGame(Game game) : base(game.EffectiveDate, game.Name, game.Description, game.Developer, game.Publisher)
+		public LocalGame(Game game) 
+			: base(game.StartDate, game.EndDate, game.Name, game.BannerUri, game.PosterUri, game.Description, game.Developer, game.Publisher)
 		{
 			this.Posted = false;
 		}
 
-		public LocalGame(DateTime effectiveDate, string name, string description, string developer, string publisher) : base(effectiveDate, name, description, developer, publisher)
+		public LocalGame(DateTime startDate, DateTime endDate, string name, string bannerUri, string posterUri, string description, string developer, string publisher) 
+			: base(startDate, endDate, name, bannerUri, posterUri, description, developer, publisher)
 		{
 			this.Posted = false;
 		}	

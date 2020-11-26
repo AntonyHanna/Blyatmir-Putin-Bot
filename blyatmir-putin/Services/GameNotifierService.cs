@@ -87,8 +87,11 @@ namespace Blyatmir_Putin_Bot.Services
 			EmbedBuilder builder = new EmbedBuilder
 			{
 				Title = game.Name,
-				Url = "https://www.epicgames.com/store/en-US/product/" + game.Name.Replace(" ", "-").ToLower(),
+				Description = game.Description,
+				ImageUrl = game.BannerUri,
+				ThumbnailUrl = game.PosterUri,
 				Color = new Color(r: 163, g: 255, b: 0),
+				Url = "https://www.epicgames.com/store/en-US/product/" + game.Name.Replace(" ", "-").ToLower(),
 				Author = new EmbedAuthorBuilder
 				{
 					IconUrl = "https://i.pinimg.com/originals/21/2d/1b/212d1b4d8d3f8ec990eb405e735b3f8d.png",
@@ -96,7 +99,6 @@ namespace Blyatmir_Putin_Bot.Services
 					Url = "https://www.epicgames.com/store/en-US/"
 				},
 
-				Description = game.Description,
 				Fields = new List<EmbedFieldBuilder>
 				{
 					new EmbedFieldBuilder
@@ -114,7 +116,7 @@ namespace Blyatmir_Putin_Bot.Services
 					new EmbedFieldBuilder
 					{
 						Name = "Availability (UTC)",
-						Value = game.EffectiveDate
+						Value = game.StartDate + " - " + game.EndDate
 					},
 				}
 			};
