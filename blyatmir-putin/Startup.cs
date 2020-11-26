@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blyatmir_Putin_Bot
@@ -65,7 +66,15 @@ namespace Blyatmir_Putin_Bot
 
 			await Client.StartAsync();
 
-			GameNotifierService.QueryService.StartService();
+			Logger.Debug("Delaying the startup of the Game notifier service");
+
+			new Thread(() =>
+			{
+				Thread.CurrentThread.IsBackground = true;
+				Thread.Sleep(10000);
+				GameNotifierService.QueryService.StartService();
+				Logger.Debug("Game notifier service has been started");
+			}).Start();
 
 			//wait infinitely I think?
 			await Task.Delay(-1);
