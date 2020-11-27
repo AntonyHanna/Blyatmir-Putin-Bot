@@ -93,7 +93,7 @@ namespace Blyatmir_Putin_Bot.Services
 				Url = "https://www.epicgames.com/store/en-US/product/" + game.Name.Replace(" ", "-").ToLower(),
 				Author = new EmbedAuthorBuilder
 				{
-					IconUrl = "https://i.pinimg.com/originals/21/2d/1b/212d1b4d8d3f8ec990eb405e735b3f8d.png",
+					IconUrl = "https://cdn.discordapp.com/attachments/598416605185310729/781731261525000232/epicgames_logo.png",
 					Name = "Epic Games Store",
 					Url = "https://www.epicgames.com/store/en-US/"
 				},
