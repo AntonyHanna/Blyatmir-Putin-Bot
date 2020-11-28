@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Blyatmir_Putin_Bot.Model;
+using Blyatmir_Putin_Bot.Core.Attributes;
+using Blyatmir_Putin_Bot.Core.Database;
+using Blyatmir_Putin_Bot.Core.Models;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;

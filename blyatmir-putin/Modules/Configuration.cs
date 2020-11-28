@@ -1,4 +1,5 @@
-﻿using Blyatmir_Putin_Bot.Model;
+﻿using Blyatmir_Putin_Bot.Core.Database;
+using Blyatmir_Putin_Bot.Core.Models;
 using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;

@@ -1,11 +1,15 @@
-using Blyatmir_Putin_Bot.Model;
+using Blyatmir_Putin_Bot.Core;
+using Blyatmir_Putin_Bot.Core.Attributes;
+using Blyatmir_Putin_Bot.Core.Database;
+using Blyatmir_Putin_Bot.Core.Factories;
+using Blyatmir_Putin_Bot.Core.Interfaces;
+using Blyatmir_Putin_Bot.Core.Models;
 using Blyatmir_Putin_Bot.Services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 

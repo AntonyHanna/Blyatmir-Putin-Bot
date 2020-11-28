@@ -1,6 +1,5 @@
-﻿using Blyatmir_Putin_Bot.Model;
+﻿using Blyatmir_Putin_Bot.Core.Models;
 using Discord.WebSocket;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 

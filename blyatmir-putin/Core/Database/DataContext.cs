@@ -1,6 +1,7 @@
+using Blyatmir_Putin_Bot.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace Blyatmir_Putin_Bot.Core.Database
 {
 	public class DataContext : DbContext
 	{

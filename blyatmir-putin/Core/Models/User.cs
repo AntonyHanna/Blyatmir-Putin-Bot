@@ -1,11 +1,10 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
+using Blyatmir_Putin_Bot.Core.Database;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace Blyatmir_Putin_Bot.Core.Models
 {
 	public class User
 	{

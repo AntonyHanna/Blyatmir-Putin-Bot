@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace Blyatmir_Putin_Bot.Core.Models
 {
 	public static class Logger
 	{

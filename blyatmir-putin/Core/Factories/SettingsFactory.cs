@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using Blyatmir_Putin_Bot.Core.Interfaces;
+using Blyatmir_Putin_Bot.Core.Models;
+using System;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace Blyatmir_Putin_Bot.Core.Factories
 {
 	public static class SettingsFactory
 	{

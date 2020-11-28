@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using Blyatmir_Putin_Bot.Core.Interfaces;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace Blyatmir_Putin_Bot.Core.Models
 {
 	public class EnvironmentSettings : IAppSettings
 	{

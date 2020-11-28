@@ -1,5 +1,4 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Discord;
+﻿using Discord;
 using System;
 using Discord.WebSocket;
 using ElCheapo.Managers;
@@ -8,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blyatmir_Putin_Bot.Core.Database;
+using Blyatmir_Putin_Bot.Core.Models;
 
 namespace Blyatmir_Putin_Bot.Services
 {

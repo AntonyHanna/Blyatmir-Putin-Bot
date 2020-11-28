@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Blyatmir_Putin_Bot.Core.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace Blyatmir_Putin_Bot.Core.Models
 {
 	public static class AttributeLoader
 	{
