@@ -1,28 +1,34 @@
-using Blyatmir_Putin_Bot.Model;
-using Blyatmir_Putin_Bot.Services;
+using blyatmir_putin.Core;
+using blyatmir_putin.Core.Attributes;
+using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Factories;
+using blyatmir_putin.Core.Interfaces;
+using blyatmir_putin.Core.Models;
+using blyatmir_putin.Services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot
+namespace blyatmir_putin
 {
+	[DirectoryRequired("config")]
 	class Startup
 	{
 		public static IAppSettings AppConfig;
 		public static DiscordSocketClient Client;
+		public static DataContext context;
 		public static CommandService Commands;
 		private static CommandHandler commandHandler;
-
-		public static DateTime StartTime { get; private set; }
 
 		private static void Main()
 			=> new Startup().MainAsync().GetAwaiter().GetResult();
 
 		public async Task MainAsync()
 		{
-			StartTime = DateTime.Now;
 			await StartBotAsync();
 		}
 
@@ -32,6 +38,8 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public async static Task StartBotAsync()
 		{
+			AttributeLoader.LoadCustomAttributes();
+
 			Client = new DiscordSocketClient(new DiscordSocketConfig
 			{
 				LogLevel = LogSeverity.Debug
@@ -40,9 +48,12 @@ namespace Blyatmir_Putin_Bot
 			Commands = new CommandService();
 			commandHandler = new CommandHandler(Client, Commands);
 
-			AppConfig = SettingsFactory.Create();
+			AppConfig = await SettingsFactory.CreateAsync();
 
-			if(string.IsNullOrWhiteSpace(AppConfig.Token))
+			context = new DataContext();
+			context.Database.Migrate(); /* ensure the db exists */
+
+			if (string.IsNullOrWhiteSpace(AppConfig.Token))
 			{
 				Console.WriteLine("Failed to start... Bot Token was missing.\n\n" +
 					"Troubleshooting:\n" +
@@ -51,13 +62,23 @@ namespace Blyatmir_Putin_Bot
 				Environment.Exit(-1);
 			}
 
-			AttachEventHandlers();
+			await AttachEventHandlers();
 
 			await Client.SetGameAsync(AppConfig.Activity);
 			await Client.LoginAsync(TokenType.Bot, AppConfig.Token);
 			await commandHandler.InstallCommandsAsync();
 
 			await Client.StartAsync();
+
+			Logger.Debug("Delaying the startup of the Game notifier service");
+
+			new Thread(() =>
+			{
+				Thread.CurrentThread.IsBackground = true;
+				Thread.Sleep(10000);
+				GameNotifierService.QueryService.StartService();
+				Logger.Debug("Game notifier service has been started");
+			}).Start();
 
 			//wait infinitely I think?
 			await Task.Delay(-1);
@@ -66,41 +87,40 @@ namespace Blyatmir_Putin_Bot
 		/// <summary>
 		/// Attaches the required event handlers to the bot
 		/// </summary>
-		private static void AttachEventHandlers()
+		private static async Task AttachEventHandlers()
 		{
-			//responds with f's in chat
-			Client.MessageReceived += FInChatService.CheckForLoss;
+			await Task.Run(() =>
+			{
+				//responds with f's in chat
+				Client.MessageReceived += FInChatService.CheckForLoss;
 
-			//check messages for potential quotes
-			Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;
+				//check messages for potential quotes
+				Client.MessageReceived += QuoteManagamentService.QuoteIntentProcessorAsync;
 
-			//Control how reactions should affect messages
-			Client.ReactionAdded += ReactionHandlerService.ReactionAddedAsync;
+				//Control how reactions should affect messages
+				Client.ReactionAdded += ReactionHandlerService.ReactionAddedAsync;
 
-			// Handle how services that require reactions should respond to the clearing of reactions
-			Client.ReactionsCleared += ReactionHandlerService.ReactionsCleared;
+				// Handle how services that require reactions should respond to the clearing of reactions
+				Client.ReactionsCleared += ReactionHandlerService.ReactionsCleared;
 
-			//Generate GuildData once Ready is fired
-			Client.Ready += Guild.GenerateMissingGuilds;
+				//Generate GuildData once Ready is fired
+				Client.Ready += Guild.GenerateMissingGuilds;
 
-			Client.Ready += Container.GenerateMissingContiners;
+				//Update serverdata when the bot joins a new guild
+				Client.JoinedGuild += Guild.GenerateGuildData;
 
-			//Update serverdata when the bot joins a new guild
-			Client.JoinedGuild += Guild.GenerateGuildData;
+				Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
 
-			Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
+				//log messages in the console
+				Client.Log += Log;
 
-			//log messages in the console
-			Client.Log += Log;
-
-			AppDomain.CurrentDomain.ProcessExit += OnExitAsync;
+				AppDomain.CurrentDomain.ProcessExit += OnExitAsync;
+			});
 		}
 
 		private static async void OnExitAsync(object sender, EventArgs e)
 		{
 			await Client.StopAsync();
-			SshController.SshClient.Disconnect();
-			SshController.SshClient.Dispose();
 
 			// Disconnect from all voice chats
 			foreach (AudioService audioService in AudioService.AudioServices)
@@ -118,7 +138,7 @@ namespace Blyatmir_Putin_Bot
 		/// <returns></returns>
 		public static Task Log(LogMessage message)
 		{
-			Task.Run(() => Console.WriteLine(message.ToString()));
+			Task.Run(() => Logger.Debug(message.Message));
 			return Task.CompletedTask;
 		}
 	}

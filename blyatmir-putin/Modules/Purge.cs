@@ -1,11 +1,10 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	public class purge : ModuleBase<SocketCommandContext>
 	{
@@ -21,16 +20,17 @@ namespace Blyatmir_Putin_Bot.Modules
 
 			await DeleteMessages(num);
 
-			//message embed format
-			var easyEmbed = new EasyEmbed()
+			var embed = new EmbedBuilder
 			{
-				AuthorName = $"Purged {count} Message(s).",
-				AuthorIcon = $"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x",
-				EmbedColor = Color.Red
+				Color = Color.Red,
+				Author = new EmbedAuthorBuilder
+				{
+					Name = $"Purged {count} Message(s).",
+					IconUrl = $"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x"
+				},
 			};
 
-			//send the message
-			await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
+			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 
 

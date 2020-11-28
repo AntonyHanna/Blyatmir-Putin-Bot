@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace blyatmir_putin.Core.Models
 {
 	public static class Logger
 	{
@@ -27,7 +27,7 @@ namespace Blyatmir_Putin_Bot.Model
 			{
 				Console.ForegroundColor = color;
 				DateTime stamp = DateTime.Now;
-				Console.Write($"[{stamp.ToShortDateString()} {stamp.ToShortTimeString()}]\t{message}\n");
+				Console.Write($"[{stamp.ToShortDateString()} {stamp.ToLongTimeString()}]\t{message}\n");
 				Console.ResetColor();
 			}
 		}
@@ -37,7 +37,7 @@ namespace Blyatmir_Putin_Bot.Model
 			lock(_messageLock)
 			{
 				DateTime stamp = DateTime.Now;
-				Console.Write($"[{stamp.ToShortDateString()} {stamp.ToShortTimeString()}]\t{message}\n");
+				Console.Write($"[{stamp.ToShortDateString()} {stamp.ToLongTimeString()}]\t{message}\n");
 			}
 		}
 	}

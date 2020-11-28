@@ -2,7 +2,7 @@
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Services
+namespace blyatmir_putin.Services
 {
 	public static class ReactionHandlerService
 	{

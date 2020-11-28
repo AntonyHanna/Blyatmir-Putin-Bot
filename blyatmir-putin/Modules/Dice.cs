@@ -1,10 +1,10 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	public class Dice : ModuleBase<SocketCommandContext>
 	{
@@ -23,27 +23,32 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Alias("d")]
 		public async Task DiceRollAsync()
 		{
-			//new field woo hoo
-			EmbedFieldBuilder field = new EmbedFieldBuilder()
+			var embed = new EmbedBuilder
 			{
-				Name = "Roll",
-				Value = $"`{this.RollDice()}`",
-				IsInline = false
-			};
-
-			//embed template
-			var easyEmbed = new EasyEmbed()
-			{
-				AuthorName = "(╯°□°）╯︵ ┻━┻",
-				AuthorIcon = $"https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/game-die_1f3b2.png",
-				EmbedColor = Color.Green,
-				EmbedTitle = $"Dice Roll Results",
-				EmbedField = field,
-				FooterText = $"Rolled on some mystical dice from bum fuck nowhere seems to have 6 possible value(s)... BLYAT!"
+				Color = Color.Green,
+				Title = $"Dice Roll Results",
+				Author = new EmbedAuthorBuilder
+				{
+					Name = "(╯°□°）╯︵ ┻━┻",
+					IconUrl = $"https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/game-die_1f3b2.png",
+				},
+				Fields = new List<EmbedFieldBuilder>
+				{
+					new EmbedFieldBuilder
+					{
+						Name = "Roll",
+						Value = $"`{this.RollDice()}`",
+						IsInline = false
+					}
+				},
+				Footer = new EmbedFooterBuilder
+				{
+					Text = $"Rolled on some mystical dice from bum fuck nowhere seems to have 6 possible value(s)... BLYAT!"
+				}
 			};
 
 			//send the message
-			await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
+			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 
 		/// <summary>
@@ -55,27 +60,31 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Alias("d")]
 		public async Task DiceRollAsync(int maxValue)
 		{
-			//new field woo hoo
-			EmbedFieldBuilder field = new EmbedFieldBuilder()
+			var embed = new EmbedBuilder
 			{
-				Name = "Roll",
-				Value = $"`{this.RollDice(maxValue)}`",
-				IsInline = false
+				Color = Color.Green,
+				Title = $"Dice Roll Results",
+				Author = new EmbedAuthorBuilder
+				{
+					Name = "(╯°□°）╯︵ ┻━┻",
+					IconUrl = $"https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/game-die_1f3b2.png",
+				},
+				Fields = new List<EmbedFieldBuilder>
+				{
+					new EmbedFieldBuilder
+					{
+						Name = "Roll",
+						Value = $"`{this.RollDice(maxValue)}`",
+						IsInline = false
+					}
+				},
+				Footer = new EmbedFooterBuilder
+				{
+					Text = $"Rolled on some mystical dice from bum fuck nowhere seems to have {maxValue} possible value(s)... BLYAT!"
+				}
 			};
 
-			//embed template
-			var easyEmbed = new EasyEmbed()
-			{
-				AuthorName = "(╯°□°）╯︵ ┻━┻",
-				AuthorIcon = $"https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/game-die_1f3b2.png",
-				EmbedColor = Color.Green,
-				EmbedTitle = $"Dice Roll Results",
-				EmbedField = field,
-				FooterText = $"Rolled on some mystical dice from bum fuck nowhere seems to have {maxValue} possible value(s)... BLYAT!"
-			};
-
-			//send the message
-			await Context.Channel.SendMessageAsync(embed: easyEmbed.Build());
+			await Context.Channel.SendMessageAsync(embed: embed.Build());
 		}
 	}
 }

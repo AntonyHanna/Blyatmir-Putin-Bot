@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Blyatmir_Putin_Bot.Model
+﻿namespace blyatmir_putin.Core.Interfaces
 {
 	public interface IAppSettings
 	{

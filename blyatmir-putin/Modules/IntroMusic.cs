@@ -1,20 +1,23 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Blyatmir_Putin_Bot.Model;
+using blyatmir_putin.Core.Attributes;
+using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Models;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	[Group("intromusic")]
 	[Alias("im")]
+	[DirectoryRequired("config/user-intros")]
 	public class IntroMusic : ModuleBase<SocketCommandContext>
 	{
 		private string songDirectory => $"{Startup.AppConfig.RootDirectory}/resources/introMusic/";
+		private static DataContext DbContext => Startup.context;
 
 		[Command("set")]
 		[Alias("-s")]
@@ -47,10 +50,8 @@ namespace Blyatmir_Putin_Bot.Modules
 			User userData = User.GetUser(Context.Message.Author.Id);
 			string safeFileName = GenerateSafeFileName(attachment.Filename);
 
-			DeleteIntroSong(userData.IntroSong);
-
 			userData.IntroSong = safeFileName;
-			User.Write(User.UserList);
+			await DbContext.SaveChangesAsync();
 
 			DownloadAttachment(attachment.Url, safeFileName);
 
@@ -65,7 +66,7 @@ namespace Blyatmir_Putin_Bot.Modules
 			Logger.Debug($"Attempting to remove Intro Music for [{Context.Message.Author.Username}]");
 			User userData = User.GetUser(Context.Message.Author.Id);
 			userData.IntroSong = null;
-			User.Write(User.UserList);
+			await DbContext.SaveChangesAsync();
 
 			DeleteIntroSong(userData.IntroSong);
 			await Context.Channel.SendMessageAsync($"Intro Music for `{Context.Message.Author.Username}` has been removed");
@@ -107,10 +108,10 @@ namespace Blyatmir_Putin_Bot.Modules
 		[Command("default")]
 		[Alias("-d")]
 		[RequireBotPermission(GuildPermission.Administrator)]
-		internal void SetUserIntroToDefault(SocketUser user)
+		internal async Task SetUserIntroToDefault(SocketUser user)
 		{
 			Logger.Debug($"Attempting to set Intro Music for [{user.Username}] to default value");
-			SetSongToDefault(user);
+			await SetSongToDefault(user);
 			Logger.Debug($"Intro Music for [{user.Username}] has successfully been set to default");
 		}
 
@@ -185,13 +186,14 @@ namespace Blyatmir_Putin_Bot.Modules
 		
 		// this will probably end up being an issue since it'll allow users to default others intromusic
 		// the only solution is to how a baked in permissions system
-		private void SetSongToDefault(SocketUser user)
+		private async Task SetSongToDefault(SocketUser user)
 		{
 			User userInfo = User.GetUser(user.Id);
 			userInfo.IntroSong = "default.mp3";
-			User.Write(User.UserList);
 
-			Context.Channel.SendMessageAsync($"Intro Music for User: `{user.Username}` has been set to the default");
+			await DbContext.SaveChangesAsync();
+
+			await Context.Channel.SendMessageAsync($"Intro Music for User: `{user.Username}` has been set to the default");
 		}
 	}
 }

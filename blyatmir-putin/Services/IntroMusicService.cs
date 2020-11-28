@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Blyatmir_Putin_Bot.Model;
+using blyatmir_putin.Core.Models;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace Blyatmir_Putin_Bot.Services
+namespace blyatmir_putin.Services
 {
 	public class IntroMusicService : ModuleBase<SocketCommandContext>
 	{

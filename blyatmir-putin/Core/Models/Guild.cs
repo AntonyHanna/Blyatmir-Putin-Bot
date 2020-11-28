@@ -1,18 +1,15 @@
-﻿using Discord;
+﻿using blyatmir_putin.Core.Database;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace blyatmir_putin.Core.Models
 {
-	public class Guild : PersistantStorage<Guild>
+	public class Guild
 	{
-		public static List<Guild> GuildDataList = new List<Guild>(PersistantStorage<Guild>.Read());
+		private static DataContext DbContext => Startup.context;
 
 		public ulong GuildId { get; set; }
 		public string GuildName { get; set; }
@@ -21,6 +18,7 @@ namespace Blyatmir_Putin_Bot.Model
 		public int FTriggerCount { get; set; }
 		public double FTriggerCoolDown { get; set; }
 		public bool EnableIntroMusic { get; set; }
+		public bool EnableGameNotifier { get; set; }
 
 		public Guild()
 		{
@@ -31,6 +29,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.FTriggerCount = 3;
 			this.FTriggerCoolDown = 20.0;
 			this.EnableIntroMusic = false;
+			this.EnableGameNotifier = false;
 		}
 		public Guild(IGuild guild)
 		{
@@ -41,6 +40,7 @@ namespace Blyatmir_Putin_Bot.Model
 			this.FTriggerCount = 3;
 			this.FTriggerCoolDown = 20.0;
 			this.EnableIntroMusic = false;
+			this.EnableGameNotifier = false;
 		}
 
 		/// <summary>
@@ -80,51 +80,12 @@ namespace Blyatmir_Putin_Bot.Model
 		}
 
 		/// <summary>
-		/// Generates guild data for every server that the bot is present in
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private static void GenerateGuildData(object sender, ElapsedEventArgs e)
-		{
-			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
-				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
-
-			//loop through all the guilds
-			for (int j = 0; j < Startup.Client.Guilds.Count; j++)
-			{
-				//indexing for readonly collections
-				var guild = Startup.Client.Guilds.ElementAt(j);
-				bool isPresent = false;
-
-				//dont run if there is no guild data 
-				//otherwise compare the guild ids and only add the ones that are different
-				if (GuildDataList.Count() > 0)
-					foreach (var gld in GuildDataList)
-						if (guild.Id == gld.GuildId)
-							isPresent = true;
-
-				//for the ones not present add them to data
-				if (!isPresent)
-				{
-					GuildDataList.Add(new Guild(guild));
-					PersistantStorage<Guild>.Write(GuildDataList);
-					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
-				}
-			}
-		}
-
-		/// <summary>
 		/// For use with the GuildAvailable event
 		/// </summary>
 		/// <param name="arg"></param>
 		/// <returns></returns>
-		public static Task GenerateGuildData(SocketGuild arg)
+		public static async Task GenerateGuildData(SocketGuild arg)
 		{
-			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
-				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
-
 			//loop through all the guilds
 			for (int j = 0; j <= Startup.Client.Guilds.Count; j++)
 			{
@@ -134,29 +95,29 @@ namespace Blyatmir_Putin_Bot.Model
 
 				//dont run if there is no guild data 
 				//otherwise compare the guild ids and only add the ones that are different
-				if (GuildDataList.Count() > 0)
-					foreach (var gld in GuildDataList)
+				if (DbContext.Guilds.Count() > 0)
+				{
+					foreach (var gld in DbContext.Guilds)
+					{
 						if (guild.Id == gld.GuildId)
+						{
 							isPresent = true;
+						}
+					}	
+				}
 
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new Guild(guild));
-					PersistantStorage<Guild>.Write(GuildDataList);
+					DbContext.Guilds.Add(new Guild(guild));
+					await DbContext.SaveChangesAsync();
 					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
-
-			return Task.CompletedTask;
 		}
 
-		public static Task GenerateMissingGuilds()
+		public static async Task GenerateMissingGuilds()
 		{
-			//Create the config directory if it doesn't exist
-			if (!Directory.Exists(Startup.AppConfig.RootDirectory))
-				Directory.CreateDirectory(Startup.AppConfig.RootDirectory);
-
 			//loop through all the guilds
 			for (int j = 0; j < Startup.Client.Guilds.Count; j++)
 			{
@@ -166,21 +127,25 @@ namespace Blyatmir_Putin_Bot.Model
 
 				//dont run if there is no guild data 
 				//otherwise compare the guild ids and only add the ones that are different
-				if (GuildDataList.Count() > 0)
-					foreach (var gld in GuildDataList)
+				if (DbContext.Guilds.Count() > 0)
+				{
+					foreach (var gld in DbContext.Guilds)
+					{
 						if (guild.Id == gld.GuildId)
+						{
 							isPresent = true;
+						}
+					}
+				}
 
 				//for the ones not present add them to data
 				if (!isPresent)
 				{
-					GuildDataList.Add(new Guild(guild));
-					PersistantStorage<Guild>.Write(GuildDataList);
+					DbContext.Guilds.Add(new Guild(guild));
+					await DbContext.SaveChangesAsync();
 					Logger.Debug($"Creating a default guild data for [{guild.Name}]");
 				}
 			}
-
-			return Task.CompletedTask;
 		}
 
 		/// <summary>
@@ -190,7 +155,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Guild GetGuildData(SocketCommandContext context)
 		{
-			foreach (Guild data in GuildDataList)
+			foreach (Guild data in DbContext.Guilds)
 				if (data.GuildId == context.Guild.Id)
 					return data;
 
@@ -204,7 +169,7 @@ namespace Blyatmir_Putin_Bot.Model
 		/// <returns></returns>
 		public static Guild GetGuildData(IGuild guild)
 		{
-			foreach (Guild data in GuildDataList)
+			foreach (Guild data in DbContext.Guilds)
 				if (data.GuildId == guild.Id)
 					return data;
 

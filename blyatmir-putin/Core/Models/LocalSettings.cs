@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using blyatmir_putin.Core.Interfaces;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace blyatmir_putin.Core.Models
 {
-	public class LocalSettings : PersistantStorage<LocalSettings>, IAppSettings
+	public class LocalSettings : IAppSettings
 	{
 		public string Token { get; set; }
 
 		public string Prefix { get; set; }
 
-		public string RootDirectory { get; set; }
+		public string RootDirectory { get; set; } = "config/";
 
 		public string Activity { get; set; }
 
@@ -26,7 +23,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public LocalSettings()
 		{
-			string path = "config/Settings.xml";
+			string path = $"{this.RootDirectory}Settings.xml";
 			bool initialized = File.Exists(path);
 
 			if(!initialized)
@@ -40,7 +37,6 @@ namespace Blyatmir_Putin_Bot.Model
 
 					this.Token = " ";
 					this.Prefix = " ";
-					this.RootDirectory = "config/";
 					this.Activity = " ";
 					this.DockerIP = " ";
 					this.ServerUser = " ";
@@ -54,7 +50,7 @@ namespace Blyatmir_Putin_Bot.Model
 
 		public bool LoadSettings()
 		{
-			string path = "config/Settings.xml";
+			string path = $"{this.RootDirectory}Settings.xml";
 			LocalSettings settings;
 
 			using (XmlReader reader = XmlReader.Create(path))
@@ -67,7 +63,6 @@ namespace Blyatmir_Putin_Bot.Model
 			{
 				this.Token = settings.Token;
 				this.Prefix = settings.Prefix;
-				this.RootDirectory = "config/";
 				this.Activity = settings.Activity;
 				this.DockerIP = settings.DockerIP;
 				this.ServerUser = settings.ServerUser;
@@ -77,6 +72,21 @@ namespace Blyatmir_Putin_Bot.Model
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// The settings that should be used by all XmlWriters
+		/// </summary>
+		/// <returns></returns>
+		public static XmlWriterSettings XmlSettings()
+		{
+			XmlWriterSettings settings = new XmlWriterSettings();
+
+			settings.Indent = true;
+			settings.IndentChars = "    ";
+			settings.CloseOutput = true;
+
+			return settings;
 		}
 	}
 }
