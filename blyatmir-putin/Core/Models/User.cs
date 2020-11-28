@@ -2,9 +2,9 @@
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Linq;
-using Blyatmir_Putin_Bot.Core.Database;
+using blyatmir_putin.Core.Database;
 
-namespace Blyatmir_Putin_Bot.Core.Models
+namespace blyatmir_putin.Core.Models
 {
 	public class User
 	{

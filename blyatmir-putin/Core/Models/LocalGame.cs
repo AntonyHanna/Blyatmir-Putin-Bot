@@ -1,7 +1,7 @@
 ﻿using ElCheapo.Generics;
 using System;
 
-namespace Blyatmir_Putin_Bot.Core.Models
+namespace blyatmir_putin.Core.Models
 {
 	public class LocalGame : Game
 	{

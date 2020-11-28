@@ -1,7 +1,7 @@
 ﻿using System;
-using Blyatmir_Putin_Bot.Core.Interfaces;
+using blyatmir_putin.Core.Interfaces;
 
-namespace Blyatmir_Putin_Bot.Core.Models
+namespace blyatmir_putin.Core.Models
 {
 	public class EnvironmentSettings : IAppSettings
 	{

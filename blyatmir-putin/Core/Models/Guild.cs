@@ -1,11 +1,11 @@
-﻿using Blyatmir_Putin_Bot.Core.Database;
+﻿using blyatmir_putin.Core.Database;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Core.Models
+namespace blyatmir_putin.Core.Models
 {
 	public class Guild
 	{

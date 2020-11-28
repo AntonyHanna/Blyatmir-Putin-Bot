@@ -9,7 +9,7 @@ using Discord.Audio;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace Blyatmir_Putin_Bot.Core.Models
+namespace blyatmir_putin.Core.Models
 {
 	public class AudioService
 	{

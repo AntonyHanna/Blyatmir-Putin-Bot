@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blyatmir_Putin_Bot.Core.Database;
-using Blyatmir_Putin_Bot.Core.Models;
+using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Models;
 
-namespace Blyatmir_Putin_Bot.Services
+namespace blyatmir_putin.Services
 {
 	public static class GameNotifierService
 	{

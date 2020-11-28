@@ -1,4 +1,4 @@
-﻿namespace Blyatmir_Putin_Bot.Core.Interfaces
+﻿namespace blyatmir_putin.Core.Interfaces
 {
 	public interface IAppSettings
 	{

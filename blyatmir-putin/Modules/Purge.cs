@@ -4,7 +4,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	public class purge : ModuleBase<SocketCommandContext>
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Blyatmir_Putin_Bot.Migrations
+namespace blyatmir_putin.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -1,10 +1,10 @@
-﻿using Blyatmir_Putin_Bot.Core.Database;
-using Blyatmir_Putin_Bot.Core.Models;
+﻿using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Models;
 using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	[Group("config")]
 	[Alias("cfg")]

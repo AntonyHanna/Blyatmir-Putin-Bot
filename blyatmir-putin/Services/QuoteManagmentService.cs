@@ -1,4 +1,4 @@
-﻿using Blyatmir_Putin_Bot.Core.Models;
+﻿using blyatmir_putin.Core.Models;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Blyatmir_Putin_Bot.Services
+namespace blyatmir_putin.Services
 {
 	public class QuoteManagamentService
 	{

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	public class MaccasRun : ModuleBase<SocketCommandContext>
 	{
