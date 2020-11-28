@@ -1,11 +1,10 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	public class purge : ModuleBase<SocketCommandContext>
 	{

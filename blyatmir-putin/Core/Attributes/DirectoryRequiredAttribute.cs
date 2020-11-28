@@ -1,7 +1,8 @@
-﻿using System;
+﻿using blyatmir_putin.Core.Models;
+using System;
 using System.IO;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace blyatmir_putin.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 

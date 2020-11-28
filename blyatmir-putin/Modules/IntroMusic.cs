@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Blyatmir_Putin_Bot.Model;
+using blyatmir_putin.Core.Attributes;
+using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Models;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	[Group("intromusic")]
 	[Alias("im")]

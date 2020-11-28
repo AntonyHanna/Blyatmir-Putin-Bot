@@ -1,10 +1,9 @@
-﻿using Blyatmir_Putin_Bot.Model;
+﻿using blyatmir_putin.Core.Models;
 using Discord.WebSocket;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Blyatmir_Putin_Bot.Services
+namespace blyatmir_putin.Services
 {
 	public class FInChatService
 	{

@@ -1,15 +1,19 @@
-using Blyatmir_Putin_Bot.Model;
-using Blyatmir_Putin_Bot.Services;
+using blyatmir_putin.Core;
+using blyatmir_putin.Core.Attributes;
+using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Factories;
+using blyatmir_putin.Core.Interfaces;
+using blyatmir_putin.Core.Models;
+using blyatmir_putin.Services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot
+namespace blyatmir_putin
 {
 	[DirectoryRequired("config")]
 	class Startup

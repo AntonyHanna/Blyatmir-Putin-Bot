@@ -1,11 +1,10 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Modules
+namespace blyatmir_putin.Modules
 {
 	public class Dice : ModuleBase<SocketCommandContext>
 	{

@@ -1,5 +1,4 @@
-﻿using Blyatmir_Putin_Bot.Model;
-using Discord;
+﻿using Discord;
 using System;
 using Discord.WebSocket;
 using ElCheapo.Managers;
@@ -8,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using blyatmir_putin.Core.Database;
+using blyatmir_putin.Core.Models;
 
-namespace Blyatmir_Putin_Bot.Services
+namespace blyatmir_putin.Services
 {
 	public static class GameNotifierService
 	{

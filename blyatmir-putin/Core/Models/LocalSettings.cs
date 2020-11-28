@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using blyatmir_putin.Core.Interfaces;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace blyatmir_putin.Core.Models
 {
 	public class LocalSettings : IAppSettings
 	{

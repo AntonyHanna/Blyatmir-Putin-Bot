@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blyatmir_Putin_Bot.Model
+namespace blyatmir_putin.Core
 {
 	public class CommandHandler
 	{
