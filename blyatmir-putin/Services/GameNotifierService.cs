@@ -128,11 +128,12 @@ namespace blyatmir_putin.Services
 
 		private static async Task ImportNewGames(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
+			IQueryable<LocalGame> gamesDb = DbContext.Games.AsQueryable();
 			bool isGameNew = true;
 
 			foreach (ElCheapo.Generics.Game game in newGames)
 			{
-				isGameNew = DbContext.Games.AsQueryable().Select(g => g.Name == game.Name).Count() == 0 ? true : false;
+				isGameNew = gamesDb.Where(g => g.Name == game.Name).Count() == 0;
 
 				if (isGameNew)
 				{
