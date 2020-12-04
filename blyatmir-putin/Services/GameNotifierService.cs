@@ -44,8 +44,8 @@ namespace blyatmir_putin.Services
 		{
 			Task.Run(async () => 
 			{
-				await ImportNewGames(games);
-				await RemoveOldGames(games);
+				await ImportNewGamesToDB(games);
+				await RemoveOldGamesFromDB(games);
 
 				IEnumerable<SocketGuild> guilds = Startup.Client.Guilds;
 				DbSet<LocalGame> recordedGames = DbContext.Games;
@@ -126,13 +126,14 @@ namespace blyatmir_putin.Services
 			return builder.Build();
 		}
 
-		private static async Task ImportNewGames(IEnumerable<ElCheapo.Generics.Game> newGames)
+		private static async Task ImportNewGamesToDB(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
+			IQueryable<LocalGame> gamesDb = DbContext.Games.AsQueryable();
 			bool isGameNew = true;
 
 			foreach (ElCheapo.Generics.Game game in newGames)
 			{
-				isGameNew = DbContext.Games.AsQueryable().Select(g => g.Name == game.Name).Count() == 0 ? true : false;
+				isGameNew = gamesDb.Where(g => g.Name == game.Name).Count() == 0;
 
 				if (isGameNew)
 				{
@@ -144,7 +145,7 @@ namespace blyatmir_putin.Services
 			await DbContext.SaveChangesAsync();
 		}
 
-		private static async Task RemoveOldGames(IEnumerable<ElCheapo.Generics.Game> newGames)
+		private static async Task RemoveOldGamesFromDB(IEnumerable<ElCheapo.Generics.Game> newGames)
 		{
 			DbSet<LocalGame> storedGames = DbContext.Games;
 
