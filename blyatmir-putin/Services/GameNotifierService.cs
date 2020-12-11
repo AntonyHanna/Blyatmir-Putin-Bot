@@ -91,7 +91,7 @@ namespace blyatmir_putin.Services
 				ImageUrl = game.BannerUri,
 				ThumbnailUrl = game.PosterUri,
 				Color = new Color(r: 163, g: 255, b: 0),
-				Url = "https://www.epicgames.com/store/en-US/product/" + game.Name.Replace(" ", "-").ToLower(),
+				Url = game.StorePageUrl,
 				Author = new EmbedAuthorBuilder
 				{
 					IconUrl = "https://cdn.discordapp.com/attachments/598416605185310729/781731261525000232/epicgames_logo.png",
@@ -120,8 +120,6 @@ namespace blyatmir_putin.Services
 					},
 				}
 			};
-
-
 
 			return builder.Build();
 		}
