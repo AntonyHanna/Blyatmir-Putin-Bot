@@ -71,8 +71,6 @@ namespace blyatmir_putin
 
 			await Client.StartAsync();
 
-			Logger.Debug("Delaying the startup of the Game notifier service");
-
 			MessagePipe.MessageRecieved += Logger.Debug; /* hook el-cheapo logs */
 
 			new Thread(() =>
