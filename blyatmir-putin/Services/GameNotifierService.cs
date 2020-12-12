@@ -72,8 +72,11 @@ namespace blyatmir_putin.Services
 							continue;
 						}
 
-						await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(recordedGames.AsEnumerable().ElementAt(gameIdx)));
-						recordedGames.AsEnumerable().ElementAt(gameIdx).Posted = true;
+						if(recordedGames.AsEnumerable().ElementAt(gameIdx).StartDate >= DateTime.Now)
+						{
+							await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(recordedGames.AsEnumerable().ElementAt(gameIdx)));
+							recordedGames.AsEnumerable().ElementAt(gameIdx).Posted = true;
+						}
 					}
 				}
 
@@ -116,7 +119,7 @@ namespace blyatmir_putin.Services
 					new EmbedFieldBuilder
 					{
 						Name = "Availability (UTC)",
-						Value = game.StartDate + " - " + game.EndDate
+						Value = "Now - " + game.EndDate
 					},
 				}
 			};
