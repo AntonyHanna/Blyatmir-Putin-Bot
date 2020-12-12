@@ -8,6 +8,7 @@ using blyatmir_putin.Services;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using ElCheapo.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
@@ -70,7 +71,7 @@ namespace blyatmir_putin
 
 			await Client.StartAsync();
 
-			Logger.Debug("Delaying the startup of the Game notifier service");
+			MessagePipe.MessageRecieved += Logger.Debug; /* hook el-cheapo logs */
 
 			new Thread(() =>
 			{

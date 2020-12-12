@@ -67,13 +67,18 @@ namespace blyatmir_putin.Services
 
 					for (int gameIdx = 0; gameIdx < recordedGames.Count(); gameIdx++)
 					{
-						if (recordedGames.AsEnumerable().ElementAt(gameIdx).Posted)
+						LocalGame game = recordedGames.AsEnumerable().ElementAt(gameIdx);
+
+						if (game.Posted)
 						{
 							continue;
 						}
 
-						await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(recordedGames.AsEnumerable().ElementAt(gameIdx)));
-						recordedGames.AsEnumerable().ElementAt(gameIdx).Posted = true;
+						if(game.StartDate >= DateTime.Now)
+						{
+							await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(game));
+							game.Posted = true;
+						}
 					}
 				}
 
@@ -116,7 +121,7 @@ namespace blyatmir_putin.Services
 					new EmbedFieldBuilder
 					{
 						Name = "Availability (UTC)",
-						Value = game.StartDate + " - " + game.EndDate
+						Value = "Now - " + game.EndDate
 					},
 				}
 			};
