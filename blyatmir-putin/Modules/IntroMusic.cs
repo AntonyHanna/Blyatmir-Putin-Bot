@@ -16,7 +16,7 @@ namespace blyatmir_putin.Modules
 	[DirectoryRequired("config/user-intros")]
 	public class IntroMusic : ModuleBase<SocketCommandContext>
 	{
-		private string songDirectory => $"{Startup.AppConfig.RootDirectory}/resources/introMusic/";
+		private string songDirectory => $"{Startup.AppConfig.RootDirectory}/user-intros/";
 		private static DataContext DbContext => Startup.context;
 
 		[Command("set")]
