@@ -87,13 +87,9 @@ namespace blyatmir_putin.Modules
 
 			User userData = User.GetUser(user.Id);
 
+			/* Create a new audio service otherwise bot will join same channel repeatedly */
 			AudioService audioService = AudioService.GetAudioService(Context.Guild);
-
-			if (audioService == null)
-			{
-				Logger.Debug("Audio Service not found: Now creating a new Audio Service");
-				audioService = new AudioService(Context);
-			}
+			audioService = new AudioService(Context);
 
 			await audioService.StreamToVoiceAsync(userData.IntroSong);
 

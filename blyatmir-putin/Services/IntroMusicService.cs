@@ -56,14 +56,9 @@ namespace blyatmir_putin.Services
 					return;
 				}
 					
-
+				/* Create a new audio service otherwise bot will join same channel repeatedly */
 				AudioService audioService = AudioService.GetAudioService(newState.VoiceChannel.Guild);
-
-				if (audioService == null)
-				{
-					Logger.Debug($"No Audio Service found for [{newState.VoiceChannel.Guild.Name}], now creating a new Audio Service...");
-					audioService = new AudioService(newState);
-				}
+				audioService = new AudioService(newState);
 					
 				if(!await audioService.StreamToVoiceAsync(userData.IntroSong))
 				{
