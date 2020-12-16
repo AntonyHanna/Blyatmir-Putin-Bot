@@ -123,12 +123,6 @@ namespace blyatmir_putin
 		{
 			await Client.StopAsync();
 
-			// Disconnect from all voice chats
-			foreach (AudioService audioService in AudioService.AudioServices)
-			{
-				await audioService.DisconnectFromVoiceAsync();
-			}
-
 			Environment.Exit(1);
 		}
 
