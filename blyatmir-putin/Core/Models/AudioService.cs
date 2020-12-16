@@ -81,6 +81,7 @@ namespace blyatmir_putin.Core.Models
 			{
 				await this._outputStream.FlushAsync();
 				await DisconnectAsync();
+				Dispose();
 			}
 
 			return true;
@@ -119,6 +120,13 @@ namespace blyatmir_putin.Core.Models
 			}
 
 			return null;
+		}
+
+		private void Dispose()
+		{
+			this._ffmpeg.Close();
+			this._ffmpegStream.Close();
+			this._outputStream.Close();
 		}
 	}
 }
