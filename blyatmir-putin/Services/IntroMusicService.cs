@@ -57,7 +57,7 @@ namespace blyatmir_putin.Services
 				}
 					
 
-					AudioService audioService = AudioService.GetAudioService(newState.VoiceChannel.Guild);
+				AudioService audioService = AudioService.GetAudioService(newState.VoiceChannel.Guild);
 
 				if (audioService == null)
 				{
@@ -65,12 +65,9 @@ namespace blyatmir_putin.Services
 					audioService = new AudioService(newState);
 				}
 					
-
-				bool result = await audioService.ConnectToVoiceAsync();
-				
-				if(!result)
+				if(await audioService.ConnectAsync(newState.VoiceChannel.Id) == null)
 				{
-					Logger.Warning($"Failed to connect to voice channel [{newState.VoiceChannel.Name}] in [{newState.VoiceChannel.Guild.Name}] now aborting Intro Music...");
+					Logger.Warning($"Failed to connect to voice channel [{newState.VoiceChannel.Name}] in [{newState.VoiceChannel.Guild.Name}]");
 					return;
 				}
 
