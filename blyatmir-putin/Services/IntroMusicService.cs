@@ -55,10 +55,9 @@ namespace blyatmir_putin.Services
 					Logger.Warning("Aborting Intro Music:\tIntro Music is not enabled for this guild");
 					return;
 				}
-					
+
 				/* Create a new audio service otherwise bot will join same channel repeatedly */
-				AudioService audioService = AudioService.GetAudioService(newState.VoiceChannel.Guild);
-				audioService = new AudioService(newState);
+				AudioService audioService = new AudioService(newState);
 					
 				if(!await audioService.StreamToVoiceAsync(userData.IntroSong))
 				{

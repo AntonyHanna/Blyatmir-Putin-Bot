@@ -13,14 +13,7 @@ namespace blyatmir_putin.Core.Models
 {
 	public class AudioService
 	{
-		public static IEnumerable<AudioService> AudioServices = new List<AudioService>();
-
 		public SocketGuild Guild { get; }
-
-		/// <summary>
-		/// Get whether the bot is currently playing anything
-		/// </summary>
-		public bool IsPlaying { get; private set; }
 
 		/// <summary>
 		/// The ffmpeg instance
@@ -46,14 +39,12 @@ namespace blyatmir_putin.Core.Models
 		{
 			this.Guild = context.Guild;
 			this._destinationChannel = GetVoiceChannelFromCommandContext(context);
-			(AudioServices as List<AudioService>).Add(this);
 		}
 
 		public AudioService(SocketVoiceState socketVoiceState)
 		{
 			this.Guild = socketVoiceState.VoiceChannel.Guild;
 			this._destinationChannel = socketVoiceState.VoiceChannel;
-			(AudioServices as List<AudioService>).Add(this);
 		}
 
 		private static Process CreateStream(string path)
@@ -84,14 +75,12 @@ namespace blyatmir_putin.Core.Models
 
 			try
 			{
-				this.IsPlaying = true;
 				await this._ffmpegStream.CopyToAsync(this._outputStream);
 			}
 			finally
 			{
 				await this._outputStream.FlushAsync();
 				await DisconnectAsync();
-				this.IsPlaying = false;
 			}
 
 			return true;
@@ -116,18 +105,6 @@ namespace blyatmir_putin.Core.Models
 			}
 
 			return true;
-		}
-
-		public static AudioService GetAudioService(IGuild guild)
-		{
-			IEnumerable<AudioService> services = AudioServices.Where(service => service.Guild == guild);
-
-			if (services.Count() > 0)
-			{
-				return services.ElementAt(0);
-			}
-
-			return null;
 		}
 
 		private IVoiceChannel GetVoiceChannelFromCommandContext(SocketCommandContext context)
