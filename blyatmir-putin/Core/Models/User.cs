@@ -1,8 +1,9 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
-using System.Linq;
 using blyatmir_putin.Core.Database;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace blyatmir_putin.Core.Models
 {
@@ -69,12 +70,14 @@ namespace blyatmir_putin.Core.Models
 		/// <returns></returns>
 		public static User GetUser(ulong userId)
 		{
-			User result = DbContext.Users.First(user => user.UserId == userId);
+			IEnumerable<User> result = DbContext.Users.ToEnumerable().Where(user => user.UserId == userId);
 
-			if (result == null)
+			if (result.Count() == 0)
+			{
 				return new User(userId);
+			}
 
-			return result;
+			return result.ElementAt(0);
 		}
 
 		internal static void CreateUserIfMissing(SocketCommandContext context)
