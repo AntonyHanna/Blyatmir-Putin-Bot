@@ -65,13 +65,12 @@ namespace blyatmir_putin.Services
 					audioService = new AudioService(newState);
 				}
 					
-				if(await audioService.ConnectAsync(newState.VoiceChannel.Id) == null)
+				if(!await audioService.StreamToVoiceAsync(userData.IntroSong))
 				{
 					Logger.Warning($"Failed to connect to voice channel [{newState.VoiceChannel.Name}] in [{newState.VoiceChannel.Guild.Name}]");
 					return;
 				}
 
-				await audioService.StreamToVoiceAsync(userData.IntroSong);
 				Logger.Debug("Intro Music has finished successfully");
 			});
 
