@@ -81,7 +81,7 @@ namespace blyatmir_putin.Modules
 		
 			if(user == null)
 			{
-				Logger.Debug("User is null: Assuming user is the message author");
+				Logger.Debug("No user passed to command, assuming author is the user");
 				user = Context.Message.Author;
 			}
 
@@ -95,13 +95,8 @@ namespace blyatmir_putin.Modules
 				audioService = new AudioService(Context);
 			}
 
-			if(!await audioService.ConnectToVoiceAsync())
-			{
-				Logger.Warning("Aborting Intro Music: Failed to connect to voice channel");
-				return;
-			}
-
 			await audioService.StreamToVoiceAsync(userData.IntroSong);
+
 			Logger.Debug($"Intro Music has finished successfully");
 		}
 
