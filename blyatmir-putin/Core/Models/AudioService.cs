@@ -47,6 +47,14 @@ namespace blyatmir_putin.Core.Models
 			this._destinationChannel = socketVoiceState.VoiceChannel;
 		}
 
+		/// <summary>
+		/// Ensure that the memory has been released if for whatever reason it hasn't
+		/// </summary>
+		~AudioService()
+		{
+			Dispose();
+		}
+
 		private static Process CreateStream(string path)
 		{
 			return Process.Start(new ProcessStartInfo
