@@ -68,6 +68,7 @@ namespace blyatmir_putin.Core.Models
 			if (client == null)
 			{
 				Logger.Warning($"Failed to connect to voice channel [{this._destinationChannel.Name}] in [{this.Guild.Name}]");
+				Dispose();
 				return false;
 			}
 
