@@ -47,6 +47,14 @@ namespace blyatmir_putin.Core.Models
 			this._destinationChannel = socketVoiceState.VoiceChannel;
 		}
 
+		/// <summary>
+		/// Ensure that the memory has been released if for whatever reason it hasn't
+		/// </summary>
+		~AudioService()
+		{
+			Dispose();
+		}
+
 		private static Process CreateStream(string path)
 		{
 			return Process.Start(new ProcessStartInfo
@@ -68,6 +76,7 @@ namespace blyatmir_putin.Core.Models
 			if (client == null)
 			{
 				Logger.Warning($"Failed to connect to voice channel [{this._destinationChannel.Name}] in [{this.Guild.Name}]");
+				Dispose();
 				return false;
 			}
 
