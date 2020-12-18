@@ -1,4 +1,4 @@
-using Discord;
+﻿using Discord;
 using System;
 using Discord.WebSocket;
 using ElCheapo.Managers;
@@ -81,7 +81,14 @@ namespace blyatmir_putin.Services
 						if(game.StartDate <= DateTime.Now)
 						{
 							await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(game));
-							game.Posted = true;
+
+							// only set posted to true once the game has been posted in all servers
+							// otherwise only one guild will have the game posted
+							// might want to refactor this whole function in the future
+							if (recordedGames.Count() == gameIdx + 1)
+							{
+								game.Posted = true;
+							}
 						}
 					}
 				}
