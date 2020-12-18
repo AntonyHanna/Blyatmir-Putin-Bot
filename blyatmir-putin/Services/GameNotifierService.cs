@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using System;
 using Discord.WebSocket;
 using ElCheapo.Managers;
@@ -54,9 +54,13 @@ namespace blyatmir_putin.Services
 				{
 					Guild lGuild = Guild.GetGuildData(guilds.ElementAt(guildIdx));
 
+					if(lGuild == null)
+					{
+						continue;
+					}
+
 					if (lGuild.AnnouncmentChannelId == 0)
 					{
-						Logger.Warning($"No announcment channel was set for guild [{guilds.ElementAt(guildIdx).Name}]");
 						continue;
 					}
 
