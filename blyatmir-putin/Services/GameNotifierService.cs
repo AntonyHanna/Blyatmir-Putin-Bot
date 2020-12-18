@@ -54,9 +54,13 @@ namespace blyatmir_putin.Services
 				{
 					Guild lGuild = Guild.GetGuildData(guilds.ElementAt(guildIdx));
 
+					if(lGuild == null)
+					{
+						continue;
+					}
+
 					if (lGuild.AnnouncmentChannelId == 0)
 					{
-						Logger.Warning($"No announcment channel was set for guild [{guilds.ElementAt(guildIdx).Name}]");
 						continue;
 					}
 
@@ -77,7 +81,14 @@ namespace blyatmir_putin.Services
 						if(game.StartDate <= DateTime.Now)
 						{
 							await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(game));
-							game.Posted = true;
+
+							// only set posted to true once the game has been posted in all servers
+							// otherwise only one guild will have the game posted
+							// might want to refactor this whole function in the future
+							if (recordedGames.Count() == gameIdx + 1)
+							{
+								game.Posted = true;
+							}
 						}
 					}
 				}
