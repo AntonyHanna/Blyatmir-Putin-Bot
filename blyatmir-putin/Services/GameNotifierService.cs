@@ -74,7 +74,7 @@ namespace blyatmir_putin.Services
 							continue;
 						}
 
-						if(game.StartDate >= DateTime.Now)
+						if(game.StartDate <= DateTime.Now)
 						{
 							await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(game));
 							game.Posted = true;
