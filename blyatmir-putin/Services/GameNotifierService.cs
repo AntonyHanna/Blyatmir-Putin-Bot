@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using System;
 using Discord.WebSocket;
 using ElCheapo.Managers;
@@ -131,8 +131,9 @@ namespace blyatmir_putin.Services
 					},
 					new EmbedFieldBuilder
 					{
-						Name = "Availability (UTC)",
-						Value = "Now - " + game.EndDate
+						Name = "Available Until",
+						Value = $"{TimeZoneInfo.ConvertTimeFromUtc(game.EndDate, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")).ToString("dddd dd MMM yyyy - hh:mm tt")}\t(AEST)\n" +
+						$"{game.EndDate.ToString("dddd dd MMM yyyy - hh:mm tt")}\t(UTC)"
 					},
 				}
 			};
