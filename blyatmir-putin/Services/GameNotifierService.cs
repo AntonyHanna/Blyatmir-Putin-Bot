@@ -50,55 +50,38 @@ namespace blyatmir_putin.Services
 				IEnumerable<SocketGuild> guilds = Startup.Client.Guilds;
 				DbSet<LocalGame> recordedGames = DbContext.Games;
 
-				for (int guildIdx = 0; guildIdx < guilds.Count(); guildIdx++)
+				foreach(LocalGame storedGame in recordedGames)
 				{
-					Guild lGuild = Guild.GetGuildData(guilds.ElementAt(guildIdx));
-
-					if(lGuild == null)
+					if(storedGame.Posted)
 					{
 						continue;
 					}
 
-					if (lGuild.AnnouncmentChannelId == 0)
+					if(storedGame.StartDate > DateTime.UtcNow) // game is not yet available
 					{
 						continue;
 					}
 
-					if (!lGuild.EnableGameNotifier)
+					foreach(SocketGuild guild in guilds)
 					{
-						continue;
-					}
+						Guild guildData = Guild.GetGuildData(guild);
 
-					for (int gameIdx = 0; gameIdx < recordedGames.Count(); gameIdx++)
-					{
-						LocalGame game = recordedGames.AsEnumerable().ElementAt(gameIdx);
-
-						if (game.Posted)
+						if(guildData == null || !guildData.EnableGameNotifier || guildData.AnnouncmentChannelId == 0)
 						{
 							continue;
 						}
 
-						if(game.StartDate <= DateTime.UtcNow)
-						{
-							await guilds.ElementAt(guildIdx).GetTextChannel(lGuild.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(game));
-
-							// only set posted to true once the game has been posted in all servers
-							// otherwise only one guild will have the game posted
-							// might want to refactor this whole function in the future
-							if (recordedGames.Count() == gameIdx + 1)
-							{
-								game.Posted = true;
-							}
-						}
+						await guild.GetTextChannel(guildData.AnnouncmentChannelId).SendMessageAsync(embed: GenerateGameEmbed(storedGame));
 					}
+
+					storedGame.Posted = true;
 				}
 
 				await DbContext.SaveChangesAsync();
 			});
-
 		}
 
-		private static Embed GameEmbed(LocalGame game)
+		private static Embed GenerateGameEmbed(LocalGame game)
 		{
 			EmbedBuilder builder = new EmbedBuilder
 			{
@@ -131,8 +114,9 @@ namespace blyatmir_putin.Services
 					},
 					new EmbedFieldBuilder
 					{
-						Name = "Availability (UTC)",
-						Value = "Now - " + game.EndDate
+						Name = "Available Until",
+						Value = $"{TimeZoneInfo.ConvertTimeFromUtc(game.EndDate, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")).ToString("dddd dd MMM yyyy - hh:mm tt")}\t(AEST)\n" +
+						$"{game.EndDate.ToString("dddd dd MMM yyyy - hh:mm tt")}\t(UTC)"
 					},
 				}
 			};
