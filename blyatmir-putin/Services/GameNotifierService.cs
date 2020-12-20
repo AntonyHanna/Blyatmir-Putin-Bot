@@ -71,7 +71,7 @@ namespace blyatmir_putin.Services
 							continue;
 						}
 
-						await guild.GetTextChannel(guildData.AnnouncmentChannelId).SendMessageAsync(embed: GameEmbed(storedGame));
+						await guild.GetTextChannel(guildData.AnnouncmentChannelId).SendMessageAsync(embed: GenerateGameEmbed(storedGame));
 					}
 
 					storedGame.Posted = true;
@@ -81,7 +81,7 @@ namespace blyatmir_putin.Services
 			});
 		}
 
-		private static Embed GameEmbed(LocalGame game)
+		private static Embed GenerateGameEmbed(LocalGame game)
 		{
 			EmbedBuilder builder = new EmbedBuilder
 			{
