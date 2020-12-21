@@ -59,6 +59,7 @@ namespace blyatmir_putin.Services
 
 					if(storedGame.StartDate > DateTime.UtcNow) // game is not yet available
 					{
+						Logger.Debug($"Game is not yet available: [{storedGame.Name}]");
 						continue;
 					}
 
@@ -68,6 +69,7 @@ namespace blyatmir_putin.Services
 
 						if(guildData == null || !guildData.EnableGameNotifier || guildData.AnnouncmentChannelId == 0)
 						{
+							Logger.Warning($"Failed to either grab guild data or game notifier hasn't been setup for this guild [{guild.Name}]");
 							continue;
 						}
 
