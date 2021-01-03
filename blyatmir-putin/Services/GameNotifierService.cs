@@ -163,9 +163,8 @@ namespace blyatmir_putin.Services
 
 				if (!gameExists)
 				{
-					LocalGame tmp = storedGames.AsQueryable().First(g => g.Name == oldGame.Name);
-					Logger.Debug($"Removing an old game from the DB: [{tmp.Name}]");
-					storedGames.Remove(tmp);
+					Logger.Debug($"Removing an old game from the DB: [{oldGame.Name}]");
+					storedGames.Remove(oldGame);
 				}
 			}
 
