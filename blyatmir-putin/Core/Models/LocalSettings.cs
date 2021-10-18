@@ -15,12 +15,6 @@ namespace blyatmir_putin.Core.Models
 
 		public string Activity { get; set; }
 
-		public string DockerIP { get; set; }
-
-		public string ServerUser { get; set; }
-
-		public string ServerPassword { get; set; }
-
 		public LocalSettings()
 		{
 			string path = $"{this.RootDirectory}Settings.xml";
@@ -38,10 +32,6 @@ namespace blyatmir_putin.Core.Models
 					this.Token = " ";
 					this.Prefix = " ";
 					this.Activity = " ";
-					this.DockerIP = " ";
-					this.ServerUser = " ";
-					this.ServerPassword = " ";
-
 
 					serializer.Serialize(writer, initialisationList);
 				}
@@ -64,9 +54,6 @@ namespace blyatmir_putin.Core.Models
 				this.Token = settings.Token;
 				this.Prefix = settings.Prefix;
 				this.Activity = settings.Activity;
-				this.DockerIP = settings.DockerIP;
-				this.ServerUser = settings.ServerUser;
-				this.ServerPassword = settings.ServerPassword;
 
 				return true;
 			}
