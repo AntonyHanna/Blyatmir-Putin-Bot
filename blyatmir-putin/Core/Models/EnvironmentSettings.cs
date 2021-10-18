@@ -13,20 +13,11 @@ namespace blyatmir_putin.Core.Models
 
 		public string Activity { get; set; }
 
-		public string DockerIP { get; set; }
-
-		public string ServerUser { get; set; }
-
-		public string ServerPassword { get; set; }
-
 		public EnvironmentSettings()
 		{
 			this.Token = Environment.GetEnvironmentVariable("BOT_TOKEN");
 			this.Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX");
 			this.Activity = Environment.GetEnvironmentVariable("BOT_ACTIVITY");
-			this.DockerIP = Environment.GetEnvironmentVariable("DOCKER_IP");
-			this.ServerUser = Environment.GetEnvironmentVariable("SERVER_LOGIN");
-			this.ServerPassword = Environment.GetEnvironmentVariable("SERVER_PASSWORD");
 		}
 	}
 }
