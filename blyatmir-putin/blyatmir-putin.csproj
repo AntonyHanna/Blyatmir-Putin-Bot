@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>blyatmir_putin</RootNamespace>
     <Authors>Antony Hanna</Authors>
     <Version>2.0.3</Version>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
-	  <PackageReference Include="ElCheapo" Version="0.5.4" />
+	  <PackageReference Include="ElCheapo" Version="0.5.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
