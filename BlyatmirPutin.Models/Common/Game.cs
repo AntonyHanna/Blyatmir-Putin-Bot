@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlyatmirPutin.Models.Common
+﻿namespace BlyatmirPutin.Models.Common
 {
 	/// <summary>
 	/// Represents a Game in the Database
