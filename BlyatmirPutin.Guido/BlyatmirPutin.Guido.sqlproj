@@ -66,5 +66,6 @@
     <Build Include="Tables\GameNotifierModule.sql" />
     <Build Include="Tables\FModule.sql" />
     <Build Include="Tables\Game.sql" />
+    <Build Include="Tables\IntroMusicRecord.sql" />
   </ItemGroup>
 </Project>
