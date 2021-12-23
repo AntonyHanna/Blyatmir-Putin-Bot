@@ -51,7 +51,7 @@ namespace BlyatmirPutin.DataAccess
 
 			while (reader.Read())
 			{
-				T? obj = (T)Activator.CreateInstance(typeof(T));
+				T? obj = (T?)Activator.CreateInstance(typeof(T));
 
 				if (obj == null)
 					return objects;
