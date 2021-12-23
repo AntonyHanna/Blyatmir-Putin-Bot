@@ -1,6 +1,6 @@
-﻿CREATE TABLE Member (
-	Id BIGINT,
-	CurrentIntro INT
+﻿CREATE TABLE [dbo].[Member] (
+	[Id] BIGINT,
+	[CurrentIntro] INT
 
-	PRIMARY KEY (Id)
+	PRIMARY KEY ([Id])
 );

@@ -1,7 +1,7 @@
-﻿CREATE TABLE GameNotifierModule (
-	Id INT IDENTITY,
-	GuildId BIGINT,
-	IsEnabled BIGINT DEFAULT 1
+﻿CREATE TABLE [dbo].[GameNotifierModule] (
+	[Id] INT IDENTITY,
+	[GuildId] BIGINT,
+	[IsEnabled] BIGINT DEFAULT 1
 
-	PRIMARY KEY (Id)
+	PRIMARY KEY ([Id])
 );

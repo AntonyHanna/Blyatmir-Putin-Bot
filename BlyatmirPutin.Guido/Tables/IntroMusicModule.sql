@@ -1,17 +1,7 @@
-﻿-- CREATE TABLE IntroMusicRecord (
-	-- UserId BIGINT,
-	-- IntroId INT,
-	-- DateSet DATETIME,
-	-- DateUnset DATETIME
+﻿CREATE TABLE [dbo].[IntroMusicModule] (
+	[Id] INT IDENTITY,
+	[GuildId] BIGINT,
+	[IsEnabled] BIT DEFAULT 1
 
-	-- PRIMARY KEY (UserId, IntroId, DateSet)
--- );
-
-
-CREATE TABLE IntroMusicModule (
-	Id INT IDENTITY,
-	GuildId BIGINT,
-	IsEnabled BIT DEFAULT 1
-
-	PRIMARY KEY (Id)
+	PRIMARY KEY ([Id])
 );
