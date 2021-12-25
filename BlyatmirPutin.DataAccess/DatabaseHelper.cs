@@ -1,29 +1,20 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Data.Sqlite;
 using System.Reflection;
 
 namespace BlyatmirPutin.DataAccess
 {
-	internal class DatabaseHelper
+	public class DatabaseHelper
 	{
 		#region Properties
-		private static SqlConnection? _databaseConnection;
-		private static SqlConnection DatabaseConnection
-		{
-			get
-			{
-				if (_databaseConnection == null)
-				{
-					_databaseConnection = new SqlConnection(@"Data Source=(localdb)\ProjectModels;Initial Catalog=TESTDB;Integrated " +
-			"Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent" +
-			"=ReadWrite;MultiSubnetFailover=False");
-					_databaseConnection.Open();
-				}
-				return _databaseConnection;
-			}
-		}
+
 		#endregion
 
-		#region Primary SQL Statements
+		#region Delegates
+		delegate string DatabaseObjectOperation<T>(T obj) where T : class;
+		#endregion
+
+		#region Public Methods
+			#region Generic Methods
 		/// <summary>
 		/// Gets all rows for the given type
 		/// </summary>
@@ -36,8 +27,8 @@ namespace BlyatmirPutin.DataAccess
 			PropertyInfo[]? properties = typeof(T).GetProperties();
 
 			string query = $"SELECT * FROM {typeof(T).Name}";
-			SqlCommand command = new SqlCommand(query, DatabaseConnection);
-			SqlDataReader? reader;
+			SqliteCommand command = new SqliteCommand(query, DatabaseManager.DatabaseConnection);
+			SqliteDataReader? reader;
 
 			try
 			{
@@ -78,22 +69,8 @@ namespace BlyatmirPutin.DataAccess
 		/// <returns>Whether the query completed successfully</returns>
 		public static bool Insert<T>(T obj) where T : class
 		{
-			int rowsAffected = 0;
-			string query = GenerateInsertQuery(obj);
-			SqlCommand command = new SqlCommand(query, DatabaseConnection);
-
-			try
-			{
-				rowsAffected = command.ExecuteNonQuery();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-
-			command.Dispose();
-
-			return rowsAffected == 1;
+			int affectedRows = PerformDatabaseOperation(obj, GenerateInsertQuery);
+			return affectedRows == 1;
 		}
 
 		/// <summary>
@@ -104,22 +81,8 @@ namespace BlyatmirPutin.DataAccess
 		/// <returns>Whether the query completed successfully</returns>
 		public static bool Update<T>(T obj) where T : class
 		{
-			int rowsAffected = 0;
-			string query = GenerateUpdateQuery(obj);
-			SqlCommand command = new SqlCommand(query, DatabaseConnection);
-
-			try
-			{
-				rowsAffected = command.ExecuteNonQuery();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-
-			command.Dispose();
-
-			return rowsAffected == 1;
+			int affectedRows = PerformDatabaseOperation(obj, GenerateUpdateQuery);
+			return affectedRows == 1;
 		}
 
 		/// <summary>
@@ -130,23 +93,87 @@ namespace BlyatmirPutin.DataAccess
 		/// <returns>Whether the query completed successfully</returns>
 		public static bool Delete<T>(T obj) where T : class
 		{
-			int rowsAffected = 0;
-			string query = GenerateDeleteQuery(obj);
-			SqlCommand command = new SqlCommand(query, DatabaseConnection);
+			int affectedRows = PerformDatabaseOperation(obj, GenerateDeleteQuery);
+			return affectedRows > 1;
+		}
+			#endregion
+
+			#region Non-Generic Methods
+		public static bool ExecuteRawSql(string sql)
+		{
+			SqliteCommand createCommand = new SqliteCommand(sql, DatabaseManager.DatabaseConnection);
 
 			try
 			{
-				rowsAffected = command.ExecuteNonQuery();
+				createCommand.ExecuteReader();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				return false;
+			}
+
+			createCommand.Dispose();
+
+			return true;
+		}
+
+		public static int ExecuteRawSqlNonQuery(string sql)
+		{
+			int count = 0;
+			SqliteCommand createCommand = new SqliteCommand(sql, DatabaseManager.DatabaseConnection);
+
+			try
+			{
+				count = createCommand.ExecuteNonQuery();
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 			}
 
-			command.Dispose();
+			createCommand.Dispose();
 
-			return rowsAffected > 0;
+			return count;
 		}
+
+		/// <summary>
+		/// Checks the Table Definitions for the specified type
+		/// and creates the table with the resulting SQL
+		/// </summary>
+		/// <param name="type">The type to provide to the <see cref="TableDefinitions.Mappings"/> dictionary</param>
+		/// <returns>Whether the operation completed successfully</returns>
+		public static bool CreateTable(Type type)
+		{
+			string tableCreationQuery;
+			try
+			{
+				tableCreationQuery = TableDefinitions.Mappings[type];
+			}
+			catch
+			{
+				Console.WriteLine($"There's no key of type [{type.Name}] in the dictionary");
+				return false;
+			}
+
+			return ExecuteRawSql(tableCreationQuery);
+		}
+
+		/// <summary>
+		/// Executes the CREATE TABLE queries for all models in the Models assembly
+		/// </summary>
+		public static void EnsureTablesCreated()
+		{
+			Assembly assembly = Assembly.Load("BlyatmirPutin.Models");
+			Type[] models = assembly.GetTypes();
+
+			for (int i = 0; i < models.Length; i++)
+			{
+				CreateTable(models[i]);
+			}
+		}
+			#endregion
+
 		#endregion
 
 		#region Private Methods
@@ -253,6 +280,19 @@ namespace BlyatmirPutin.DataAccess
 			query += $"{id};";
 
 			return query;
+		}
+
+		/// <summary>
+		/// Performs the query returned by the <paramref name="operation"/> delegate
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="obj">The object to use for the operation</param>
+		/// <param name="operation">The SQL operation to perform</param>
+		/// <returns>The number of rows affected by the operation</returns>
+		private static int PerformDatabaseOperation<T>(T obj, DatabaseObjectOperation<T> operation) where T : class
+		{
+			string query = operation(obj);
+			return ExecuteRawSqlNonQuery(query);
 		}
 		#endregion
 	}
