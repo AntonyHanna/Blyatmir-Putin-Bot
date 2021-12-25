@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represent the settings for the Game Notifier module in the Database
 	/// </summary>
-	internal class GameNotifierModule
+	public class GameNotifierModule
 	{
 		/// <summary>
 		/// The unique identifier for the Game Notifier module in the Database

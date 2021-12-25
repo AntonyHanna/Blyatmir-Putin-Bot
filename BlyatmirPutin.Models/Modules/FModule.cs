@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represent the settings for the F module in the Database
 	/// </summary>
-	internal class FModule
+	public class FModule
 	{
 		/// <summary>
 		/// The unique identifier for the F module in the Database

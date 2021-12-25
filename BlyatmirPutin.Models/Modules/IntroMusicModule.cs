@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represent the settings for the Intro Music module in the Database
 	/// </summary>
-	internal class IntroMusicModule
+	public class IntroMusicModule
 	{
 		/// <summary>
 		/// The unique identifier for the Intro Music module in the Database

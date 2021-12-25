@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents an Intro Music in the Database
 	/// </summary>
-	internal class IntroMusic
+	public class IntroMusic
 	{
 		/// <summary>
 		/// The databases unique identifier for intro music

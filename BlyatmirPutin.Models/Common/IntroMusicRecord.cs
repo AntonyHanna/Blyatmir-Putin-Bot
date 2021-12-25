@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents a users past Intro Music in the Database
 	/// </summary>
-	internal class IntroMusicRecord
+	public class IntroMusicRecord
 	{
 		/// <summary>
 		/// The databases unique identifier for intro music

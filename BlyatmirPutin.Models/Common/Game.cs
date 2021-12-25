@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents a Game in the Database
 	/// </summary>
-	internal class Game
+	public class Game
 	{
 		/// <summary>
 		/// The unique identifier for the Game in the Database
