@@ -1,9 +1,0 @@
-﻿CREATE TABLE [dbo].[IntroMusic] (
-	[Id] INT IDENTITY,
-	[UploaderId] BIGINT NOT NULL,
-	[IntroName] NVARCHAR NOT NULL,
-	[FilePath] NVARCHAR NOT NULL,
-	[DateAdded] DATETIME DEFAULT GETDATE() 
-	
-	PRIMARY KEY ([Id])
-);

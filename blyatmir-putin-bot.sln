@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlyatmirPutin.Logic", "Blya
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlyatmirPutin.DataAccess", "BlyatmirPutin.DataAccess\BlyatmirPutin.DataAccess.csproj", "{5F2274DE-DCF9-431F-A0E2-30C2D5B64448}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BlyatmirPutin.Guido", "BlyatmirPutin.Guido\BlyatmirPutin.Guido.sqlproj", "{3EE85B67-073E-43A3-A94D-73F9EB87110E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +27,6 @@ Global
 		{5F2274DE-DCF9-431F-A0E2-30C2D5B64448}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F2274DE-DCF9-431F-A0E2-30C2D5B64448}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F2274DE-DCF9-431F-A0E2-30C2D5B64448}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EE85B67-073E-43A3-A94D-73F9EB87110E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EE85B67-073E-43A3-A94D-73F9EB87110E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EE85B67-073E-43A3-A94D-73F9EB87110E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{3EE85B67-073E-43A3-A94D-73F9EB87110E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EE85B67-073E-43A3-A94D-73F9EB87110E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EE85B67-073E-43A3-A94D-73F9EB87110E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
