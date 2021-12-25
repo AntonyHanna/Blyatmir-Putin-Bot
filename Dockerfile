@@ -13,8 +13,6 @@ RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" -c Release -o /build-o
 # gets the core runtime to allow for running the program
 FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine
 
-ENV ISDOCKER = 1
-
 # install the required linux packages
 RUN apk update && apk add \
 	opus-dev \
