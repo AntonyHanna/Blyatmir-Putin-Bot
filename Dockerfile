@@ -1,5 +1,5 @@
 # get the sdk to allow us to build
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine as build-env
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as build-env
 
 # prep the directories we'll be using
 RUN mkdir /build-output /source-code
@@ -11,7 +11,7 @@ COPY ./ source-code/
 RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" -c Release -o /build-output/
 
 # gets the core runtime to allow for running the program
-FROM mcr.microsoft.com/dotnet/runtime:5.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine
 
 ENV ISDOCKER = 1
 
