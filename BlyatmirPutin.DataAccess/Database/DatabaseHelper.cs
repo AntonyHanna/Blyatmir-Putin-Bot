@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using BlyatmirPutin.Models.Common.Configuration;
+using Microsoft.Data.Sqlite;
 using System.Reflection;
 
 namespace BlyatmirPutin.DataAccess.Database
@@ -168,10 +169,11 @@ namespace BlyatmirPutin.DataAccess.Database
 
 			Type[] ignoredTypes =
 			{
-				
+				typeof(DesktopConfiguration),
+				typeof(DockerConfiguration)
 			};
 
-			Type[] models = assembly.GetTypes();
+			Type[] models = (Type[])assembly.GetTypes().Where(t => t.IsClass);
 
 			for (int i = 0; i < models.Length; i++)
 			{
