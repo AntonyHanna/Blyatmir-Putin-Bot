@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Reflection;
 
-namespace BlyatmirPutin.DataAccess
+namespace BlyatmirPutin.DataAccess.Database
 {
 	public class DatabaseHelper
 	{
@@ -165,11 +165,20 @@ namespace BlyatmirPutin.DataAccess
 		public static void EnsureTablesCreated()
 		{
 			Assembly assembly = Assembly.Load("BlyatmirPutin.Models");
+
+			Type[] ignoredTypes =
+			{
+				
+			};
+
 			Type[] models = assembly.GetTypes();
 
 			for (int i = 0; i < models.Length; i++)
 			{
-				CreateTable(models[i]);
+				if(!ignoredTypes.Contains(models[i]))
+				{
+					CreateTable(models[i]);
+				}
 			}
 		}
 			#endregion

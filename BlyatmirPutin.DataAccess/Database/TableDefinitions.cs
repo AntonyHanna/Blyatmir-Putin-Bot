@@ -1,7 +1,7 @@
 ﻿using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Modules;
 
-namespace BlyatmirPutin.DataAccess
+namespace BlyatmirPutin.DataAccess.Database
 {
 	/// <summary>
 	/// Provide a mapping of types to SQL for table generation

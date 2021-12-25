@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 
-namespace BlyatmirPutin.DataAccess
+namespace BlyatmirPutin.DataAccess.Database
 {
 	/// <summary>
 	/// Manages the database connection
