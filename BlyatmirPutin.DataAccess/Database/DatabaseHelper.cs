@@ -151,10 +151,11 @@ namespace BlyatmirPutin.DataAccess.Database
 			try
 			{
 				tableCreationQuery = TableDefinitions.Mappings[type];
+				Logger.LogDebug($"Created table for key {type.Name}");
 			}
 			catch
 			{
-				Logger.LogError($"There's no key of type [{type.Name}] in the dictionary");
+				Logger.LogWarning($"There's no key of type {type.Name} in the dictionary, skipping...");
 				return false;
 			}
 
@@ -174,9 +175,9 @@ namespace BlyatmirPutin.DataAccess.Database
 				typeof(DockerConfiguration)
 			};
 
-			Type[] models = (Type[])assembly.GetTypes().Where(t => t.IsClass);
+			List<Type> models = assembly.GetTypes().Where(t => t.IsClass).ToList();
 
-			for (int i = 0; i < models.Length; i++)
+			for (int i = 0; i < models.Count; i++)
 			{
 				if(!ignoredTypes.Contains(models[i]))
 				{
