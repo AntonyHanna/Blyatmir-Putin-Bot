@@ -39,7 +39,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			bool success = true;
 			try
 			{
-				_databaseConnection?.Open();
+				DatabaseConnection?.Open();
 			}
 			catch (Exception ex)
 			{
@@ -60,7 +60,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			bool success = true;
 			try
 			{
-				_databaseConnection?.Close();
+				DatabaseConnection?.Close();
 			}
 			catch (Exception ex)
 			{
@@ -81,8 +81,8 @@ namespace BlyatmirPutin.DataAccess.Database
 		private static void DisposeDatabaseConnection(object? sender, EventArgs e)
 		{
 			Logger.LogDebug("Disposing of database connection...");
-			_databaseConnection?.Close();
-			_databaseConnection?.Dispose();
+			DatabaseConnection?.Close();
+			DatabaseConnection?.Dispose();
 			_databaseConnection = null;
 		}
 		#endregion
