@@ -1,4 +1,5 @@
-﻿using BlyatmirPutin.Models.Common.Configuration;
+﻿using BlyatmirPutin.Common.Logging;
+using BlyatmirPutin.Models.Common.Configuration;
 using Microsoft.Data.Sqlite;
 using System.Reflection;
 
@@ -37,7 +38,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Logger.LogError(ex.Message);
 				return objects;
 			}
 
@@ -110,7 +111,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Logger.LogError(ex.Message);
 				return false;
 			}
 
@@ -130,7 +131,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Logger.LogError(ex.Message);
 			}
 
 			createCommand.Dispose();
@@ -153,7 +154,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch
 			{
-				Console.WriteLine($"There's no key of type [{type.Name}] in the dictionary");
+				Logger.LogError($"There's no key of type [{type.Name}] in the dictionary");
 				return false;
 			}
 
@@ -264,7 +265,10 @@ namespace BlyatmirPutin.DataAccess.Database
 			object? id = properties?.Where(p => p?.Name == "Id")?.First()?.GetValue(obj);
 
 			if (id == null)
+			{
+				Logger.LogCritical("No property with name \"Id\" was found");
 				throw new NullReferenceException("No property with name \"Id\" was found");
+			}
 
 			query += $" WHERE Id = {id}";
 
@@ -286,7 +290,10 @@ namespace BlyatmirPutin.DataAccess.Database
 			object? id = properties?.Where(p => p?.Name == "Id")?.First().GetValue(obj);
 
 			if (id == null)
+			{
+				Logger.LogCritical("No property with name \"Id\" was found");
 				throw new NullReferenceException("No property with name \"Id\" was found");
+			}
 
 			query += $"{id};";
 

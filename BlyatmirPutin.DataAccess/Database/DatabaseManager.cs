@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using BlyatmirPutin.Common.Logging;
+using Microsoft.Data.Sqlite;
 
 namespace BlyatmirPutin.DataAccess.Database
 {
@@ -42,7 +43,8 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Logger.LogCritical(ex.Message);
+				Environment.Exit(-1);
 				success = false;
 			}
 
@@ -62,7 +64,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Logger.LogError(ex.Message);
 				success = false;
 			}
 
@@ -78,7 +80,7 @@ namespace BlyatmirPutin.DataAccess.Database
 		/// <param name="e"></param>
 		private static void DisposeDatabaseConnection(object? sender, EventArgs e)
 		{
-			Console.WriteLine("Disposing of database connection...");
+			Logger.LogDebug("Disposing of database connection...");
 			_databaseConnection?.Close();
 			_databaseConnection?.Dispose();
 			_databaseConnection = null;

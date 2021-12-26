@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlyatmirPutin.Common\BlyatmirPutin.Common.csproj" />
     <ProjectReference Include="..\BlyatmirPutin.Models\BlyatmirPutin.Models.csproj" />
   </ItemGroup>
 
