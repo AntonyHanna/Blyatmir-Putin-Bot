@@ -1,4 +1,5 @@
-﻿using BlyatmirPutin.Common.Logging;
+using BlyatmirPutin.Common.Logging;
+using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Logic.Discord;
 using BlyatmirPutin.Models.Factories;
 using BlyatmirPutin.Models.Interfaces;
@@ -45,8 +46,9 @@ public class Program
 			DiscordManager.Dispose();
 		}
 
-		Logger.LogDebug("Disposing of database connection...");
-		// need to disconnect the database here
+		Logger.LogDebug("Disconnecting and disposing of database connection...");
+		DatabaseManager.DisconnectDatabase();
+		DatabaseManager.Dispose();
 
 		Logger.LogDebug("Resetting console color...");
 		Console.ResetColor();

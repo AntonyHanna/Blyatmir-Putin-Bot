@@ -21,7 +21,6 @@ namespace BlyatmirPutin.DataAccess.Database
 				if (_databaseConnection == null)
 				{
 					_databaseConnection = new SqliteConnection("Data Source=Guido.sqlite;");
-					AppDomain.CurrentDomain.ProcessExit += DisposeDatabaseConnection;
 				}
 
 				return _databaseConnection;
@@ -78,7 +77,7 @@ namespace BlyatmirPutin.DataAccess.Database
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private static void DisposeDatabaseConnection(object? sender, EventArgs e)
+		public static void Dispose()
 		{
 			Logger.LogDebug("Disposing of database connection...");
 			DatabaseConnection?.Close();
