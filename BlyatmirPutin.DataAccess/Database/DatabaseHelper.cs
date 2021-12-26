@@ -155,7 +155,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 			catch
 			{
-				Logger.LogWarning($"There's no key of type {type.Name} in the dictionary, skipping...");
+				Logger.LogWarning($"There's no type {type.Name} in the dictionary, skipping...");
 				return false;
 			}
 
