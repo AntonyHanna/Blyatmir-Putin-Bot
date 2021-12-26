@@ -28,6 +28,14 @@ public class Program
 		DiscordManager = new DiscordManager();
 		IConfiguration? config = ConfigurationFactory.Create();
 
+		if(DatabaseManager.IsNew)
+		{
+			Logger.LogWarning($"No database found, creating tables now...");
+			DatabaseHelper.EnsureTablesCreated();
+		}
+		
+		Logger.LogInfo("Connected to database successfully");
+
 		await DiscordManager.ConnectAsync(config);
 
 		await Task.Delay(-1);

@@ -20,12 +20,22 @@ namespace BlyatmirPutin.DataAccess.Database
 			{
 				if (_databaseConnection == null)
 				{
+					// determine if the database is new
+					if(_isNew == null)
+					{
+						_isNew = !File.Exists("Guido.sqlite");
+					}
+
 					_databaseConnection = new SqliteConnection("Data Source=Guido.sqlite;");
 				}
 
 				return _databaseConnection;
 			}
 		}
+
+		private static bool? _isNew { get; set; }
+
+		public static bool IsNew => _isNew ?? true;
 		#endregion
 
 		#region Public Methods
