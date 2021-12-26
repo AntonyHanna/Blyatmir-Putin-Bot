@@ -1,4 +1,4 @@
-using BlyatmirPutin.Common.Logging;
+﻿using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Logic.Discord;
 using BlyatmirPutin.Models.Factories;
@@ -27,6 +27,17 @@ public class Program
 
 		DiscordManager = new DiscordManager();
 		IConfiguration? config = ConfigurationFactory.Create();
+		if(string.IsNullOrWhiteSpace(config?.Token) || string.IsNullOrEmpty(config?.Token))
+		{
+			Logger.LogCritical("Bot token was left empty, now exiting application...");
+			Environment.Exit(-1);
+		}
+
+		if (!DatabaseManager.ConnectDatabase())
+		{
+			Logger.LogCritical("Failed to connect to database, now exiting application...");
+			Environment.Exit(-1);
+		}
 
 		if(DatabaseManager.IsNew)
 		{
