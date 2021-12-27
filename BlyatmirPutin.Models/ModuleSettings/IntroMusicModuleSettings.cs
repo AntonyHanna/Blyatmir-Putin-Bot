@@ -1,12 +1,12 @@
 ﻿namespace BlyatmirPutin.Models.Modules
 {
 	/// <summary>
-	/// Represent the settings for the Game Notifier module in the Database
+	/// Represent the settings for the Intro Music module in the Database
 	/// </summary>
-	public class GameNotifierModule
+	public class IntroMusicModuleSettings
 	{
 		/// <summary>
-		/// The unique identifier for the Game Notifier module in the Database
+		/// The unique identifier for the Intro Music module in the Database
 		/// </summary>
 		public int Id { get; set; }
 
