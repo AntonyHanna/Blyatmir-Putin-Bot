@@ -163,26 +163,13 @@ namespace BlyatmirPutin.DataAccess.Database
 		}
 
 		/// <summary>
-		/// Executes the CREATE TABLE queries for all models in the Models assembly
+		/// Creates the tables defined in <see cref="TableDefinitions.Mappings"/>
 		/// </summary>
 		public static void EnsureTablesCreated()
 		{
-			Assembly assembly = Assembly.Load("BlyatmirPutin.Models");
-
-			Type[] ignoredTypes =
+			for (int i = 0; i < TableDefinitions.Mappings.Count; i++)
 			{
-				typeof(DesktopConfiguration),
-				typeof(DockerConfiguration)
-			};
-
-			List<Type> models = assembly.GetTypes().Where(t => t.IsClass).ToList();
-
-			for (int i = 0; i < models.Count; i++)
-			{
-				if(!ignoredTypes.Contains(models[i]))
-				{
-					CreateTable(models[i]);
-				}
+				CreateTable(TableDefinitions.Mappings.ElementAt(i).Key);
 			}
 		}
 			#endregion
