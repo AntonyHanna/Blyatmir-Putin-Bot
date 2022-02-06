@@ -19,5 +19,11 @@
 		/// Controls whether this module is enabled for this Guild
 		/// </summary>
 		public bool IsEnabled { get; set; }
+
+		public override bool Equals(object? obj) 
+			=> obj != null && obj is IntroMusicModuleSettings && this.Id == ((IntroMusicModuleSettings)obj).Id;
+
+		public override int GetHashCode() 
+			=> this.Id.GetHashCode();
 	}
 }

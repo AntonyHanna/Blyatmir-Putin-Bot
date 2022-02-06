@@ -13,6 +13,12 @@
 		/// <summary>
 		/// The Id to the users intro
 		/// </summary>
-		public int CurrentIntro { get; set; }
+		public string CurrentIntro { get; set; }
+
+		public override bool Equals(object? obj)
+			=> obj != null && obj is Member && this.Id == (obj as Member)?.Id;
+
+		public override int GetHashCode()
+			=> this.Id.GetHashCode();
 	}
 }

@@ -8,7 +8,7 @@
 		/// <summary>
 		/// The databases unique identifier for intro music
 		/// </summary>
-		public int Id { get; set; }
+		public string Id { get; set; }
 
 		/// <summary>
 		/// Represents the user who was using the intro music
@@ -18,18 +18,23 @@
 		/// <summary>
 		/// Represents which intro was used
 		/// </summary>
-		public int IntroId { get; set; }
+		public string IntroId { get; set; }
 
 		/// <summary>
 		/// Represents the date time when the user started
 		/// using this intro
 		/// </summary>
-		public DateTime DateSet { get; set; }
+		public long DateSet { get; set; }
 
-		/// <summary>
-		/// Represents the date time when the user stopped
-		/// using this intro
-		/// </summary>
-		public DateTime DateUnset { get; set; }
+		public IntroMusicRecord()
+		{
+			this.Id = Guid.NewGuid().ToString();
+		}
+
+		public override bool Equals(object? obj)
+			=> obj != null && obj is IntroMusicRecord && this.Id == (obj as IntroMusicRecord).Id;
+
+		public override int GetHashCode() 
+			=> this.Id.GetHashCode();
 	}
 }
