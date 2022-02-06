@@ -21,9 +21,9 @@ namespace BlyatmirPutin.DataAccess.Database
 				if (_databaseConnection == null)
 				{
 					// determine if the database is new
-					if(_isNew == null)
+					if(_isInitialised == null)
 					{
-						_isNew = !File.Exists("Guido.sqlite");
+						_isInitialised = !File.Exists("Guido.sqlite");
 					}
 
 					_databaseConnection = new SqliteConnection("Data Source=Guido.sqlite;");
@@ -33,9 +33,9 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 		}
 
-		private static bool? _isNew { get; set; }
+		private static bool? _isInitialised { get; set; }
 
-		public static bool IsNew => _isNew ?? true;
+		public static bool IsInitialised => _isInitialised ?? true;
 		#endregion
 
 		#region Public Methods
