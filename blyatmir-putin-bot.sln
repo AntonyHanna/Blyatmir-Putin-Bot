@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlyatmirPutin.DataAccess", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlyatmirPutin.Common", "BlyatmirPutin.Common\BlyatmirPutin.Common.csproj", "{9886FED3-08C8-48F5-844A-ECEA0640F489}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{D0701B3F-E5A0-47B9-9A12-2AC06404F0BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{D0701B3F-E5A0-47B9-9A12-2AC06404F0BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlyatmirPutin.Tests", "BlyatmirPutin.Tests\BlyatmirPutin.Tests.csproj", "{B109C403-1BB4-4E3E-8C4C-A261910647BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D0701B3F-E5A0-47B9-9A12-2AC06404F0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0701B3F-E5A0-47B9-9A12-2AC06404F0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0701B3F-E5A0-47B9-9A12-2AC06404F0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B109C403-1BB4-4E3E-8C4C-A261910647BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B109C403-1BB4-4E3E-8C4C-A261910647BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B109C403-1BB4-4E3E-8C4C-A261910647BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B109C403-1BB4-4E3E-8C4C-A261910647BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
