@@ -1,4 +1,4 @@
-﻿using BlyatmirPutin.Common.Logging;
+using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.Models.Common.Configuration;
 using Microsoft.Data.Sqlite;
 using System.Reflection;
