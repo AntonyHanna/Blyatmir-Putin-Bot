@@ -26,7 +26,7 @@ namespace BlyatmirPutin.Models.Factories
 				// appropriate action
 				switch (XmlManager.EnsureCreated<DesktopConfiguration>(path))
 				{
-					case XmlManager.FileStatus.AlreadyExists:
+					case XmlManager.FileStatus.Created:
 						if (XmlManager.Read(ref desktopConfig, path))
 						{
 							Logger.LogInfo("Successfully loaded the config.");
@@ -34,7 +34,7 @@ namespace BlyatmirPutin.Models.Factories
 						}
 						break;
 
-					case XmlManager.FileStatus.Created:
+					case XmlManager.FileStatus.AlreadyExists:
 					case XmlManager.FileStatus.Error:
 						Logger.LogCritical("There was either an error loading " +
 							"the file or the file could not be found.\n\n" +
