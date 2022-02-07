@@ -1,6 +1,7 @@
 ﻿using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Models.Common;
+using BlyatmirPutin.Models.Modules;
 using Discord;
 using Discord.Commands;
 using System.Net;
@@ -19,6 +20,29 @@ namespace BlyatmirPutin.Logic.Modules
 				Logger.LogWarning("No attachment was provided, aborting SetNewIntroMusic...");
 				return;
 			}
+
+			#region Get Module Settings
+			IntroMusicModuleSettings? settings = DatabaseHelper.GetRows<IntroMusicModuleSettings>().Find((s) => s.GuildId == Context.Guild.Id);
+
+			if(settings == null)
+			{
+				Logger.LogInfo($"No IntroMusicModuleSettings found for guild [{Context.Guild.Name}]...");
+				settings = new IntroMusicModuleSettings
+				{
+					GuildId = Context.Guild.Id,
+					IsEnabled = false
+				};
+
+				DatabaseHelper.Insert(settings);
+				Logger.LogInfo("Inserting IntroMusicModuleSettings to Database");
+			}
+
+			if(!settings.IsEnabled)
+			{
+				Logger.LogWarning($"Not playing intro for user [{Context.User.Username}], intro is not enabled for guild [{Context.Guild.Name}]");
+				return;
+			}
+			#endregion
 
 			Member author;
 

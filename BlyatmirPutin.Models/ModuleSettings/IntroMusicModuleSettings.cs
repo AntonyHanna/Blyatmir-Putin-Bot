@@ -8,7 +8,7 @@
 		/// <summary>
 		/// The unique identifier for the Intro Music module in the Database
 		/// </summary>
-		public int Id { get; set; }
+		public string Id { get; set; }
 
 		/// <summary>
 		/// The Discord Guild Id that this entry is associated with
@@ -19,6 +19,11 @@
 		/// Controls whether this module is enabled for this Guild
 		/// </summary>
 		public bool IsEnabled { get; set; }
+
+		public IntroMusicModuleSettings()
+		{
+			this.Id = Guid.NewGuid().ToString();
+		}
 
 		public override bool Equals(object? obj) 
 			=> obj != null && obj is IntroMusicModuleSettings && this.Id == ((IntroMusicModuleSettings)obj).Id;
