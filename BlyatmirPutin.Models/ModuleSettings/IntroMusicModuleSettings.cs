@@ -20,6 +20,11 @@
 		/// </summary>
 		public bool IsEnabled { get; set; }
 
+		/// <summary>
+		/// Controls the required amount of votes before an Intro is Thanos snapped
+		/// </summary>
+		public int VoteThreshold { get; set; }
+
 		public IntroMusicModuleSettings()
 		{
 			this.Id = Guid.NewGuid().ToString();
