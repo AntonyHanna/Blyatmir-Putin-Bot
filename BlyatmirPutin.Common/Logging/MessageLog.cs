@@ -33,6 +33,7 @@
 
 		public enum LogLevel
 		{
+			Verbose,
 			Info,
 			Debug,
 			Warning,

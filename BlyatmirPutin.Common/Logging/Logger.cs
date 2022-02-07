@@ -13,6 +13,12 @@ namespace BlyatmirPutin.Common.Logging
 			}
 		}
 
+		public static void LogVerbose(string message, [CallerMemberName] string callerName = "")
+		{
+			if (IsConsoleAvailable)
+				Console.WriteLine(new MessageLog(message, MessageLog.LogLevel.Verbose, ConsoleColor.Gray, callerName));
+		}
+
 		public static void LogInfo(string message, [CallerMemberName] string callerName = "")
 		{
 			if(IsConsoleAvailable)
@@ -42,7 +48,19 @@ namespace BlyatmirPutin.Common.Logging
 			if (IsConsoleAvailable)
 				Console.Error.WriteLine(new MessageLog(message, MessageLog.LogLevel.Critical, ConsoleColor.Magenta, callerName));
 		}
-		
+
+		public static void LogEnter([CallerMemberName] string callerName = "")
+		{
+			if(IsConsoleAvailable)
+				Console.Error.WriteLine(new MessageLog($"Entered method: [{callerName}]", MessageLog.LogLevel.Verbose, ConsoleColor.Gray, callerName));
+		}
+
+		public static void LogExit([CallerMemberName] string callerName = "")
+		{
+			if (IsConsoleAvailable)
+				Console.Error.WriteLine(new MessageLog($"Exited method: [{callerName}]", MessageLog.LogLevel.Verbose, ConsoleColor.Gray, callerName));
+		}
+
 		private static ConsoleColor DetermineForegroundColor()
 		{
 			if(Console.BackgroundColor == ConsoleColor.Black)
