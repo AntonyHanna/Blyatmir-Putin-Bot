@@ -28,7 +28,7 @@
 		private static string FormatMessage(string message, ConsoleColor color = default, string logLevel = "", string callerName = "")
 		{
 			Console.ForegroundColor = color;
-			return string.Format($"{Timestamp,-10:dd MMM yyyy - hh:mm tt}  {logLevel,-8}  {callerName,-10}  {message}", message);
+			return string.Format($"{Timestamp,-10:dd MMM yyyy - hh:mm tt}  {logLevel,-8}  {callerName,-20}  {message}", message);
 		}
 
 		public enum LogLevel
