@@ -28,6 +28,7 @@
 		public IntroMusicModuleSettings()
 		{
 			this.Id = Guid.NewGuid().ToString();
+			this.VoteThreshold = 5;
 		}
 
 		public override bool Equals(object? obj) 
