@@ -1,5 +1,6 @@
 ﻿using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Modules;
+using BlyatmirPutin.Models.Records;
 
 namespace BlyatmirPutin.DataAccess.Database
 {
@@ -20,7 +21,8 @@ namespace BlyatmirPutin.DataAccess.Database
 			{ typeof(IntroMusicRecord), "CREATE TABLE IntroMusicRecord (Id NVARCHAR IDENTITY, UserId BIGINT, IntroId NVARCHAR, DateSet BIGINT, PRIMARY KEY (Id));" },
 			{ typeof(FModuleSettings), "CREATE TABLE FModuleSettings (Id INT IDENTITY, GuildId BIGINT, IsEnabled BIGINT default 1, Threshold INT DEFAULT 3, Cooldown INT DEFAULT 30, PRIMARY KEY (Id));" },
 			{ typeof(GameNotifierModuleSettings), "CREATE TABLE GameNotifierModuleSettings (Id INT IDENTITY, GuildId BIGINT, IsEnabled BIGINT DEFAULT 1, PRIMARY KEY (Id));" },
-			{ typeof(IntroMusicModuleSettings), "CREATE TABLE IntroMusicModuleSettings (Id NVARCHAR IDENTITY, GuildId BIGINT, IsEnabled BIT DEFAULT 1, VoteThreshold INT, PRIMARY KEY (Id));" }
+			{ typeof(IntroMusicModuleSettings), "CREATE TABLE IntroMusicModuleSettings (Id NVARCHAR IDENTITY, GuildId BIGINT, IsEnabled BIT DEFAULT 1, VoteThreshold INT, PRIMARY KEY (Id));" },
+			{ typeof(IntroMusicVote), "CREATE TABLE IntroMusicVote (Id NVARCHAR IDENTITY, VoterID BIGINT, TargetUserID BIGINT, GuildID BIGINT, PRIMARY KEY (Id));" }
 		};
 	}
 }
