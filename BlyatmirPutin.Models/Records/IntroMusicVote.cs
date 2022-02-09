@@ -22,9 +22,15 @@
 		/// </summary>
 		public ulong GuildID { get; set; }
 
+		/// <summary>
+		/// The timestamp of when the vote was placed
+		/// </summary>
+		public long VoteTimestamp { get; set; }
+
 		public IntroMusicVote()
 		{
 			this.Id = Guid.NewGuid().ToString();
+			this.VoteTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		}
 
 		public override bool Equals(object? obj)

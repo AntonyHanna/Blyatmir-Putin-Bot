@@ -22,7 +22,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			{ typeof(FModuleSettings), "CREATE TABLE FModuleSettings (Id INT IDENTITY, GuildId UNSIGNED BIGINT, IsEnabled BIGINT default 1, Threshold INT DEFAULT 3, Cooldown INT DEFAULT 30, PRIMARY KEY (Id));" },
 			{ typeof(GameNotifierModuleSettings), "CREATE TABLE GameNotifierModuleSettings (Id INT IDENTITY, GuildId UNSIGNED BIGINT, IsEnabled BIGINT DEFAULT 1, PRIMARY KEY (Id));" },
 			{ typeof(IntroMusicModuleSettings), "CREATE TABLE IntroMusicModuleSettings (Id NVARCHAR IDENTITY, GuildId UNSIGNED BIGINT, IsEnabled BIT DEFAULT 1, VoteThreshold INT, PRIMARY KEY (Id));" },
-			{ typeof(IntroMusicVote), "CREATE TABLE IntroMusicVote (Id NVARCHAR IDENTITY, VoterID UNSIGNED BIGINT, TargetUserID UNSIGNED BIGINT, GuildID UNSIGNED BIGINT, PRIMARY KEY (Id));" }
+			{ typeof(IntroMusicVote), "CREATE TABLE IntroMusicVote (Id NVARCHAR IDENTITY, VoterID UNSIGNED BIGINT, TargetUserID UNSIGNED BIGINT, GuildID UNSIGNED BIGINT, VoteTimestamp BIGINT, PRIMARY KEY (Id));" }
 		};
 	}
 }
