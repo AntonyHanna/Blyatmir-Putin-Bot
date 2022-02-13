@@ -1,6 +1,7 @@
 using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.Models.Common.Configuration;
 using Microsoft.Data.Sqlite;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace BlyatmirPutin.DataAccess.Database
@@ -17,6 +18,35 @@ namespace BlyatmirPutin.DataAccess.Database
 
 		#region Public Methods
 			#region Generic Methods
+		/// <summary>
+		/// Gets an object by the specified id
+		/// </summary>
+		/// <returns></returns>
+		public static T? GetById<T>(object id) where T : class
+		{
+			PropertyInfo? objPropInfo = typeof(T)?.GetProperties()
+				?.Where((p) => Attribute.IsDefined(p, typeof(KeyAttribute)))
+				?.FirstOrDefault();
+
+			Type paramType = id.GetType();
+
+			if (objPropInfo == null)
+			{
+				Logger.LogError($"No key specified in the '{nameof(objPropInfo.DeclaringType)}' data object");
+				return null;
+			}
+
+			if (objPropInfo.PropertyType != paramType)
+			{
+				Logger.LogError($"Failed to get data object, the id property was not the same DO '{objPropInfo.PropertyType}' specified Id type '{paramType.Name}'");
+				return null;
+			}
+
+			string query = $"SELECT * FROM {typeof(T).Name} WHERE {objPropInfo.Name} = '{id}'";
+
+			return QueryObject<T>(query);
+		}
+
 		/// <summary>
 		/// Gets all rows for the given type
 		/// </summary>
@@ -59,6 +89,12 @@ namespace BlyatmirPutin.DataAccess.Database
 
 				objects.Add(obj);
 			}
+
+			Task.Run(async () =>
+			{
+				await reader.DisposeAsync();
+				await command.DisposeAsync();
+			});
 
 			return objects;
 		}
@@ -177,6 +213,46 @@ namespace BlyatmirPutin.DataAccess.Database
 		#endregion
 
 		#region Private Methods
+		private static T? QueryObject<T>(string query) where T : class
+		{
+			PropertyInfo[] properties = typeof(T).GetProperties();
+			T? obj = (T?)Activator.CreateInstance(typeof(T));
+
+			if (obj == null)
+				return null;
+
+			SqliteCommand command = new SqliteCommand(query, DatabaseManager.DatabaseConnection);
+			SqliteDataReader? reader;
+
+			try
+			{
+				reader = command.ExecuteReader();
+			}
+			catch (Exception ex)
+			{
+				Logger.LogError(ex.Message);
+				return null;
+			}
+
+			reader.Read();
+
+			for (int i = 0; i < properties?.Length; i++)
+			{
+				Type type = typeof(T);
+				PropertyInfo? propertyInfo = type.GetProperty(properties[i].Name);
+
+				propertyInfo?.SetValue(obj, Convert.ChangeType(reader[properties[i].Name], propertyInfo.PropertyType));
+			}
+
+			Task.Run(async () => 
+			{
+				await reader.DisposeAsync();
+				await command.DisposeAsync();
+			});
+
+			return obj;
+		}
+
 		/// <summary>
 		/// Generates a query to insert the given object
 		/// </summary>
