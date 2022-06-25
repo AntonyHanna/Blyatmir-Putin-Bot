@@ -1,8 +1,12 @@
 using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.Models.Common.Configuration;
 using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace BlyatmirPutin.DataAccess.Database
 {
@@ -32,7 +36,7 @@ namespace BlyatmirPutin.DataAccess.Database
 
 			if (objPropInfo == null)
 			{
-				Logger.LogError($"No key specified in the '{nameof(objPropInfo.DeclaringType)}' data object");
+				Logger.LogError($"No key specified in the '{typeof(T)}' data object");
 				return null;
 			}
 
@@ -203,7 +207,7 @@ namespace BlyatmirPutin.DataAccess.Database
 		/// </summary>
 		public static void EnsureTablesCreated()
 		{
-			for (int i = 0; i < TableDefinitions.Mappings.Count; i++)
+			for (int i = 0; i < TableDefinitions.Mappings.Count(); i++)
 			{
 				CreateTable(TableDefinitions.Mappings.ElementAt(i).Key);
 			}
@@ -326,15 +330,15 @@ namespace BlyatmirPutin.DataAccess.Database
 			}
 
 			// construct the identifier portion of the query (WHERE)
-			object? id = properties?.Where(p => p?.Name == "Id")?.First()?.GetValue(obj);
+			PropertyInfo? id = properties?.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)))?.FirstOrDefault();
 
 			if (id == null)
 			{
-				Logger.LogCritical("No property with name \"Id\" was found");
-				throw new NullReferenceException("No property with name \"Id\" was found");
+				Logger.LogCritical($"No data object identifier was found for type {typeof(T).Name}");
+				throw new NullReferenceException("No data object identifier was found for type {typeof(T).Name}");
 			}
 
-			query += $" WHERE Id = {id}";
+			query += $" WHERE Id = {id.GetValue(obj)}";
 
 			return query;
 		}
@@ -351,15 +355,15 @@ namespace BlyatmirPutin.DataAccess.Database
 			string query = $"DELETE FROM {typeof(T).Name} WHERE Id = ";
 			PropertyInfo[] properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-			object? id = properties?.Where(p => p?.Name == "Id")?.First().GetValue(obj);
+			PropertyInfo? id = properties?.Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)))?.FirstOrDefault();
 
 			if (id == null)
 			{
-				Logger.LogCritical("No property with name \"Id\" was found");
-				throw new NullReferenceException("No property with name \"Id\" was found");
+				Logger.LogCritical($"No data object identifier was found for type {typeof(T).Name}");
+				throw new NullReferenceException("No data object identifier was found for type {typeof(T).Name}");
 			}
 
-			query += $"{id};";
+			query += $"{id.GetValue(obj)};";
 
 			return query;
 		}
