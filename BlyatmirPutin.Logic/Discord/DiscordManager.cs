@@ -1,8 +1,17 @@
 ﻿using BlyatmirPutin.Common.Logging;
+using BlyatmirPutin.DataAccess.Database;
+using BlyatmirPutin.Logic.Factories;
+using BlyatmirPutin.Logic.Services;
+using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Interfaces;
 using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic.Discord
 {
@@ -16,30 +25,50 @@ namespace BlyatmirPutin.Logic.Discord
 
 		public CommandService? CommandService{ get; private set; }
 
+		public InteractionService? InteractionService { get; private set; }
+
 		public async Task ConnectAsync(IConfiguration? config)
 		{
+	
 			Client = new DiscordSocketClient(new DiscordSocketConfig
 			{
 				GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildVoiceStates | GatewayIntents.GuildMessages,
 				LogLevel = LogSeverity.Debug,
-				UseSystemClock = true
+				UseSystemClock = true,
+				MaxWaitBetweenGuildAvailablesBeforeReady = 500
 			});
 
 			CommandService = new CommandService(new CommandServiceConfig
-			{ 
+			{
 				LogLevel = LogSeverity.Debug,
 				CaseSensitiveCommands = true
 			});
 
+			InteractionService = new InteractionService(Client.Rest, new InteractionServiceConfig
+			{
+				LogLevel = LogSeverity.Debug,
+			});
+
 			Client.Log += Client_Log;
+			Client.Ready += Client_Ready;
+
 			CommandService.Log += Client_Log;
 
-			CommandHandler handler = new CommandHandler(Client, CommandService);
+			Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
+
+			CommandHandler handler = new CommandHandler(Client, CommandService, InteractionService);
+
+			
 
 			await handler.InstallCommandsAsync();
 			await Client.LoginAsync(TokenType.Bot, config?.Token);
 			await Client.SetGameAsync(config?.Activity);
 			await Client.StartAsync();
+		}
+
+		private async Task Client_Ready()
+		{
+			await InteractionService?.RegisterCommandsGloballyAsync();
 		}
 
 		public async Task DisconnectAsync()

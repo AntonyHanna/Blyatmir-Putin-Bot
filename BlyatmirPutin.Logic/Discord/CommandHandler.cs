@@ -1,10 +1,8 @@
-﻿using Discord.Commands;
+﻿using BlyatmirPutin.Logic.Factories;
+using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic.Discord
@@ -15,23 +13,40 @@ namespace BlyatmirPutin.Logic.Discord
 
 		private CommandService Commands { get; set; }
 
-		public CommandHandler(DiscordSocketClient client, CommandService commands)
+        private InteractionService Interactions { get; set; }
+
+		public CommandHandler(DiscordSocketClient client, CommandService commands, InteractionService interactions)
 		{
             this.Client = client;
             this.Commands = commands;
+            this.Interactions = interactions;
 		}
 
         public async Task InstallCommandsAsync()
 		{
             Client.MessageReceived += HandleCommandAsync;
 
-            await Commands.AddModulesAsync(
-                assembly: Assembly.GetExecutingAssembly(),
-                services: null
-            );
-		}
+            Assembly assembly = Assembly.GetExecutingAssembly();
 
-        public async Task HandleCommandAsync(SocketMessage arg)
+            await Commands.AddModulesAsync(
+                assembly: assembly,
+                services: ServiceFactory.ServiceProvider
+            );
+            await Interactions.AddModulesAsync(
+                    assembly: assembly,
+                    services: ServiceFactory.ServiceProvider
+            );
+
+            Client.InteractionCreated += HandleInteractionAsync;
+        }
+
+		private async Task HandleInteractionAsync(SocketInteraction interaction)
+		{
+            SocketInteractionContext context = new SocketInteractionContext(Client, interaction);
+            await Interactions.ExecuteCommandAsync(context, ServiceFactory.ServiceProvider);
+        }
+
+		public async Task HandleCommandAsync(SocketMessage arg)
         {
             // Bail out if it's a System Message.
             var msg = arg as SocketUserMessage;
@@ -44,7 +59,6 @@ namespace BlyatmirPutin.Logic.Discord
             int pos = 0;
 
             // get the guild based prefix
-
             if (msg.HasCharPrefix('/', ref pos))
             {
                 // Create a Command Context.
