@@ -3,6 +3,9 @@ using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Logic.Discord;
 using BlyatmirPutin.Models.Factories;
 using BlyatmirPutin.Models.Interfaces;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 public class Program
 {
@@ -26,6 +29,8 @@ public class Program
 			Environment.Exit(0);
 		};
 
+		Directory.CreateDirectory("/data/user-intros");
+
 		DiscordManager = new DiscordManager();
 		IConfiguration? config = ConfigurationFactory.Create();
 		if (string.IsNullOrWhiteSpace(config?.Token) || string.IsNullOrEmpty(config?.Token))
@@ -45,7 +50,7 @@ public class Program
 			Logger.LogWarning($"No database found, creating tables now...");
 			DatabaseHelper.EnsureTablesCreated();
 		}
-
+		
 		Logger.LogInfo("Connected to database successfully");
 
 		await DiscordManager.ConnectAsync(config);
