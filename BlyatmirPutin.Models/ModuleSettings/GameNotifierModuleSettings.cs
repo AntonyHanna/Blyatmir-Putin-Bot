@@ -1,4 +1,6 @@
-﻿namespace BlyatmirPutin.Models.Modules
+using System.ComponentModel.DataAnnotations;
+
+namespace BlyatmirPutin.Models.Modules
 {
 	/// <summary>
 	/// Represent the settings for the Game Notifier module in the Database

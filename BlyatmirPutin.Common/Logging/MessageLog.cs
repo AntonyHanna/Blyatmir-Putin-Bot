@@ -1,4 +1,6 @@
-﻿namespace BlyatmirPutin.Common.Logging
+﻿using System;
+
+namespace BlyatmirPutin.Common.Logging
 {
 	public class MessageLog
 	{

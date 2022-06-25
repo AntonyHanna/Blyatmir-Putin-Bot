@@ -1,4 +1,7 @@
-﻿namespace BlyatmirPutin.Models.Records
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace BlyatmirPutin.Models.Records
 {
 	public class IntroMusicVote
 	{

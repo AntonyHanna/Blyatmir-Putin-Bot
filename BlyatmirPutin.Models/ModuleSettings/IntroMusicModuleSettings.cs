@@ -1,4 +1,7 @@
-﻿namespace BlyatmirPutin.Models.Modules
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace BlyatmirPutin.Models.Modules
 {
 	/// <summary>
 	/// Represent the settings for the Intro Music module in the Database

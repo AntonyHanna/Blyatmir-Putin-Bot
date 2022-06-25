@@ -1,6 +1,8 @@
 ﻿using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Modules;
 using BlyatmirPutin.Models.Records;
+using System;
+using System.Collections.Generic;
 
 namespace BlyatmirPutin.DataAccess.Database
 {

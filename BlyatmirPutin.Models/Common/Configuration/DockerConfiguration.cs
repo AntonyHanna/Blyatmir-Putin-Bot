@@ -1,4 +1,5 @@
 ﻿using BlyatmirPutin.Models.Interfaces;
+using System;
 
 namespace BlyatmirPutin.Models.Common.Configuration
 {

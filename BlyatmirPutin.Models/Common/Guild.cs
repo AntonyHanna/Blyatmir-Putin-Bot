@@ -1,4 +1,6 @@
-﻿namespace BlyatmirPutin.Models.Common
+using System.ComponentModel.DataAnnotations;
+
+namespace BlyatmirPutin.Models.Common
 {
 	/// <summary>
 	/// Represent a Discord Guild in the Database

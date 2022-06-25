@@ -1,4 +1,6 @@
-﻿namespace BlyatmirPutin.Models.Common
+using System.ComponentModel.DataAnnotations;
+
+namespace BlyatmirPutin.Models.Common
 {
 	/// <summary>
 	/// Represents a Discord User in the Database

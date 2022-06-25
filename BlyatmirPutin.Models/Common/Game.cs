@@ -1,4 +1,7 @@
-﻿namespace BlyatmirPutin.Models.Common
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace BlyatmirPutin.Models.Common
 {
 	/// <summary>
 	/// Represents a Game in the Database
