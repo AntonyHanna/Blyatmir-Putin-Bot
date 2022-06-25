@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlyatmirPutin.Models.Records
@@ -8,6 +8,7 @@ namespace BlyatmirPutin.Models.Records
 		/// <summary>
 		/// The databases unique identifier for this intro music vote
 		/// </summary>
+		[Key]
 		public string Id { get; private set; }
 
 		/// <summary>

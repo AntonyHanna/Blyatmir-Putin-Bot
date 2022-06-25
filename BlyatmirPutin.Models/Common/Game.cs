@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlyatmirPutin.Models.Common
@@ -11,6 +11,7 @@ namespace BlyatmirPutin.Models.Common
 		/// <summary>
 		/// The unique identifier for the Game in the Database
 		/// </summary>
+		[Key]
 		public int Id { get; set; }
 
 		/// <summary>

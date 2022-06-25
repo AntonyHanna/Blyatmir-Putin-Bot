@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlyatmirPutin.Models.Modules
@@ -11,6 +11,7 @@ namespace BlyatmirPutin.Models.Modules
 		/// <summary>
 		/// The unique identifier for the Intro Music module in the Database
 		/// </summary>
+		[Key]
 		public string Id { get; set; }
 
 		/// <summary>

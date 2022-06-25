@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlyatmirPutin.Models.Common
 {
@@ -10,6 +10,7 @@ namespace BlyatmirPutin.Models.Common
 		/// <summary>
 		/// The members User ID according to Discord
 		/// </summary>
+		[Key]
 		public ulong Id { get; set; }
 
 		/// <summary>

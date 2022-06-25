@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlyatmirPutin.Models.Modules
 {
@@ -10,6 +10,7 @@ namespace BlyatmirPutin.Models.Modules
 		/// <summary>
 		/// The unique identifier for the Game Notifier module in the Database
 		/// </summary>
+		[Key]
 		public int Id { get; set; }
 
 		/// <summary>
