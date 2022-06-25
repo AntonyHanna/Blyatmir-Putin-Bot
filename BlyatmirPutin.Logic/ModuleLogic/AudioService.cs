@@ -2,8 +2,14 @@
 using Discord;
 using Discord.Audio;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic
 {
@@ -53,6 +59,14 @@ namespace BlyatmirPutin.Logic
 			AudioServices.Add(this);
 		}
 
+		public AudioService(SocketInteractionContext context)
+		{
+			this.Guild = context.Guild;
+			this._destinationChannel = GetVoiceChannelFromCommandContext(context);
+
+			AudioServices.Add(this);
+		}
+
 		public AudioService(SocketVoiceState socketVoiceState)
 		{
 			this.Guild = socketVoiceState.VoiceChannel.Guild;
@@ -66,6 +80,21 @@ namespace BlyatmirPutin.Logic
 			IEnumerable<AudioService> service = AudioServices.Where(a => a.Guild == context.Guild);
 
 			if(!service.Any())
+			{
+				Logger.LogDebug($"No existing audio service for guild [{context.Guild.Name}], creating a new service");
+				return new AudioService(context);
+			}
+
+			Logger.LogDebug($"Using existing audio service for guild [{service.First().Guild.Name}]");
+
+			return service.First();
+		}
+
+		public static AudioService GetAudioService(SocketInteractionContext context)
+		{
+			IEnumerable<AudioService> service = AudioServices.Where(a => a.Guild == context.Guild);
+
+			if (!service.Any())
 			{
 				Logger.LogDebug($"No existing audio service for guild [{context.Guild.Name}], creating a new service");
 				return new AudioService(context);
@@ -176,7 +205,7 @@ namespace BlyatmirPutin.Logic
 			{
 				if(this._destinationChannel == null)
 				{
-					Logger.LogWarning("Failed to disconnect from the voice channel, destination channel was null");
+					Logger.LogWarning("Failed to disconnect from voice channel, bot wasn't in a channel");
 					return false;
 				}
 
@@ -194,6 +223,20 @@ namespace BlyatmirPutin.Logic
 		private IVoiceChannel? GetVoiceChannelFromCommandContext(SocketCommandContext context)
 		{
 			SocketUser user = context.Message.Author;
+
+			IEnumerable<SocketVoiceChannel> voiceChannels = this.Guild.VoiceChannels.Where(channel => channel.Users.Contains(user));
+
+			if (voiceChannels.Count() > 0)
+			{
+				return voiceChannels.ElementAt(0);
+			}
+
+			return null;
+		}
+
+		private IVoiceChannel? GetVoiceChannelFromCommandContext(SocketInteractionContext context)
+		{
+			SocketUser user = context.User;
 
 			IEnumerable<SocketVoiceChannel> voiceChannels = this.Guild.VoiceChannels.Where(channel => channel.Users.Contains(user));
 
