@@ -8,7 +8,11 @@ RUN mkdir /build-output /source-code
 COPY ./ source-code/
 
 # build the source code
-RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" -c Release -o /build-output/
+
+RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" \
+	-c Release \
+	-o /build-output/ \
+	--runtime alpine-x64
 
 # gets the core runtime to allow for running the program
 FROM mcr.microsoft.com/dotnet/runtime:5.0-alpine
