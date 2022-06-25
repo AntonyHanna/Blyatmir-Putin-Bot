@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace BlyatmirPutin.Common.Logging
@@ -9,7 +10,7 @@ namespace BlyatmirPutin.Common.Logging
 		{
 			get
 			{
-				return Console.LargestWindowWidth != 0;
+				return Console.LargestWindowWidth != 0 || Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") != null;
 			}
 		}
 
@@ -49,13 +50,13 @@ namespace BlyatmirPutin.Common.Logging
 				Console.Error.WriteLine(new MessageLog(message, MessageLog.LogLevel.Critical, ConsoleColor.Magenta, callerName));
 		}
 
-		public static void LogEnter([CallerMemberName] string callerName = "")
+		public static void MethodEnter([CallerMemberName] string callerName = "")
 		{
 			if(IsConsoleAvailable)
 				Console.Error.WriteLine(new MessageLog($"Entered method: [{callerName}]", MessageLog.LogLevel.Verbose, ConsoleColor.Gray, callerName));
 		}
 
-		public static void LogExit([CallerMemberName] string callerName = "")
+		public static void MethodExit([CallerMemberName] string callerName = "")
 		{
 			if (IsConsoleAvailable)
 				Console.Error.WriteLine(new MessageLog($"Exited method: [{callerName}]", MessageLog.LogLevel.Verbose, ConsoleColor.Gray, callerName));
