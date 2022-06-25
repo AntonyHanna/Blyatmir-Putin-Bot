@@ -12,8 +12,6 @@ namespace BlyatmirPutin.Logic.Services
 		public static Task PlayIntroMusic(SocketUser user, SocketVoiceState previousState, SocketVoiceState newState)
 		{
 			Task.Run(async () => {
-				Logger.LogDebug($"Attempting to run Intro Music for [{user.Username}]");
-
 				// Stops this from triggering when a user is muted or deafened
 				bool isSameChannel = previousState.VoiceChannel == newState.VoiceChannel;
 
@@ -22,6 +20,8 @@ namespace BlyatmirPutin.Logic.Services
 					// logging this just ends up producing confusing logs
 					return;
 				}
+
+				Logger.LogDebug($"Attempting to run Intro Music for [{user.Username}]");
 
 				Member? memberData = DatabaseHelper.GetById<Member>(user.Id);
 				IntroMusic? introMusic = DatabaseHelper.GetById<IntroMusic>(memberData?.CurrentIntro);
