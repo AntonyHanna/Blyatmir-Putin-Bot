@@ -1,4 +1,4 @@
-﻿using BlyatmirPutin.Common.Logging;
+using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Logic.Factories;
 using BlyatmirPutin.Logic.Services;
@@ -91,15 +91,15 @@ namespace BlyatmirPutin.Logic.Discord
 					break;
 
 				case LogSeverity.Warning:
-					Logger.LogWarning(arg.Message, arg.Source);
+					Logger.LogWarning(arg.Exception.Message, arg.Source);
 					break;
 
 				case LogSeverity.Error:
-					Logger.LogError(arg.Message, arg.Source);
+					Logger.LogError(arg.Exception.Message, arg.Source);
 					break;
 
 				case LogSeverity.Critical:
-					Logger.LogCritical(arg.Message, arg.Source);
+					Logger.LogCritical(arg.Exception.Message, arg.Source);
 					break;
 			}
 			return Task.CompletedTask;

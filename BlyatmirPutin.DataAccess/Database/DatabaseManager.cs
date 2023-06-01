@@ -25,10 +25,10 @@ namespace BlyatmirPutin.DataAccess.Database
 					// determine if the database is new
 					if(_isInitialised == null)
 					{
-						_isInitialised = !File.Exists("data/Guido.sqlite");
+						_isInitialised = !File.Exists("/data/Guido.sqlite");
 					}
 
-					_databaseConnection = new SqliteConnection("Data Source=data/Guido.sqlite;");
+					_databaseConnection = new SqliteConnection("Data Source=/data/Guido.sqlite;");
 				}
 
 				return _databaseConnection;

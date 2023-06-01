@@ -1,5 +1,6 @@
+
 # get the sdk to allow us to build
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine as build-env
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as build-env
 
 # prep the directories we'll be using
 RUN mkdir /build-output /source-code
@@ -15,10 +16,11 @@ RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" \
 	--runtime alpine-x64
 
 # gets the core runtime to allow for running the program
-FROM mcr.microsoft.com/dotnet/runtime:5.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime:7.0-alpine
 
 # install the required linux packages
 RUN apk update && apk add \
+	icu-dev \
 	opus-dev \
 	libsodium-dev \
 	ffmpeg ; \
@@ -27,6 +29,7 @@ RUN apk update && apk add \
 RUN mkdir /build-output/
 
 COPY --from=build-env /build-output/ /build-output/
-	
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 # start the program
 ENTRYPOINT ["dotnet", "/build-output/ConsoleApp1.dll"]
