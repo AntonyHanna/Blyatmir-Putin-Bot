@@ -1,16 +1,20 @@
-using BlyatmirPutin.Common.Logging;
-using BlyatmirPutin.DataAccess.Database;
-using BlyatmirPutin.Logic.Factories;
+using BlyatmirPutin.Logic.Events;
+using BlyatmirPutin.Logic.Modules;
 using BlyatmirPutin.Logic.Services;
-using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Interfaces;
-using Discord;
-using Discord.Commands;
-using Discord.Interactions;
-using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
+using NetCord;
+using NetCord.Gateway;
+using NetCord.Gateway.ReconnectStrategies;
+using NetCord.Gateway.Voice;
+using NetCord.Logging;
+using NetCord.Rest;
+using NetCord.Services;
+using NetCord.Services.ApplicationCommands;
 using System;
-using System.Reflection;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection.Metadata.Ecma335;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic.Discord
@@ -20,94 +24,104 @@ namespace BlyatmirPutin.Logic.Discord
 		/// <summary>
 		/// Represents the discord bot client
 		/// </summary>
-		/// <remarks>Will be null until <see cref="ConnectAsync(IConfiguration?)"/> is called</remarks>
-		public DiscordSocketClient? Client { get; private set; }
+		/// <remarks>Will be null until <see cref="Setup(IConfiguration?)"/> is called</remarks>
+        public GatewayClient GatewayClient { get; private set; }
 
-		public CommandService? CommandService{ get; private set; }
+        public GatewayClientConfiguration GatewayClientConfiguration { get; private set; }
 
-		public InteractionService? InteractionService { get; private set; }
+		private ConsoleLogger _consoleLogger;
 
-		public async Task ConnectAsync(IConfiguration? config)
+        public async Task Setup(IConfiguration config)
 		{
-	
-			Client = new DiscordSocketClient(new DiscordSocketConfig
+			this._consoleLogger = new ConsoleLogger(LogLevel.Trace);
+
+			this.GatewayClientConfiguration = new GatewayClientConfiguration
 			{
-				GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildVoiceStates | GatewayIntents.GuildMessages,
-				LogLevel = LogSeverity.Debug,
-				UseSystemClock = true,
-				MaxWaitBetweenGuildAvailablesBeforeReady = 500
-			});
+				Logger = this._consoleLogger
+			};
 
-			CommandService = new CommandService(new CommandServiceConfig
-			{
-				LogLevel = LogSeverity.Debug,
-				CaseSensitiveCommands = true
-			});
-
-			InteractionService = new InteractionService(Client.Rest, new InteractionServiceConfig
-			{
-				LogLevel = LogSeverity.Debug,
-			});
-
-			Client.Log += Client_Log;
-			Client.Ready += Client_Ready;
-
-			CommandService.Log += Client_Log;
-
-			Client.UserVoiceStateUpdated += IntroMusicService.PlayIntroMusic;
-
-			CommandHandler handler = new CommandHandler(Client, CommandService, InteractionService);
-
-			
-
-			await handler.InstallCommandsAsync();
-			await Client.LoginAsync(TokenType.Bot, config?.Token);
-			await Client.SetGameAsync(config?.Activity);
-			await Client.StartAsync();
+			this.GatewayClient = new GatewayClient(new BotToken(config.Token), this.GatewayClientConfiguration);
 		}
 
-		private async Task Client_Ready()
+		public async Task Start()
 		{
-			await InteractionService?.RegisterCommandsGloballyAsync();
+			await InstallCommandsAsync();
+			await GatewayClient.StartAsync();
 		}
 
-		public async Task DisconnectAsync()
+		public async Task InstallCommandsAsync()
 		{
-			if(Client != null)
-				await Client.StopAsync();
-		}
+			ApplicationCommandService<ApplicationCommandContext> applicationCommandService = new ApplicationCommandService<ApplicationCommandContext>();
 
-		private Task Client_Log(LogMessage arg)
-		{
-			switch(arg.Severity)
+			applicationCommandService.AddModule<IntroMusicModule>();
+
+			CustomVoiceStateUpdate.VoiceStateUpdateTriggered += IntroMusicService.PlayIntroMusic;
+
+			GatewayClient.VoiceStateUpdate += async (VoiceState voice) =>
 			{
-				case LogSeverity.Info:
-				case LogSeverity.Verbose:
-					Logger.LogInfo(arg.Message, arg.Source);
-					break;
+				VoiceState cachedVoiceState = GatewayClient.Cache.Guilds[voice.GuildId].VoiceStates[voice.UserId];
 
-				case LogSeverity.Debug:
-					Logger.LogDebug(arg.Message, arg.Source);
-					break;
+				if (voice.User.IsBot)
+				{
+					return;
+				}
 
-				case LogSeverity.Warning:
-					Logger.LogWarning(arg.Exception.Message, arg.Source);
-					break;
+				// Disconnect
+				if (voice.ChannelId == null)
+				{
+					return;
+				}
 
-				case LogSeverity.Error:
-					Logger.LogError(arg.Exception.Message, arg.Source);
-					break;
+				if (cachedVoiceState.ChannelId == voice.ChannelId)
+				{
+					return;
+				}
 
-				case LogSeverity.Critical:
-					Logger.LogCritical(arg.Exception.Message, arg.Source);
-					break;
-			}
-			return Task.CompletedTask;
+				CustomVoiceStateUpdateEventArgs args = new CustomVoiceStateUpdateEventArgs()
+				{
+					Client = this.GatewayClient,
+					VoiceState = voice
+				};
+
+				CustomVoiceStateUpdate.OnVoiceStateUpdateTriggered(args);
+			};
+
+			GatewayClient.InteractionCreate += async (Interaction interaction) =>
+			{
+				if (interaction is not ApplicationCommandInteraction commandInteraction)
+				{
+					return;
+				}
+
+				IExecutionResult result = await applicationCommandService.ExecuteAsync(new ApplicationCommandContext(commandInteraction, this.GatewayClient));
+
+				if (result is not IFailResult failResult)
+				{
+					return;
+				}
+
+				try
+				{
+					await interaction.SendResponseAsync(InteractionCallback.Message(failResult.Message));
+				}
+				catch
+				{
+
+				}
+
+			};
+
+			await applicationCommandService.RegisterCommandsAsync(GatewayClient.Rest, GatewayClient.Id);
+		}
+
+		public async Task UpdatePresenceAsync(PresenceProperties presence)
+		{
+			await this.GatewayClient.UpdatePresenceAsync(presence);
 		}
 
 		public void Dispose()
 		{
-			Client?.Dispose();
+			GatewayClient?.Dispose();
 		}
 	}
 }

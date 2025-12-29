@@ -1,43 +1,53 @@
 ﻿using BlyatmirPutin.Common.Logging;
 using BlyatmirPutin.DataAccess.Database;
+using BlyatmirPutin.Logic.Events;
 using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Modules;
-using Discord.WebSocket;
+using NetCord.Gateway;
 using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic.Services
 {
 	public class IntroMusicService
 	{
-		public static Task PlayIntroMusic(SocketUser user, SocketVoiceState previousState, SocketVoiceState newState)
-		{
-			Task.Run(async () => {
-				// Stops this from triggering when a user is muted or deafened
-				bool isSameChannel = previousState.VoiceChannel == newState.VoiceChannel;
 
-				if (user.IsBot || isSameChannel || newState.VoiceChannel == null)
+		public static void PlayIntroMusic(object? sender, CustomVoiceStateUpdateEventArgs voiceEventArgs)
+		{
+			GatewayClient client = voiceEventArgs.Client;
+			VoiceState voiceState = voiceEventArgs.VoiceState;
+
+
+			Task.Run(async () =>
+			{
+				// need to store the VoiceState in the AudioService
+				// and keep its previous server in ther
+				// then compare the current server to the one in audio service
+
+				// Stops this from triggering when a user is a bot
+				if (voiceState.User?.IsBot ?? true)
 				{
 					// logging this just ends up producing confusing logs
 					return;
 				}
+				Member? memberData = null;
+				Logger.LogDebug($"Attempting to run Intro Music for [{voiceState.User.Username}]");
 
-				Logger.LogDebug($"Attempting to run Intro Music for [{user.Username}]");
+				memberData = DatabaseHelper.GetById<Member>(voiceState.User.Id);
 
-				Member? memberData = DatabaseHelper.GetById<Member>(user.Id);
 				IntroMusic? introMusic = DatabaseHelper.GetById<IntroMusic>(memberData?.CurrentIntro);
 				IntroMusicModuleSettings? introMusicModuleSettings = DatabaseHelper
 					.GetRows<IntroMusicModuleSettings>()
-					.Find((s) => s.GuildId == newState.VoiceChannel.Guild.Id);
+					.Find((s) => s.GuildId == voiceEventArgs.VoiceState.GuildId);
 
 				if (memberData?.CurrentIntro == null)
 				{
-					Logger.LogWarning($"Failed to play intro for user '{user.Username}', no intro was set.");
+					Logger.LogWarning($"Failed to play intro for user '{voiceState.User.Username}', no intro was set.");
 					return;
 				}
 
 				if (introMusicModuleSettings == null)
 				{
-					Logger.LogWarning($"Failed to play intro, no corresponding guild settings was found for id '{newState.VoiceChannel.Guild.Id}'");
+					Logger.LogWarning($"Failed to play intro, no corresponding guild settings was found for id '{voiceState.GuildId}'");
 					return;
 				}
 
@@ -48,18 +58,25 @@ namespace BlyatmirPutin.Logic.Services
 				}
 
 				/* Create a new audio service otherwise bot will join same channel repeatedly */
-				AudioService audioService = new AudioService(newState);
+				AudioService? audioService = null;
 
-				if (!await audioService.StreamToVoiceAsync(introMusic?.IntroName))
+				if (!AudioService.TryGetAudioService(voiceState, out audioService))
 				{
-					Logger.LogWarning($"Failed to connect to voice channel [{newState.VoiceChannel.Name}] in [{newState.VoiceChannel.Guild.Name}]");
-					return;
+					audioService = new AudioService(client, voiceState);
 				}
+				else
+				{
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    audioService.ReinitializeService(voiceState);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                }
+
+				await audioService.ConnectToChannelAsync();
+				await audioService.StreamToVoiceAsync(introMusic?.IntroName);
+				await audioService.DisconnectFromChannelAsync();
 
 				Logger.LogDebug("Intro Music has finished successfully");
 			});
-
-			return Task.CompletedTask;
 		}
 	}
 }

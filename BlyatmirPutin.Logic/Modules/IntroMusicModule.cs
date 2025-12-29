@@ -3,23 +3,30 @@ using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Models.Common;
 using BlyatmirPutin.Models.Modules;
 using BlyatmirPutin.Models.Records;
-using Discord;
-using Discord.Interactions;
+using NetCord;
+using NetCord.Gateway;
+using NetCord.Gateway.Voice;
+using NetCord.Logging;
+using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic.Modules
 {
-	[Group("intro-music", "All intro music playback commands")]
-	public class IntroMusicModule : InteractionModuleBase<SocketInteractionContext>
+	[SlashCommand("intro-music", "All intro music playback commands", Contexts = [InteractionContextType.Guild])]
+	public class IntroMusicModule : ApplicationCommandModule<ApplicationCommandContext>
 	{
 		#region Assignment Commands
-		[SlashCommand("set", "Set your intro music")]
+		[SubSlashCommand("set", "Set your intro music")]
 		public async Task SetNewIntroMusic(Attachment attachment)
 		{
+			InteractionCallback.DeferredMessage(MessageFlags.Loading);
 			if (attachment == null)
 			{
 				Logger.LogWarning("No attachment was provided, aborting SetNewIntroMusic...");
@@ -29,11 +36,11 @@ namespace BlyatmirPutin.Logic.Modules
 
 			Member author;
 
-			DownloadAttachment(attachment.Url, attachment.Filename);
+			DownloadAttachment(attachment.Url, attachment.FileName);
 
 			// get the specific user we want
 			List<Member> members = DatabaseHelper.GetRows<Member>().ToList();
-			
+
 			if (!members.Any())
 			{
 				// create member
@@ -52,8 +59,8 @@ namespace BlyatmirPutin.Logic.Modules
 			IntroMusic intro = new IntroMusic
 			{
 				UploaderId = Context.User.Id, /* the user who uploaded this particular id */
-				IntroName = attachment.Filename,
-				FilePath = $"/data/user-intros/{attachment.Filename}",
+				IntroName = attachment.FileName,
+				FilePath = $"/data/user-intros/{attachment.FileName}",
 			};
 
 			IntroMusicRecord record = new IntroMusicRecord
@@ -73,38 +80,37 @@ namespace BlyatmirPutin.Logic.Modules
 
 			// update the user entry with their new intro id
 			DatabaseHelper.Update(author);
+			EmbedProperties embed = new EmbedProperties()
+				.WithColor(new Color(0, 128, 128))
+				.WithTitle("Woopty freaking doo")
+				.WithDescription("Thats great a new intro to keep track of...")
+				.WithImage(new EmbedImageProperties("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHV1cXptODNhZ2JpcXhlNmF4MzRpdGZ2cXloMGZ0cXNqYXRxMnh4YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OHuPcrLnoYLxVFIjKI/giphy.gif"))
+				.WithFields(new List<EmbedFieldProperties>()
+				{
+					new EmbedFieldProperties()
+					{
+						Name = "New Intro",
+						Value = $"You've set your intro to `{intro.IntroName}`"
+					}
+				})
+				.WithFooter(new EmbedFooterProperties()
+				{
+					Text = "Nothing to see here, just a man getting a handy"
+				})
+				.WithTimestamp(DateTimeOffset.UtcNow);
+				
+			InteractionMessageProperties response = new InteractionMessageProperties();
 
 			// create the embed to acknowledge the intro
-			EmbedBuilder introSetEmbed = new EmbedBuilder
-			{
-				Color = Color.Teal,
-				Title = "Woopty freakin doo",
-				Description = "Thats great a new intro to keep track off...",
-				ImageUrl = "https://c.tenor.com/9jf-DDWOCI4AAAAC/runover-kid.gif",
-				Fields = new List<EmbedFieldBuilder>
-			{
-				new EmbedFieldBuilder
-				{
-					Name = "New Intro",
-					Value = $"You've set you're intro to `{intro.IntroName}`"
-				}
-			},
-				Footer = new EmbedFooterBuilder
-				{
-					Text = "Nothing to see here, just some casual manslaughter"
-				},
-				Timestamp = DateTimeOffset.UtcNow
-			};
-
-			await RespondAsync(embed: introSetEmbed.Build());
+			await RespondAsync(InteractionCallback.Message(response.WithEmbeds(new List<EmbedProperties>() { embed })));
 		}
 
-		[SlashCommand("remove", "remove your intro music")]
+		[SubSlashCommand("remove", "remove your intro music")]
 		public async Task RemoveIntroMusic()
 		{
 			Member? memberDO = DatabaseHelper.GetRows<Member>()?.Where((m) => m.Id == Context.User.Id)?.First();
 
-			if(memberDO == null)
+			if (memberDO == null)
 			{
 				Logger.LogWarning("No user was found in the database, aborting RemoveIntroMusic...");
 				return;
@@ -114,26 +120,26 @@ namespace BlyatmirPutin.Logic.Modules
 
 			DatabaseHelper.Update(memberDO);
 
-			EmbedBuilder introRemovedEmbed = new EmbedBuilder
-			{
-				Color = Color.LighterGrey,
-				ImageUrl = "https://c.tenor.com/SOC7ARPKg-gAAAAC/kirby-eat.gif",
-				Footer = new EmbedFooterBuilder
+			EmbedProperties embed = new EmbedProperties()
+				.WithColor(new Color(190, 190, 190))
+				.WithImage(new EmbedImageProperties("https://c.tenor.com/SOC7ARPKg-gAAAAC/kirby-eat.gif"))
+				.WithFooter(new EmbedFooterProperties()
 				{
 					Text = "Your intro gone... like Carson's career"
-				},
-				Timestamp = DateTimeOffset.UtcNow
-			};
+				})
+				.WithTimestamp(DateTimeOffset.UtcNow);
+
 
 			// remove all votes against user
 			DatabaseHelper.ExecuteRawSql($"DELETE FROM IntroMusicVote WHERE TargetUserID = {memberDO.Id}");
 
-			await RespondAsync(embed: introRemovedEmbed.Build());
+			await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties().WithEmbeds(new List<EmbedProperties>() { embed })));
 		}
 
-		[SlashCommand("vote-remove", "vote to remove someones intro")]
-		public async Task VoteRemoveIntro(IGuildUser targetUser)
+		[SubSlashCommand("vote-remove", "vote to remove someones intro")]
+		public async Task VoteRemoveIntro(GuildUser targetUser)
 		{
+			EmbedProperties embed;
 			IntroMusicVote? voteDO = DatabaseHelper.GetRows<IntroMusicVote>()
 				.First((v) => v.VoterID == Context.User.Id);
 
@@ -141,23 +147,21 @@ namespace BlyatmirPutin.Logic.Modules
 			{
 				Logger.LogInfo($"User '{Context.User.Username}' has already voted against user '{targetUser.Username}', ignoring new vote...");
 
-				EmbedBuilder existingVoteEmbed = new EmbedBuilder
-				{
-					Color = Color.Gold,
-					Author = new EmbedAuthorBuilder
+				embed = new EmbedProperties()
+					.WithColor(new Color(255, 255, 128))
+					.WithAuthor(new EmbedAuthorProperties()
 					{
 						Name = "Get your hand outta da gad damn cookie jar"
-					},
-					ImageUrl = "https://c.tenor.com/nNdmUUvMB5AAAAAd/gtfo-john-wayne.gif",
-					Description = $"Get da fuck outta here, you already voted against {targetUser.Mention}",
-					Footer = new EmbedFooterBuilder
+					})
+					.WithImage(new EmbedImageProperties("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHV1cXptODNhZ2JpcXhlNmF4MzRpdGZ2cXloMGZ0cXNqYXRxMnh4YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OHuPcrLnoYLxVFIjKI/giphy.gif"))
+					.WithDescription($"Get da fuck outta here, you already voted against {targetUser}")
+					.WithFooter(new EmbedFooterProperties()
 					{
 						Text = $"You voted on {DateTimeOffset.FromUnixTimeSeconds(voteDO.VoteTimestamp)}"
-					},
-					Timestamp = DateTimeOffset.UtcNow
-				};
+					})
+					.WithTimestamp(DateTimeOffset.UtcNow);
 
-				await RespondAsync(embed: existingVoteEmbed.Build());
+				await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties().WithEmbeds(new List<EmbedProperties>() { embed })));
 				return;
 			}
 
@@ -175,7 +179,7 @@ namespace BlyatmirPutin.Logic.Modules
 
 			IntroMusicModuleSettings? settingsDO = DatabaseHelper.GetById<IntroMusicModuleSettings>(Context.Guild.Id);
 
-			if(settingsDO == null)
+			if (settingsDO == null)
 			{
 				settingsDO = new IntroMusicModuleSettings
 				{
@@ -186,33 +190,31 @@ namespace BlyatmirPutin.Logic.Modules
 				DatabaseHelper.Insert(settingsDO);
 			}
 
-			if(settingsDO.VoteThreshold > votes)
+			if (settingsDO.VoteThreshold > votes)
 			{
 				Logger.LogVerbose($"User '{targetUser.Username}(s)' intro is at '{votes}' " +
 					$"vote(s) where threshold is '{settingsDO.VoteThreshold}', not removing intro...");
 
-				EmbedBuilder votePlacedEmbed = new EmbedBuilder
-				{
-					Color = Color.Purple,
-					Title = "Vote Placed",
-					Description = $"Let it be known that thou has forsake thy boi {targetUser.Mention}\n\n" +
-					$"The votes against {targetUser.Username} have reached {votes} vote(s), " +
-					$"{settingsDO.VoteThreshold - votes} more to go..",
-					ImageUrl = "https://c.tenor.com/a1QhvJTQf-kAAAAC/fine-this-is-fine.gif",
-					Footer = new EmbedFooterBuilder
+				embed = new EmbedProperties()
+					.WithColor(new Color(200, 115, 255))
+					.WithTitle("Vote Placed")
+					.WithDescription($"Let it be known that thou has forsake thy boi {targetUser}\n\n" +
+						$"The votes against {targetUser.Username} have reached {votes} vote(s), " +
+						$"{settingsDO.VoteThreshold - votes} more to go..")
+					.WithImage(new EmbedImageProperties("https://c.tenor.com/a1QhvJTQf-kAAAAC/fine-this-is-fine.gif"))
+					.WithFooter(new EmbedFooterProperties()
 					{
 						Text = "No hard feelings, but your intro, bad"
-					},
-					Timestamp = DateTimeOffset.UtcNow
-				};
+					})
+					.WithTimestamp(DateTimeOffset.UtcNow);
 
-				await RespondAsync(embed: votePlacedEmbed.Build());
+				await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties().WithEmbeds(new List<EmbedProperties>() { embed })));
 				return;
 			}
 
 			Member? targetUserDO = DatabaseHelper.GetById<Member>(targetUser.Id);
 
-			if(targetUserDO == null)
+			if (targetUserDO == null)
 			{
 				Logger.LogWarning($"No target user DO for user with Id '{targetUser.Id}'");
 				return;
@@ -227,41 +229,39 @@ namespace BlyatmirPutin.Logic.Modules
 			// remove all votes against user
 			DatabaseHelper.ExecuteRawSql($"DELETE FROM IntroMusicVote WHERE TargetUserID = {targetUserDO.Id}");
 
-			EmbedBuilder successEmbed = new EmbedBuilder
-			{
-				Color = Color.Green,
-				Title = "Democracy Manifest",
-				Description = $"{targetUser.Mention}'s intro has reached the vote threshold... time to yeet that bitch (┛◉Д◉)┛彡┻━┻",
-				Fields = new List<EmbedFieldBuilder>
+			embed = new EmbedProperties()
+				.WithColor(new Color(115, 255, 160))
+				.WithTitle("Democracy Manifest")
+				.WithDescription($"{targetUser}'s intro has reached the vote threshold... time to yeet that bitch (┛◉Д◉)┛彡┻━┻")
+				.WithImage(new EmbedImageProperties("https://c.tenor.com/RK4tVUAJZ8MAAAAd/ship-sinking-ship.gif"))
+				.WithFields(new List<EmbedFieldProperties>()
 				{
-					new EmbedFieldBuilder
+					new EmbedFieldProperties
 					{
-						IsInline = true,
+						Inline = true,
 						Name = "Intro",
 						Value = intro?.IntroName
 					},
-					new EmbedFieldBuilder
+					new EmbedFieldProperties
 					{
-						IsInline = true,
+						Inline = true,
 						Name = "State",
 						Value = "Yoted"
 					}
-				},
-				ImageUrl = "https://c.tenor.com/RK4tVUAJZ8MAAAAd/ship-sinking-ship.gif",
-				Footer = new EmbedFooterBuilder
-				{ 
+				})
+				.WithFooter(new EmbedFooterProperties()
+				{
 					Text = "This message was brought to you by the democracy gang"
-				},
-				Timestamp = DateTimeOffset.UtcNow
-			};
+				})
+				.WithTimestamp(DateTimeOffset.UtcNow);
 
-			await RespondAsync(embed: successEmbed.Build());
+			await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties().WithEmbeds(new List<EmbedProperties>() { embed })));
 		}
 		#endregion
 
 		#region Service Commands
-		[SlashCommand("join", "play a users intro, plays yours by default", false, RunMode.Async)]
-		public async Task PlayIntro(IGuildUser? user = null)
+		[SubSlashCommand("join", "play a users intro, plays yours by default")]
+		public async Task PlayIntro(GuildUser? user = null)
 		{
 			#region Get Module Settings
 			IntroMusicModuleSettings? settings = DatabaseHelper.GetRows<IntroMusicModuleSettings>().Find((s) => s.GuildId == Context.Guild.Id);
@@ -288,17 +288,45 @@ namespace BlyatmirPutin.Logic.Modules
 
 			Logger.LogDebug("Attempting to connect to voice channel");
 
-			AudioService audioService = AudioService.GetAudioService(Context);
+			//AudioService audioService = AudioService.GetAudioService(Context);
+
+			if (!Context.Guild.VoiceStates.TryGetValue(Context.User.Id, out VoiceState vState))
+			{
+				return;
+			}
+
+			if (vState.ChannelId == null)
+			{
+				return;
+			}
+
+			if (Context.Guild.VoiceStates.TryGetValue(Context.Client.Id, out VoiceState botVState))
+			{
+				// if bot connected already, disconnect
+				await Context.Client.UpdateVoiceStateAsync(new VoiceStateProperties(Context.Guild.Id, null));
+			}
+
+			VoiceClient vClient = await Context.Client.JoinVoiceChannelAsync(Context.Guild.Id, vState.ChannelId.Value, new VoiceClientConfiguration()
+			{
+				Logger = new ConsoleLogger(LogLevel.Trace)
+			});
+
+			await vClient.StartAsync();
+			await vClient.EnterSpeakingStateAsync(new SpeakingProperties(SpeakingFlags.Microphone));
 
 			// ensure that the service is not being used and that its resources are collected before the next use
-			audioService.Dispose();
+			//audioService.Dispose();
 
 			ulong userId = (user == null) ? Context.User.Id : user.Id;
 
 			Member member = DatabaseHelper.GetRows<Member>().Where((m) => m.Id == userId).First();
 			IntroMusic intro = DatabaseHelper.GetRows<IntroMusic>().Where((m) => m.Id == member.CurrentIntro).First();
-			
-			if(string.IsNullOrEmpty(intro.IntroName))
+
+			Stream outStream = vClient.CreateOutputStream();
+			OpusEncodeStream stream = new OpusEncodeStream(outStream, PcmFormat.Short, VoiceChannels.Stereo, OpusApplication.Audio);
+			Process? ffmpeg = AudioService.CreateFfmpegProcess("." + intro.FilePath);
+
+			if (string.IsNullOrEmpty(intro.IntroName))
 			{
 				Logger.LogWarning("Aborting connect operation, IntroName is either null or empty...");
 				return;
@@ -306,14 +334,22 @@ namespace BlyatmirPutin.Logic.Modules
 
 			try
 			{
-				await audioService.StreamToVoiceAsync(intro.IntroName);
+				//await audioService.StreamToVoiceAsync(intro.IntroName);
+				await RespondAsync(InteractionCallback.Message($"Now playing: {intro.IntroName}"));
+				await ffmpeg.StandardOutput.BaseStream.CopyToAsync(stream);
+				await stream.FlushAsync();
+
+				VoiceStateProperties vcProperties = new VoiceStateProperties(Context.Guild.Id, null);
+				await Context.Client.UpdateVoiceStateAsync(vcProperties);
 			}
 			catch (Exception ex)
 			{
 				Logger.LogCritical(ex.Message);
+				await ModifyResponseAsync((MessageOptions mOptions) =>
+				{
+					mOptions.Content = $"Failed to play intro: {intro.IntroName}";
+				});
 			}
-
-			await RespondAsync($"Now playing '{intro.IntroName}'...");
 		}
 		#endregion
 

@@ -3,6 +3,8 @@ using BlyatmirPutin.DataAccess.Database;
 using BlyatmirPutin.Logic.Discord;
 using BlyatmirPutin.Models.Factories;
 using BlyatmirPutin.Models.Interfaces;
+using NetCord;
+using NetCord.Gateway;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -29,11 +31,18 @@ public class Program
 			Environment.Exit(0);
 		};
 
-		Directory.CreateDirectory("/data/user-intros");
+		Directory.CreateDirectory("./data/user-intros");
 
 		DiscordManager = new DiscordManager();
 		IConfiguration? config = ConfigurationFactory.Create();
-		if (string.IsNullOrWhiteSpace(config?.Token) || string.IsNullOrEmpty(config?.Token))
+
+		if (config == null)
+		{
+			Logger.LogCritical("Failed to find to generate a config...");
+			Environment.Exit(-1);
+		}
+
+		if (string.IsNullOrWhiteSpace(config.Token) || string.IsNullOrEmpty(config.Token))
 		{
 			Logger.LogCritical("Bot token was left empty, now exiting application...");
 			Environment.Exit(-1);
@@ -53,8 +62,19 @@ public class Program
 		
 		Logger.LogInfo("Connected to database successfully");
 
-		await DiscordManager.ConnectAsync(config);
-
+		await DiscordManager.Setup(config);
+		await DiscordManager.Start();
+		await DiscordManager.UpdatePresenceAsync(new PresenceProperties(UserStatusType.Online)
+		{
+			Activities = [
+				new UserActivityProperties(config.Activity, UserActivityType.Streaming)
+				{
+					Url = @"https://www.youtube.com/watch?v=WY0F3JhLE5o",
+					State = "Do you come from a land down under"
+				}
+			]
+		});
+		
 		await Task.Delay(-1);
 	}
 
@@ -65,7 +85,8 @@ public class Program
 		if (DiscordManager != null)
 		{
 			Logger.LogInfo("Disconnecting from discord...");
-			await DiscordManager.DisconnectAsync();
+			// TODO
+			//await DiscordManager.DisconnectAsync();
 
 			Logger.LogDebug("Disposing discord manager...");
 			DiscordManager.Dispose();

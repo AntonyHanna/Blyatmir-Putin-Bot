@@ -25,10 +25,10 @@ namespace BlyatmirPutin.DataAccess.Database
 					// determine if the database is new
 					if(_isInitialised == null)
 					{
-						_isInitialised = !File.Exists("/data/Guido.sqlite");
+						_isInitialised = !File.Exists("./data/Guido.sqlite");
 					}
 
-					_databaseConnection = new SqliteConnection("Data Source=/data/Guido.sqlite;");
+					_databaseConnection = new SqliteConnection("Data Source=./data/Guido.sqlite;");
 				}
 
 				return _databaseConnection;
@@ -41,7 +41,7 @@ namespace BlyatmirPutin.DataAccess.Database
 		#endregion
 
 		#region Public Methods
-		/// <summary>
+		/// <summary>	
 		/// Attempt to connect to the database
 		/// </summary>
 		/// <returns>Whether the operation complete successfully</returns>
@@ -52,7 +52,7 @@ namespace BlyatmirPutin.DataAccess.Database
 			{
 				DatabaseConnection?.Open();
 			}
-			catch (Exception ex)
+			catch (SqliteException ex)
 			{
 				Logger.LogCritical(ex.Message);
 				Environment.Exit(-1);

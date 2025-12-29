@@ -1,6 +1,6 @@
 
 # get the sdk to allow us to build
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine as build-env
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as build-env
 
 # prep the directories we'll be using
 RUN mkdir /build-output /source-code
@@ -13,10 +13,10 @@ COPY ./ source-code/
 RUN dotnet publish "./source-code/blyatmir-putin-bot.sln" \
 	-c Release \
 	-o /build-output/ \
-	--runtime linux-x64
+	--runtime alpine-x64
 
 # gets the core runtime to allow for running the program
-FROM mcr.microsoft.com/dotnet/runtime:10.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime:7.0-alpine
 
 # install the required linux packages
 RUN apk update && apk add \

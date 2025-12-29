@@ -1,14 +1,10 @@
 ﻿using BlyatmirPutin.Common.Logging;
-using Discord;
-using Discord.Audio;
-using Discord.Commands;
-using Discord.Interactions;
-using Discord.WebSocket;
-using System;
+using NetCord.Gateway;
+using NetCord.Gateway.Voice;
+using NetCord.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic
@@ -18,130 +14,96 @@ namespace BlyatmirPutin.Logic
 		/// <summary>
 		/// Contains all <seealso cref="AudioService"/> instances for all Guilds
 		/// </summary>
-		private static readonly List<AudioService> AudioServices = new List<AudioService>();
+		private static readonly Dictionary<ulong, AudioService> AudioServices = new Dictionary<ulong, AudioService>();
 
 		/// <summary>
-		/// The <seealso cref="SocketGuild"/> that 
-		/// this <seealso cref="AudioService"/> is assigned to
+		/// The bot client
 		/// </summary>
-		public SocketGuild Guild { get; }
+		private GatewayClient _gatewayClient { get; set; }
 
-		/// <summary>
-		/// The ffmpeg instance
-		/// </summary>
-		private Process? _ffmpeg;
+		public VoiceState? _voiceState { get; set; }
 
-		/// <summary>
-		/// The output of Ffmpeg
-		/// </summary>
-		private Stream? _ffmpegStream;
+		public VoiceClient? _voiceClient { get; set; }
 
-		/// <summary>
-		/// The audio data ouput stream
-		/// </summary>
-		private AudioOutStream? _outputStream;
+		private ulong _guildId { get; set; }
 
-		/// <summary>
-		/// The voice channel to try to connect to
-		/// </summary>
-		private IVoiceChannel? _destinationChannel;
-
-		/// <summary>
-		/// Whether this instance of <seealso cref="AudioService"/> is in a disposed state
-		/// </summary>
-		private bool _isDisposed;
-		
-		public AudioService(SocketCommandContext context)
+		private AudioService(ulong guildId)
 		{
-			this.Guild = context.Guild;
-			this._destinationChannel = GetVoiceChannelFromCommandContext(context);
-
-			AudioServices.Add(this);
+			this._guildId = guildId;
+			AudioServices.Add(guildId, this);
 		}
 
-		public AudioService(SocketInteractionContext context)
+		public AudioService(GatewayClient client, VoiceClient voiceClient) : this(voiceClient.GuildId)
 		{
-			this.Guild = context.Guild;
-			this._destinationChannel = GetVoiceChannelFromCommandContext(context);
-
-			AudioServices.Add(this);
+			this._gatewayClient = client;
+			this._voiceClient = voiceClient;
 		}
 
-		public AudioService(SocketVoiceState socketVoiceState)
+		public AudioService(GatewayClient client, VoiceState voiceState) : this(voiceState.GuildId)
 		{
-			this.Guild = socketVoiceState.VoiceChannel.Guild;
-			this._destinationChannel = socketVoiceState.VoiceChannel;
-
-			AudioServices.Add(this);
+			this._gatewayClient = client;
+			this._voiceState = voiceState;
 		}
 
-		public static AudioService GetAudioService(SocketCommandContext context)
+		public static bool TryGetAudioService(VoiceClient voiceClient, out AudioService? service)
 		{
-			IEnumerable<AudioService> service = AudioServices.Where(a => a.Guild == context.Guild);
+			service = null;
+			return AudioServices.TryGetValue(voiceClient.GuildId, out service);
+		}
 
-			if(!service.Any())
+		public static bool TryGetAudioService(VoiceState voiceState, out AudioService? service)
+		{
+			service = null;
+			return AudioServices.TryGetValue(voiceState.GuildId, out service);
+		}
+
+		public static Process? CreateFfmpegProcess(string path)
+		{
+			ProcessStartInfo startInfo = new("ffmpeg")
 			{
-				Logger.LogDebug($"No existing audio service for guild [{context.Guild.Name}], creating a new service");
-				return new AudioService(context);
-			}
-
-			Logger.LogDebug($"Using existing audio service for guild [{service.First().Guild.Name}]");
-
-			return service.First();
-		}
-
-		public static AudioService GetAudioService(SocketInteractionContext context)
-		{
-			IEnumerable<AudioService> service = AudioServices.Where(a => a.Guild == context.Guild);
-
-			if (!service.Any())
-			{
-				Logger.LogDebug($"No existing audio service for guild [{context.Guild.Name}], creating a new service");
-				return new AudioService(context);
-			}
-
-			Logger.LogDebug($"Using existing audio service for guild [{service.First().Guild.Name}]");
-
-			return service.First();
-		}
-
-		public static AudioService GetAudioService(SocketVoiceState voiceState)
-		{
-			IEnumerable<AudioService> service = AudioServices.Where(a => a.Guild == voiceState.VoiceChannel.Guild);
-
-			if (!service.Any())
-			{
-				Logger.LogDebug($"No existing audio service for guild [{voiceState.VoiceChannel.Guild.Name}], creating a new service");
-				return new AudioService(voiceState);
-			}
-
-			Logger.LogDebug($"Using existing audio service for guild [{service.First().Guild.Name}]");
-
-			return service.First();
-		}
-
-		private static Process? CreateFfmpegProcess(string path)
-		{
-			ProcessStartInfo processStartInfo = new ProcessStartInfo
-			{
-				FileName = "ffmpeg",
-				Arguments = $"-hide_banner -loglevel panic -i \"{path}\" -ac 2 -f s16le -ar 48000 pipe:1",
-				UseShellExecute = false,
 				RedirectStandardOutput = true,
 			};
 
-			if(processStartInfo == null)
-			{
-				Logger.LogError($"Failed to create process from path [{path}]");
-				return null;
-			}
+			// Set reconnect attempts in case of a lost connection to 1
+			//startInfo.ArgumentList.Add("-reconnect");
+			//startInfo.ArgumentList.Add("1");
 
-			return Process.Start(processStartInfo);
+			// Set reconnect attempts in case of a lost connection for streamed media to 1
+			//startInfo.ArgumentList.Add("-reconnect_streamed");
+			//startInfo.ArgumentList.Add("1");
+
+			// Set the maximum delay between reconnection attempts to 5 seconds
+			//startInfo.ArgumentList.Add("-reconnect_delay_max");
+			//startInfo.ArgumentList.Add("5");
+
+			// Specify the input
+			startInfo.ArgumentList.Add("-i");
+			startInfo.ArgumentList.Add(path);
+
+			// Set the logging level to quiet mode
+			startInfo.ArgumentList.Add("-loglevel");
+			startInfo.ArgumentList.Add("panic");
+
+			// Set the number of audio channels to 2 (stereo)
+			startInfo.ArgumentList.Add("-ac");
+			startInfo.ArgumentList.Add("2");
+
+			// Set the output format to 16-bit signed little-endian
+			startInfo.ArgumentList.Add("-f");
+			startInfo.ArgumentList.Add("s16le");
+
+			// Set the audio sampling rate to 48 kHz
+			startInfo.ArgumentList.Add("-ar");
+			startInfo.ArgumentList.Add("48000");
+
+			// Direct the output to stdout
+			startInfo.ArgumentList.Add("pipe:1");
+
+			return Process.Start(startInfo);
 		}
 
 		public async Task<bool> StreamToVoiceAsync(string fileName)
 		{
-			_isDisposed = false;
 			Process? ffmpegProcess = CreateFfmpegProcess($"./data/user-intros/{fileName}") ?? null;
 
 			if (ffmpegProcess == null)
@@ -150,114 +112,57 @@ namespace BlyatmirPutin.Logic
 				return false;
 			}
 
-			this._ffmpeg = ffmpegProcess;
-			this._ffmpegStream = this._ffmpeg.StandardOutput.BaseStream;
+			Stream outStream = this._voiceClient.CreateOutputStream();
+			OpusEncodeStream opusStream = new OpusEncodeStream(outStream, PcmFormat.Short, VoiceChannels.Stereo, OpusApplication.Audio);
 
-			if (this._destinationChannel == null)
-			{
-				Logger.LogWarning("Destination channel cannot be null");
-				return false;
-			}
+			await ffmpegProcess.StandardOutput.BaseStream.CopyToAsync(opusStream);
+			await opusStream.FlushAsync();
 
-			IAudioClient? client = null;
-			try
-			{
-				client = await ConnectAsync(this._destinationChannel.Id);
-			}
-			catch (Exception ex)
-			{
-				Logger.LogError($"Failed to connect to voice channel\n {ex.Message}");
-				return false;
-			}
-
-			if (client == null)
-			{
-				Logger.LogError($"Failed to connect to voice channel [{this._destinationChannel.Name}] in [{this.Guild.Name}]");
-				Dispose();
-				return false;
-			}
-
-			this._outputStream = client.CreatePCMStream(AudioApplication.Mixed);
-
-			try
-			{
-				await this._ffmpegStream.CopyToAsync(this._outputStream);
-			}
-			finally
-			{
-				await this._outputStream.FlushAsync();
-				await DisconnectAsync();
-				Dispose();
-			}
+			await opusStream.DisposeAsync();
+			await outStream.DisposeAsync();
+			
+			ffmpegProcess.Close();
 
 			return true;
 		}
 
-		public async Task<IAudioClient?> ConnectAsync(ulong channelID)
+		public void ReinitializeService(VoiceClient voiceClient)
 		{
-			SocketVoiceChannel voiceChannel = this.Guild.VoiceChannels.Where(v => v.Id == channelID).First();
-			return await voiceChannel.ConnectAsync() ?? null;
+			this._voiceClient = voiceClient;
+			this._voiceState = null;
 		}
 
-		public async Task<bool> DisconnectAsync()
+		public void ReinitializeService(VoiceState voiceState)
 		{
-			try
+			this._voiceState = voiceState;
+			this._voiceClient = null;
+		}
+
+		public async Task ConnectToChannelAsync()
+		{
+			if (this._voiceState == null || this._voiceState.ChannelId == null)
 			{
-				if(this._destinationChannel == null)
+				return;
+			}
+
+			if (this._voiceClient == null)
+			{
+				this._voiceClient = await this._gatewayClient.JoinVoiceChannelAsync(this._guildId, this._voiceState.ChannelId.Value, new VoiceClientConfiguration()
 				{
-					Logger.LogWarning("Failed to disconnect from voice channel, bot wasn't in a channel");
-					return false;
-				}
-
-				await this._destinationChannel.DisconnectAsync();
-			}
-			catch
-			{
-				Logger.LogWarning("Failed to disconnect from the voice channel");
-				return false;
+					Logger = new ConsoleLogger(LogLevel.Trace)
+				});
 			}
 
-			return true;
+			await this._voiceClient.StartAsync();
+			await this._voiceClient.EnterSpeakingStateAsync(new SpeakingProperties(SpeakingFlags.Microphone));
 		}
 
-		private IVoiceChannel? GetVoiceChannelFromCommandContext(SocketCommandContext context)
+		public async Task DisconnectFromChannelAsync()
 		{
-			SocketUser user = context.Message.Author;
+			VoiceStateProperties vsProperties = new VoiceStateProperties(this._guildId, null);
+			await this._gatewayClient.UpdateVoiceStateAsync(vsProperties);
 
-			IEnumerable<SocketVoiceChannel> voiceChannels = this.Guild.VoiceChannels.Where(channel => channel.Users.Contains(user));
-
-			if (voiceChannels.Count() > 0)
-			{
-				return voiceChannels.ElementAt(0);
-			}
-
-			return null;
-		}
-
-		private IVoiceChannel? GetVoiceChannelFromCommandContext(SocketInteractionContext context)
-		{
-			SocketUser user = context.User;
-
-			IEnumerable<SocketVoiceChannel> voiceChannels = this.Guild.VoiceChannels.Where(channel => channel.Users.Contains(user));
-
-			if (voiceChannels.Count() > 0)
-			{
-				return voiceChannels.ElementAt(0);
-			}
-
-			return null;
-		}
-
-		public void Dispose()
-		{
-			if(!_isDisposed)
-			{
-				Logger.LogDebug($"Attempting to dispose of AudioService for guild [{this.Guild.Name}]");
-				this._ffmpeg?.Close();
-				this._ffmpegStream?.Close();
-				this._outputStream?.Close();
-			}
-			_isDisposed = true;
+			AudioServices.Remove(this._guildId);
 		}
 	}
 }
