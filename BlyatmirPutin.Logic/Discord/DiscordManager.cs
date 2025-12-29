@@ -4,17 +4,11 @@ using BlyatmirPutin.Logic.Services;
 using BlyatmirPutin.Models.Interfaces;
 using NetCord;
 using NetCord.Gateway;
-using NetCord.Gateway.ReconnectStrategies;
-using NetCord.Gateway.Voice;
 using NetCord.Logging;
 using NetCord.Rest;
 using NetCord.Services;
 using NetCord.Services.ApplicationCommands;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlyatmirPutin.Logic.Discord
@@ -59,7 +53,11 @@ namespace BlyatmirPutin.Logic.Discord
 
 			GatewayClient.VoiceStateUpdate += async (VoiceState voice) =>
 			{
-				VoiceState cachedVoiceState = GatewayClient.Cache.Guilds[voice.GuildId].VoiceStates[voice.UserId];
+				Guild guildCache = GatewayClient.Cache.Guilds[voice.GuildId];
+				VoiceState? cachedVoiceState = null;
+				
+				// if only just first connecting there will be no VoiceState cache
+				_ = guildCache.VoiceStates.TryGetValue(voice.UserId, out cachedVoiceState);
 
 				if (voice.User.IsBot)
 				{
@@ -72,7 +70,7 @@ namespace BlyatmirPutin.Logic.Discord
 					return;
 				}
 
-				if (cachedVoiceState.ChannelId == voice.ChannelId)
+				if (cachedVoiceState != null && cachedVoiceState.ChannelId == voice.ChannelId)
 				{
 					return;
 				}
