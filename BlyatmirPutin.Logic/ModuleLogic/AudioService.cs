@@ -112,7 +112,7 @@ namespace BlyatmirPutin.Logic
 				return false;
 			}
 
-			Stream outStream = this._voiceClient.CreateOutputStream();
+			Stream outStream = this._voiceClient.CreateVoiceStream();
 			OpusEncodeStream opusStream = new OpusEncodeStream(outStream, PcmFormat.Short, VoiceChannels.Stereo, OpusApplication.Audio);
 
 			await ffmpegProcess.StandardOutput.BaseStream.CopyToAsync(opusStream);

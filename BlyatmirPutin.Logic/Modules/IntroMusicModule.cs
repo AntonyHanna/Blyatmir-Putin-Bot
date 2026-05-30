@@ -276,6 +276,7 @@ namespace BlyatmirPutin.Logic.Modules
 				};
 
 				DatabaseHelper.Insert(settings);
+
 				Logger.LogInfo("Inserting IntroMusicModuleSettings to Database");
 			}
 
@@ -287,8 +288,6 @@ namespace BlyatmirPutin.Logic.Modules
 			#endregion
 
 			Logger.LogDebug("Attempting to connect to voice channel");
-
-			//AudioService audioService = AudioService.GetAudioService(Context);
 
 			if (!Context.Guild.VoiceStates.TryGetValue(Context.User.Id, out VoiceState vState))
 			{
@@ -319,10 +318,22 @@ namespace BlyatmirPutin.Logic.Modules
 
 			ulong userId = (user == null) ? Context.User.Id : user.Id;
 
-			Member member = DatabaseHelper.GetRows<Member>().Where((m) => m.Id == userId).First();
-			IntroMusic intro = DatabaseHelper.GetRows<IntroMusic>().Where((m) => m.Id == member.CurrentIntro).First();
+			Member? member = DatabaseHelper.GetRows<Member>().Where((m) => m.Id == userId).FirstOrDefault();
+			IntroMusic? intro = DatabaseHelper.GetRows<IntroMusic>().Where((m) => m.Id == member.CurrentIntro).FirstOrDefault();
 
-			Stream outStream = vClient.CreateOutputStream();
+			if (member == null)
+			{
+				await RespondAsync(InteractionCallback.Message($"Nah, your shits straight fucked"));
+				return;
+			}
+
+			if (intro == null)
+			{
+				await RespondAsync(InteractionCallback.Message($"You aint got no shoes lieutenant Dan"));
+				return;
+			}
+
+			Stream outStream = vClient.CreateVoiceStream();
 			OpusEncodeStream stream = new OpusEncodeStream(outStream, PcmFormat.Short, VoiceChannels.Stereo, OpusApplication.Audio);
 			Process? ffmpeg = AudioService.CreateFfmpegProcess("." + intro.FilePath);
 
