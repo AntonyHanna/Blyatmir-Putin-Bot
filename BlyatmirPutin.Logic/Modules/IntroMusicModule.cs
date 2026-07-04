@@ -34,27 +34,22 @@ namespace BlyatmirPutin.Logic.Modules
 				return;
 			}
 
-			Member author;
-
 			DownloadAttachment(attachment.Url, attachment.FileName);
 
 			// get the specific user we want
-			List<Member> members = DatabaseHelper.GetRows<Member>().ToList();
+			Member? member = DatabaseHelper.GetRows<Member>().FirstOrDefault(m => m.Id == Context.User.Id);
 
-			if (!members.Any())
+			if (member == null)
 			{
 				// create member
-				author = new Member
+				member = new Member
 				{
 					Id = Context.User.Id
 				};
 
-				DatabaseHelper.Insert(author);
+				DatabaseHelper.Insert(member);
 			}
-			else
-			{
-				author = members.First();
-			}
+
 			// create an intro entry
 			IntroMusic intro = new IntroMusic
 			{
@@ -76,10 +71,10 @@ namespace BlyatmirPutin.Logic.Modules
 			DatabaseHelper.Insert(record);
 
 			// link the new intro id with the member
-			author.CurrentIntro = intro.Id;
+			member.CurrentIntro = intro.Id;
 
 			// update the user entry with their new intro id
-			DatabaseHelper.Update(author);
+			DatabaseHelper.Update(member);
 			EmbedProperties embed = new EmbedProperties()
 				.WithColor(new Color(0, 128, 128))
 				.WithTitle("Woopty freaking doo")
